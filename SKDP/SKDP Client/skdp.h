@@ -23,7 +23,7 @@
 #define SKPD_H
 
 #include "common.h"
-#include "../../QSC/QSC/sha3.h"
+#include "../QSC/sha3.h"
 
 /**
 * \file skdh.h

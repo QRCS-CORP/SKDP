@@ -23,7 +23,7 @@
 #define SKPD_H
 
 #include "common.h"
-#include "../../QSC/QSC/sha3.h"
+#include "../QSC/sha3.h"
 
 /**
 * \file skdh.h
@@ -556,7 +556,7 @@ typedef enum skdp_errors
 	skdp_error_transmit_failure = 0x0C,		/*!< The transmitter failed at the network layer */
 	skdp_error_unknown_protocol = 0x0D,		/*!< The protocol version is unknown */
 	skdp_error_unsequenced = 0x0E,			/*!< The packet was received out of sequence */
-	skdp_error_general_failure = 0xFF,		/*!< The connection experienced an error */
+	skdp_error_general_failure = 0xFF,		/*!< The connection experienced an internal error */
 } skdp_errors;
 
 /*!

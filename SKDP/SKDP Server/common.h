@@ -1,6 +1,6 @@
 #ifndef SKDP_SERVER_COMMON_H
 #define SKDP_SERVER_COMMON_H
 
-#include "../../QSC/QSC/common.h"
+#include "../QSC/common.h"
 
 #endif

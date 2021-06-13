@@ -163,7 +163,7 @@
     <ClInclude Include="skdpclient.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\QSC\QSC\QSC.vcxproj">
+    <ProjectReference Include="..\QSC\QSC.vcxproj">
       <Project>{7b7f8e47-0f7c-4273-a229-a7ab2a452ea9}</Project>
     </ProjectReference>
   </ItemGroup>

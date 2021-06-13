@@ -1,10 +1,9 @@
 #include "skdpclient.h"
-#include "../../QSC/QSC/acp.h"
-#include "../../QSC/QSC/intutils.h"
-#include "../../QSC/QSC/memutils.h"
-#include "../../QSC/QSC/sha3.h"
-#include "../../QSC/QSC/socketclient.h"
-
+#include "../QSC/acp.h"
+#include "../QSC/intutils.h"
+#include "../QSC/memutils.h"
+#include "../QSC/sha3.h"
+#include "../QSC/socketclient.h"
 
 static void client_dispose(skdp_client_state* ctx)
 {

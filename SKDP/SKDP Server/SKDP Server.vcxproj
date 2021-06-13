@@ -156,15 +156,15 @@
     <ClCompile Include="skdpserver.c" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\QSC\QSC\QSC.vcxproj">
-      <Project>{7b7f8e47-0f7c-4273-a229-a7ab2a452ea9}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="appsrv.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="skdp.h" />
     <ClInclude Include="skdpserver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QSC\QSC.vcxproj">
+      <Project>{7b7f8e47-0f7c-4273-a229-a7ab2a452ea9}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

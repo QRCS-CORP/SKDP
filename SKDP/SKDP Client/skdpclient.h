@@ -21,8 +21,8 @@
 
 #include "common.h"
 #include "skdp.h"
-#include "../../QSC/QSC/rcs.h"
-#include "../../QSC/QSC/socketclient.h"
+#include "../QSC/rcs.h"
+#include "../QSC/socketclient.h"
 
  /*!
  * \struct skdp_kex_client_state
