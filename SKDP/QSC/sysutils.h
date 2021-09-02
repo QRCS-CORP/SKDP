@@ -21,7 +21,7 @@
 * An implementation of various system related functions
 * Written by John G. Underhill
 * Updated on July 30, 2020
-* Contact: develop@vtdev.com */
+* Contact: support@vtdev.com */
 
 /**
 * \file sysutils.h
@@ -33,6 +33,9 @@
 #define QSC_SYSUTILS_H
 
 #include "common.h"
+
+/* bogus winbase.h error */
+QSC_SYSTEM_CONDITION_IGNORE(5105)
 
 #define QSC_SYSUTILS_SYSTEM_NAME_MAX 256
 

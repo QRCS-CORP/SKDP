@@ -32,6 +32,7 @@
 #	define QSC_SYSTEM_COMPILER_MSC
 #elif defined(__MINGW32__)
 #	define QSC_SYSTEM_COMPILER_MINGW
+#	define QSC_SYSTEM_COMPILER_GCC
 #elif defined(__CC_ARM)
 #	define QSC_SYSTEM_COMPILER_ARM
 #elif defined(__BORLANDC__)
@@ -164,11 +165,17 @@
 #endif
 
 #if defined(QSC_DLL_API)
-#	if defined(_MSC_VER)
+#	if defined(QSC_SYSTEM_COMPILER_MSC)
 #		if defined(QSC_DLL_IMPORT)
 #			define QSC_EXPORT_API __declspec(dllimport)
 #		else
 #			define QSC_EXPORT_API __declspec(dllexport)
+#		endif
+#	elif defined(QSC_SYSTEM_COMPILER_GCC)
+#		if defined(QSC_DLL_IMPORT)
+#		define QSC_EXPORT_API __attribute__((dllimport))
+#		else
+#		define QSC_EXPORT_API __attribute__((dllexport))
 #		endif
 #	else
 #		if defined(__SUNPRO_C)
@@ -186,6 +193,8 @@
 #else
 #	define QSC_EXPORT_API
 #endif
+
+//#define QSC_GCC_ASM_ENABLED
 
 #if defined(__GNUC__)
 #	define QSC_CACHE_ALIGNED __attribute__((aligned(64)))
@@ -217,6 +226,22 @@
 #	endif
 #endif
 
+#if !defined(QSC_ALIGN)
+#	if defined(__GNUC__) || defined(__clang__)
+#		define QSC_ALIGN(x)  __attribute__((aligned(x)))
+#	elif defined(_MSC_VER)
+#		define QSC_ALIGN(x)  __declspec(align(x))
+#	else
+#		define QSC_ALIGN(x)
+#	endif
+#endif
+
+#if defined _MSC_VER && _MSC_VER
+#	ifndef restrict
+#		define restrict __restrict
+#	endif
+#endif
+
 #if !defined(__GNUC__)
 #	if defined(__attribute__)
 #		undef __attribute__
@@ -224,14 +249,14 @@
 #	define __attribute__(a)
 #endif
 
-// 128 bit unsigned integer support
+// 128 bit uint32_t integer support
 #if defined(__SIZEOF_INT128__) && defined(QSC_SYSTEM_IS_X64) && !defined(__xlc__)
 #	define QSC_SYSTEM_NATIVE_UINT128
 	// Prefer TI mode over __int128 as GCC rejects the latter in pedantic mode
 #	if defined(__GNUG__)
 		typedef uint32_t uint128_t __attribute__((mode(TI)));
 #	else
-		typedef unsigned __int128 uint128_t;
+		typedef __int128 uint128_t;
 #	endif
 #endif
 
@@ -239,7 +264,7 @@
 // functions 'borrowed' from Botan ;)
 #	define QSC_SYSTEM_FAST_64X64_MUL(X,Y,Low,High)			\
 	do {													\
-      const uint128_t r = static_cast<uint128_t>(X) * Y;	\
+      const uint128_t r = (uint128_t)(X) * Y;	\
       *High = (r >> 64) & 0xFFFFFFFFFFFFFFFFULL;			\
       *Low = (r) & 0xFFFFFFFFFFFFFFFFULL;					\
 	} while(0)
@@ -281,7 +306,6 @@
 
 
 #define QSC_SYSTEM_MAX_PATH 260
-
 #define QSC_SYSTEM_SECMEMALLOC_DEFAULT 4096
 #define QSC_SYSTEM_SECMEMALLOC_MIN 16
 #define QSC_SYSTEM_SECMEMALLOC_MAX 128
@@ -309,30 +333,37 @@
 #define QSC_SYSTEM_STRHELPER(x) #x
 #define QSC_SYSTEM_TO_STRING(x) QSC_SYSTEM_STRHELPER(x)
 
-// instructs the compiler to skip optimizations on the contained function; closed with CEX_OPTIMIZE_RESUME 
+// instructs the compiler to skip optimizations on the contained function; closed with CEX_OPTIMIZE_RESUME
 #if defined(QSC_SYSTEM_COMPILER_MSC)
 #	define QSC_SYSTEM_OPTIMIZE_IGNORE __pragma(optimize("", off))
 #elif defined(QSC_SYSTEM_COMPILER_GCC) || defined(QSC_SYSTEM_COMPILER_MINGW)
-	_Pragma(QSC_SYSTEM_TO_STRING(GCC optimize("O0")))
-#	define QSC_SYSTEM_TO_STRING #pragma GCC optimize ("O0"), #pragma GCC optimize ("O0")
+#	define QSC_SYSTEM_OPTIMIZE_IGNORE __attribute__((optimize("O0")))
 #elif defined(QSC_SYSTEM_COMPILER_CLANG)
 #	define QSC_SYSTEM_OPTIMIZE_IGNORE __attribute__((optnone))
 #elif defined(QSC_SYSTEM_COMPILER_INTEL)
-#	define QSC_SYSTEM_OPTIMIZE_IGNORE pragma optimize("", off) 
+#	define QSC_SYSTEM_OPTIMIZE_IGNORE pragma optimize("", off)
 #else
-#	define QSC_SYSTEM_OPTIMIZE_IGNORE 0
+#	define QSC_SYSTEM_OPTIMIZE_IGNORE
 #endif
 
-// end of section; resume compiler optimizations 
 #if defined(QSC_SYSTEM_COMPILER_MSC)
 #	define QSC_SYSTEM_OPTIMIZE_RESUME __pragma(optimize("", on))
 #elif defined(QSC_SYSTEM_COMPILER_GCC) || defined(QSC_SYSTEM_COMPILER_MINGW)
-//	_Pragma(QSC_SYSTEM_TO_STRING(GCC pop_options))
-#	define QSC_SYSTEM_OPTIMIZE_RESUME #pragma GCC pop_options
+#	define QSC_SYSTEM_OPTIMIZE_RESUME
 #elif defined(CEX_COMPILER_INTEL)
-#	define QSC_SYSTEM_OPTIMIZE_RESUME pragma optimize("", on) 
+#	define QSC_SYSTEM_OPTIMIZE_RESUME pragma optimize("", on)
 #else
-#	define QSC_SYSTEM_OPTIMIZE_RESUME 0
+#	define QSC_SYSTEM_OPTIMIZE_RESUME
+#endif
+
+#if defined(QSC_SYSTEM_COMPILER_MSC)
+#	define QSC_SYSTEM_CONDITION_IGNORE(x) __pragma(warning(disable : x))
+#elif defined(QSC_SYSTEM_COMPILER_GCC) || defined(QSC_SYSTEM_COMPILER_MINGW)
+#	define QSC_SYSTEM_CONDITION_IGNORE(x) _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wunused-parameter\"")
+#elif defined(CEX_COMPILER_INTEL)
+#	define QSC_SYSTEM_CONDITION_IGNORE(x)
+#else
+#	define QSC_SYSTEM_CONDITION_IGNORE(x)
 #endif
 
 /* intrinsics support level */
@@ -346,12 +377,10 @@
 
 /*
 * AVX512 Capabilities Check
-* TODO: future expansion (if you can test it, I'll add it)
-* links: 
 * https://software.intel.com/en-us/intel-cplusplus-compiler-16.0-user-and-reference-guide
 * https://software.intel.com/en-us/articles/compiling-for-the-intel-xeon-phi-processor-and-the-intel-avx-512-isa
 * https://colfaxresearch.com/knl-avx512/
-* 
+*
 * #include <immintrin.h>
 * supported is 1: ex. __AVX512CD__ 1
 * F		__AVX512F__					Foundation
@@ -366,7 +395,7 @@
 * VNNIW	__AVX5124VNNIW__			Vector instructions for deep learning enhanced word variable precision
 * FMAPS	__AVX5124FMAPS__			Vector instructions for deep learning floating - point single precision
 * VPOPCNT	__AVX512VPOPCNTDQ__		?
-* 
+*
 * Note: AVX512 is currently untested, this flag enables support on a compliant system
 */
 
@@ -408,8 +437,18 @@
 #	define QSC_SYSTEM_HAS_XOP
 #endif
 
-#if defined(__AVX__) || defined(__AVX2__) || defined(__AVX512__)
+#if defined(QSC_SYSTEM_HAS_AVX) || defined(QSC_SYSTEM_HAS_AVX2) || defined(QSC_SYSTEM_HAS_AVX512)
 #	define QSC_SYSTEM_AVX_INTRINSICS
+#endif
+
+#if defined(QSC_SYSTEM_HAS_AVX512)
+#	define QSC_SIMD_ALIGN QSC_ALIGN(64)
+#elif defined(QSC_SYSTEM_HAS_AVX2)
+#	define QSC_SIMD_ALIGN QSC_ALIGN(32)
+#elif defined(QSC_SYSTEM_HAS_AVX)
+#	define QSC_SIMD_ALIGN QSC_ALIGN(16)
+#else
+#	define QSC_SIMD_ALIGN
 #endif
 
 /*!
@@ -423,25 +462,6 @@
 * Function return value indicates failed operation
 */
 #define QSC_STATUS_FAILURE -1
-
-/*!
-\def QSC_ERROR_AUTHENTICATION
-* Function return value indicates internal failure
-*/
-#define QSC_ERROR_INTERNAL -2
-
-/*!
-\def QSC_ERROR_AUTHENTICATION
-* Function return value indicates authntication failure
-*/
-#define QSC_ERROR_AUTHENTICATION -3
-
-/*!
-\def QSC_ERROR_PROVIDER
-* Function return value indicates a random provider failure
-*/
-#define QSC_ERROR_PROVIDER -4
-
 
 /* Modifiable values that determine which parameter sets and options get compiled */
 
@@ -458,40 +478,54 @@
 */
 //#define QSC_KECCAK_UNROLLED_PERMUTATION
 
+
 /*** McEliece ***/
 
 /*!
-\def QSC_MCELIECE_N6960T119
-* Implement the McEliece N6960T119 parameter set
+\def QSC_MCELIECE_S3N4608T96
+* Implement the McEliece S3-N4608T96 parameter set
 */
-#define QSC_MCELIECE_N6960T119
+//#define QSC_MCELIECE_S3N4608T96
 
 /*!
-\def QSC_MCELIECE_N8192T128
-* Implement the McEliece N8192T128 parameter set
+\def QSC_MCELIECE_S5N6688T128
+* Implement the McEliece S5-N6688T128 parameter set
 */
-//#define QSC_MCELIECE_N8192T128
+#define QSC_MCELIECE_S5N6688T128
+
+/*!
+\def QSC_MCELIECE_S5N6960T119
+* Implement the McEliece S5-N6960T119 parameter set
+*/
+//#define QSC_MCELIECE_S5N6960T119
+
+/*!
+\def QSC_MCELIECE_S5N8192T128
+* Implement the McEliece S5-N8192T128 parameter set
+*/
+//#define QSC_MCELIECE_S5N8192T128
 
 
 /*** Kyber ***/
 
 /*!
-\def QSC_KYBER_S1Q3329N256
-* Implement the Kyber S1Q3329N256 parameter set
+\def QSC_KYBER_S3Q3329N256K3
+* Implement the Kyber S3Q3329N256K3 parameter set
 */
-//#define QSC_KYBER_S1Q3329N256
+#define QSC_KYBER_S3Q3329N256K3
 
 /*!
-\def QSC_KYBER_S2Q3329N256
-* Implement the Kyber S2Q3329N256 parameter set
+\def QSC_KYBER_S5Q3329N256K4
+* Implement the Kyber S5Q3329N256K4 parameter set
 */
-#define QSC_KYBER_S2Q3329N256
+//#define QSC_KYBER_S5Q3329N256K4
 
 /*!
-\def QSC_KYBER_S3Q3329N256
-* Implement the Kyber S3Q3329N256 parameter set
+\def QSC_KYBER_S6Q3329N256K5
+* Implement the Kyber S6Q3329N256K5 parameter set.
+* /warning Experimental, not an official parameter.
 */
-//#define QSC_KYBER_S3Q3329N256
+//#define QSC_KYBER_S6Q3329N256K5
 
 
 /*** ECDH ***/
@@ -506,43 +540,90 @@
 /*** Dilithium ***/
 
 /*!
-\def QSC_DILITHIUM_S1N256Q8380417
+\def QSC_DILITHIUM_S2N256Q8380417K4
 * Implement the Dilithium S1N256Q8380417 parameter set
 */
-//#define QSC_DILITHIUM_S1N256Q8380417
+//#define QSC_DILITHIUM_S2N256Q8380417K4
 
 /*!
-\def QSC_DILITHIUM_S2N256Q8380417
+\def QSC_DILITHIUM_S2N256Q8380417K4
 * Implement the Dilithium S2N256Q8380417 parameter set
 */
-#define QSC_DILITHIUM_S2N256Q8380417
+#define QSC_DILITHIUM_S3N256Q8380417K6
 
 /*!
-\def QSC_DILITHIUM_S3N256Q8380417
+\def QSC_DILITHIUM_S3N256Q8380417K6
 * Implement the Dilithium S3N256Q8380417 parameter set
 */
-//#define QSC_DILITHIUM_S3N256Q8380417
+//#define QSC_DILITHIUM_S5N256Q8380417K8
+
+
+/*** NTRU ***/
+
+/*!
+\def QSC_NTRU_S1HPS2048509
+* Implement the NTRU S1HPS2048509 parameter set
+*/
+//#define QSC_NTRU_S1HPS2048509
+
+/*!
+\def QSC_NTRU_HPSS32048677
+* Implement the NTRU HPSS32048677 parameter set
+*/
+#define QSC_NTRU_HPSS32048677
+
+/*!
+\def QSC_NTRU_S5HPS4096821
+* Implement the NTRU S5HPS4096821 parameter set
+*/
+//#define QSC_NTRU_S5HPS4096821
+
+/*!
+\def QSC_NTRU_S5HRSS701
+* Implement the NTRU S5HRSS701 parameter set
+*/
+
+
+/*** Falcon ***/
+
+/*!
+\def QSC_FALCON_S3SHAKE256F512
+* Implement the Falcon S3SHAKE256F512 parameter set
+*/
+#define QSC_FALCON_S3SHAKE256F512
+
+/*!
+\def QSC_FALCON_S5SHAKE256F1024
+* Implement the Falcon S5SHAKE256F1024 parameter set
+*/
+//#define QSC_FALCON_S5SHAKE256F1024
 
 
 /*** SphincsPlus ***/
 
 /*!
-\def QSC_SPHINCSPLUS_S1S128SHAKE
-* Implement the SphincsPlus S1S128SHAKE parameter set
+\def QSC_SPHINCSPLUS_S3S192SHAKERS
+* Implement the SphincsPlus S3S192SHAKERS robust small parameter set
 */
-#define QSC_SPHINCSPLUS_S1S128SHAKE
+//#define QSC_SPHINCSPLUS_S3S192SHAKERS
 
 /*!
-\def QSC_SPHINCSPLUS_S2S192SHAKE
-* Implement the SphincsPlus S2S192SHAKE parameter set
+\def QSC_SPHINCSPLUS_S3S192SHAKERF
+* Implement the SphincsPlus S3S192SHAKERF robust fast parameter set
 */
-//#define QSC_SPHINCSPLUS_S2S192SHAKE
+#define QSC_SPHINCSPLUS_S3S192SHAKERF
 
 /*!
-\def QSC_SPHINCSPLUS_S3S256SHAKE
-* Implement the SphincsPlus S3S256SHAKE parameter set
+\def QSC_SPHINCSPLUS_S5S256SHAKERS
+* Implement the SphincsPlus S5S256SHAKERS robust small parameter set
 */
-//#define QSC_SPHINCSPLUS_S3S256SHAKE
+//#define QSC_SPHINCSPLUS_S5S256SHAKERS
+
+/*!
+\def QSC_SPHINCSPLUS_S5S256SHAKERF
+* Implement the SphincsPlus S5S256SHAKERF robust fast parameter set
+*/
+//#define QSC_SPHINCSPLUS_S5S256SHAKERF
 
 
 /*** ECDSA ***/

@@ -21,7 +21,7 @@
 * An implementation of the SHA3 message digest, KMAC, SHAKE, and CSHAKE
 * Written by John G. Underhill
 * Updated on May 20, 2021
-* Contact: develop@vtdev.com */
+* Contact: support@vtdev.com */
 
 /**
 * \file sha3.h
@@ -262,7 +262,7 @@ QSC_EXPORT_API typedef struct
 * \enum qsc_keccak_rate
 * \brief The Keccak rate; determines which security strength is used by the function, 128, 256, or 512-bit
 */
-QSC_EXPORT_API typedef enum
+typedef enum
 {
 	qsc_keccak_rate_128 = QSC_KECCAK_128_RATE,
 	qsc_keccak_rate_256 = QSC_KECCAK_256_RATE,
@@ -284,7 +284,7 @@ QSC_EXPORT_API void qsc_keccak_absorb(qsc_keccak_state* ctx, qsc_keccak_rate rat
 /**
 * \brief Absorb the custom, and name arrays into the Keccak state
 *
-* \param ctx: [struct] The cipher state structure
+* \param ctx: [struct] The keccak state structure
 * \param rate: The rate of absorption in bytes
 * \param custom: [const] The customization string
 * \param custlen: The byte length of the customization string
@@ -297,7 +297,7 @@ QSC_EXPORT_API void qsc_keccak_absorb_custom(qsc_keccak_state* ctx, qsc_keccak_r
 /**
 * \brief Absorb the custom, name, and key arrays into the Keccak state.
 *
-* \param ctx: [struct] The cipher state structure
+* \param ctx: [struct] The keccak state structure
 * \param rate: The rate of absorption in bytes
 * \param key: [const] The input key byte array
 * \param keylen: The number of key bytes to process
@@ -315,14 +315,14 @@ QSC_EXPORT_API void qsc_keccak_absorb_key_custom(qsc_keccak_state* ctx, qsc_kecc
 * \warning The dispose function must be called when disposing of the function state.
 * This function safely destroys the internal state.
 *
-* \param ctx: [struct] The cipher state structure
+* \param ctx: [struct] The keccak state structure
 */
 QSC_EXPORT_API void qsc_keccak_dispose(qsc_keccak_state* ctx);
 
 /**
 * \brief Finalize the Keccak state
 *
-* \param ctx: [struct] The cipher state structure
+* \param ctx: [struct] The keccak state structure
 * \param rate: The rate of absorption in bytes
 * \param output: The output byte array
 * \param outlen: The number of output bytes to generate
@@ -330,6 +330,36 @@ QSC_EXPORT_API void qsc_keccak_dispose(qsc_keccak_state* ctx);
 * \param rounds: The number of permutation rounds, the default is 24, maximum is 48
 */
 QSC_EXPORT_API void qsc_keccak_finalize(qsc_keccak_state* ctx, qsc_keccak_rate rate, uint8_t* output, size_t outlen, uint8_t domain, size_t rounds);
+
+/**
+* \brief Absorb bytes into state incrementally
+*
+* \param ctx: The function state
+* \param rate: The rate of absorption in bytes
+* \param message: The input message array
+* \param msglen: The number of message bytes
+*/
+QSC_EXPORT_API void qsc_keccak_incremental_absorb(qsc_keccak_state* ctx, uint32_t rate, const uint8_t* message, size_t msglen);
+
+/**
+* \brief Finalize state added incrementally
+*
+* \param ctx: The function state
+* \param rate: The rate of absorption in bytes
+* \param position: The current position within the state buffer
+* \param domain: The function domain id
+*/
+QSC_EXPORT_API void qsc_keccak_incremental_finalize(qsc_keccak_state* ctx, uint32_t rate, uint8_t domain);
+
+/**
+* \brief Extract an array of bytes from the Keccak state
+*
+* \param ctx: The function state
+* \param output: The output byte array
+* \param outlen: The number of output bytes to generate
+* \param rate: The rate of absorption in bytes
+*/
+QSC_EXPORT_API void qsc_keccak_incremental_squeeze(qsc_keccak_state* ctx, size_t rate, uint8_t* output, size_t outlen);
 
 /**
 * \brief The Keccak permute function.
@@ -377,7 +407,7 @@ QSC_EXPORT_API void qsc_keccak_squeezeblocks(qsc_keccak_state* ctx, uint8_t* out
 *
 * \param ctx: [struct] A reference to the keccak state; must be initialized
 */
-QSC_EXPORT_API void qsc_keccak_state_reset(qsc_keccak_state* ctx);
+QSC_EXPORT_API void qsc_keccak_initialize_state(qsc_keccak_state* ctx);
 
 /**
 * \brief Update Keccak state with message input.
@@ -822,9 +852,97 @@ QSC_EXPORT_API void qsc_kpa_update(qsc_kpa_state* ctx, const uint8_t* message, s
 * \warning The dispose function must be called when disposing of the function state.
 * This function safely destroys the internal state.
 *
-* \param ctx: [struct] The cipher state structure
+* \param ctx: [struct] The keccak state structure
 */
 QSC_EXPORT_API void qsc_kpa_dispose(qsc_kpa_state* ctx);
+
+/* parallel keccak x4 */
+
+#if defined(QSC_SYSTEM_HAS_AVX2)
+
+/**
+* \brief Absorb 4 Keccak instances simultaneously using SIMD instructions.
+*
+* \warning The input and output arrays muct be of the same length.
+* This function requires the AVX2 instruction set.
+*
+* \param state: The keccak state array
+* \param rate: The shake rate
+* \param inp0: The 1st input key array
+* \param inp1: The 2nd input key array
+* \param inp2: The 3rd input key array
+* \param inp3: The 4th input key array
+* \param inplen: The length of the input key arrays
+* \param domain
+*/
+void qsc_keccakx4_absorb(__m256i state[QSC_KECCAK_STATE_SIZE], qsc_keccak_rate rate,
+	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3, size_t inplen, uint8_t domain);
+
+/**
+* \brief Squeeze 4 Keccak instances simultaneously using SIMD instructions.
+*
+* \warning The input and output arrays muct be of the same length.
+* This function requires the AVX2 instruction set.
+*
+* \param state: The keccak state array
+* \param rate: The keccak rate
+* \param out0: The 1st output array
+* \param out1: The 2nd output array
+* \param out2: The 3rd output array
+* \param out3: The 4th output array
+* \param nblocks: The number of output blocks
+*/
+void qsc_keccakx4_squeezeblocks(__m256i state[QSC_KECCAK_STATE_SIZE], qsc_keccak_rate rate,
+	uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3, size_t nblocks);
+
+#endif
+
+/* parallel keccak x8 */
+
+#if defined(QSC_SYSTEM_HAS_AVX512)
+
+/**
+* \brief Absorb 4 Keccak instances simultaneously using SIMD instructions.
+*
+* \warning The input and output arrays muct be of the same length.
+* This function requires the AVX2 instruction set.
+*
+* \param state: The keccak state array
+* \param rate: The shake rate
+* \param inp0: The 1st input key array
+* \param inp1: The 2nd input key array
+* \param inp2: The 3rd input key array
+* \param inp3: The 4th input key array
+* \param inp4: The 5th input key array
+* \param inp5: The 6th input key array
+* \param inp6: The 7th input key array
+* \param inp7: The 8th input key array
+* \param inplen: The length of the input key arrays
+* \param domain
+*/
+void qsc_keccakx8_absorb(__m512i state[QSC_KECCAK_STATE_SIZE], qsc_keccak_rate rate,
+	const uint8_t* inp0, const uint8_t* inp1, const uint8_t* inp2, const uint8_t* inp3,
+	const uint8_t* inp4, const uint8_t* inp5, const uint8_t* inp6, const uint8_t* inp7, size_t inplen, uint8_t domain);
+
+/**
+* \brief Squeeze 4 Keccak instances simultaneously using SIMD instructions.
+*
+* \warning The input and output arrays muct be of the same length.
+* This function requires the AVX2 instruction set.
+*
+* \param state: The keccak state array
+* \param rate: The keccak rate
+* \param out0: The 1st output array
+* \param out1: The 2nd output array
+* \param out2: The 3rd output array
+* \param out3: The 4th output array
+* \param nblocks: The number of output blocks
+*/
+void qsc_keccakx8_squeezeblocks(__m512i state[QSC_KECCAK_STATE_SIZE], qsc_keccak_rate rate,
+	uint8_t* out0, uint8_t* out1, uint8_t* out2, uint8_t* out3, uint8_t* out4,
+	uint8_t* out5, uint8_t* out6, uint8_t* out7, size_t nblocks);
+
+#endif
 
 /* parallel shake x4 */
 
@@ -853,7 +971,7 @@ QSC_EXPORT_API void shake128x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint
 *
 * \warning The input and output arrays muct be of the same length.
 * This function requires the AVX2 instruction set.
-* 
+*
 * \param out0: The 1st output array
 * \param out1: The 2nd output array
 * \param out2: The 3rd output array
@@ -873,7 +991,7 @@ QSC_EXPORT_API void shake256x4(uint8_t* out0, uint8_t* out1, uint8_t* out2, uint
 *
 * \warning The input and output arrays muct be of the same length.
 * This function requires the AVX2 instruction set.
-* 
+*
 * \param out0: The 1st output array
 * \param out1: The 2nd output array
 * \param out2: The 3rd output array

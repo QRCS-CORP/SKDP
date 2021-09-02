@@ -21,7 +21,7 @@
 * An implementation of the cryptographic system entropy provider
 * Written by John G. Underhill
 * Updated on January 20, 2020
-* Contact: develop@vtdev.com 
+* Contact: support@vtdev.com 
 */
 
 /**
@@ -42,6 +42,9 @@
 #define QSC_CSP_H
 
 #include "common.h"
+
+/* bogus winbase.h error */
+QSC_SYSTEM_CONDITION_IGNORE(5105)
 
 /*!
 * \def QSC_CSP_SEED_MAX

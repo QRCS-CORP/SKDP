@@ -20,7 +20,7 @@
 * An implementation of supporting time based functions
 * Written by John G. Underhill
 * Updated on February 18, 2021
-* Contact: develop@vtdev.com 
+* Contact: support@vtdev.com 
 */
 
 /*
@@ -101,7 +101,7 @@ QSC_EXPORT_API bool qsc_filetools_create_file(const char* path);
 * \param length: The size of the object
 * \return Returns true if the operation succeeded
 */
-QSC_EXPORT_API bool qsc_filetools_copy_object_to_file(const char* path, void* obj, size_t length);
+QSC_EXPORT_API bool qsc_filetools_copy_object_to_file(const char* path, const void* obj, size_t length);
 
 /**
 * \brief Copy the contents of a stream to a file.
@@ -111,7 +111,7 @@ QSC_EXPORT_API bool qsc_filetools_copy_object_to_file(const char* path, void* ob
 * \param length: The length of the array
 * \return Returns true if the operation succeeded
 */
-QSC_EXPORT_API bool qsc_filetools_copy_stream_to_file(const char* path, char* stream, size_t length);
+QSC_EXPORT_API bool qsc_filetools_copy_stream_to_file(const char* path, const char* stream, size_t length);
 
 /**
 * \brief Copy a file to an object.

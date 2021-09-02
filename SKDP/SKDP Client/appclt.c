@@ -40,7 +40,7 @@ static void client_print_error(skdp_errors error)
 {
 	const char* msg;
 
-	msg = skdp_error_to_string(skdp_error_bad_keep_alive);
+	msg = skdp_error_to_string(error);
 
 	if (msg != NULL)
 	{
@@ -53,8 +53,8 @@ static void client_print_banner()
 	qsc_consoleutils_print_line("****************************************************");
 	qsc_consoleutils_print_line("* SKDP: Symmetric Key Distribution Protocol Client *");
 	qsc_consoleutils_print_line("*                                                  *");
-	qsc_consoleutils_print_line("* Release:   v1.0.0.0a (A0)                        *");
-	qsc_consoleutils_print_line("* Date:      June 18, 2021                         *");
+	qsc_consoleutils_print_line("* Release:   v1.0.0.0b (A0)                        *");
+	qsc_consoleutils_print_line("* Date:      September 1, 2021                     *");
 	qsc_consoleutils_print_line("* Contact:   develop@vtdev.com                     *");
 	qsc_consoleutils_print_line("****************************************************");
 	qsc_consoleutils_print_line("");
@@ -112,12 +112,14 @@ static bool client_ipv4_dialogue(skdp_device_key* ckey, qsc_ipinfo_ipv4_address*
 			res = false;
 			client_print_message("The path is invalid or inaccessable.");
 		}
+
+		client_print_prompt();
 	}
 
 	return res;
 }
 
-static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, skdp_device_key* ckey)
+static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, const skdp_device_key* ckey)
 {
 	qsc_socket_receive_async_state actx = { 0 };
 	qsc_socket csck = { 0 };
@@ -140,8 +142,8 @@ static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, skdp_dev
 		/* send and receive loops */
 
 		memset((char*)&actx, 0x00, sizeof(qsc_socket_receive_async_state));
-		actx.callback = qsc_socket_receive_async_callback;
-		actx.error = qsc_socket_exception_callback;
+		actx.callback = &qsc_socket_receive_async_callback;
+		actx.error = &qsc_socket_exception_callback;
 		actx.source = &csck;
 		qsc_socket_receive_async(&actx);
 		mlen = 0;
@@ -179,20 +181,20 @@ static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, skdp_dev
 	}
 }
 
-void qsc_socket_exception_callback(qsc_socket* source, qsc_socket_exceptions error)
+void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_exceptions error)
 {
 	assert(source != NULL);
 
 	const char* emsg;
 
-	if (source != NULL)
+	if (source != NULL && error != qsc_socket_exception_success)
 	{
 		emsg = qsc_socket_error_to_string(error);
 		client_print_message(emsg);
 	}
 }
 
-void qsc_socket_receive_async_callback(qsc_socket* source, uint8_t* message, size_t msglen)
+void qsc_socket_receive_async_callback(const qsc_socket* source, const uint8_t* message, size_t msglen)
 {
 	assert(message != NULL);
 	assert(source != NULL);

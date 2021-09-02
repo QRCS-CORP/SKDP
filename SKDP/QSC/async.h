@@ -21,12 +21,15 @@
 * A threading base class.
 * Written by John G. Underhill
 * Updated on December 30, 2020
-* Contact: develop@vtdev.com */
+* Contact: support@vtdev.com */
 
 #ifndef QSC_ASYNC_H
 #define QSC_ASYNC_H
 
 #include "common.h"
+
+/* bogus winbase.h error */
+QSC_SYSTEM_CONDITION_IGNORE(5105)
 
 #if defined(QSC_SYSTEM_OS_WINDOWS)
 #	define WIN32_LEAN_AND_MEAN
@@ -40,11 +43,11 @@
 #	include <pthread>
 	typedef pthread_mutex_t qsc_async_mutex;
 #	if !defined(pthread_t)
-		typedef int pthread_t;
+		typedef int32_t pthread_t;
 #	endif
 	typedef pthread_t qsc_thread;
 #else
-#	error your operating system is not supported!
+#	error "The operating system is not supported!"
 #endif
 
 /**
@@ -64,7 +67,7 @@ QSC_EXPORT_API bool qsc_async_mutex_create(qsc_async_mutex* mtx);
 QSC_EXPORT_API bool qsc_async_mutex_destroy(qsc_async_mutex* mtx);
 
 /**
-* \brief Lock a mutex. 
+* \brief Lock a mutex.
 * The mutex must be initialized and destroyed.
 *
 * \param mtx: The mutex to lock
@@ -108,7 +111,7 @@ QSC_EXPORT_API qsc_thread qsc_async_thread_initialize(void (*thd_func)(void*), v
 *
 * \param handle: The thread to terminate (terminates calling thread on windows)
 */
-QSC_EXPORT_API void qsc_async_thread_terminate(qsc_thread* handle);
+QSC_EXPORT_API void qsc_async_thread_terminate(const qsc_thread* handle);
 
 /**
 * \brief Wait for a thread to complete execution
@@ -130,6 +133,6 @@ QSC_EXPORT_API void qsc_async_thread_sleep(uint32_t msec);
 * \param handles: The array of threads
 * \param count: The number of threads
 */
-QSC_EXPORT_API void qsc_async_thread_wait_all(qsc_thread* handles, int count);
+QSC_EXPORT_API void qsc_async_thread_wait_all(qsc_thread* handles, int32_t count);
 
 #endif

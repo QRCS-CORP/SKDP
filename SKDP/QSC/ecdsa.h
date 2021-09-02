@@ -18,10 +18,10 @@
 *
 *
 * Implementation Details:
-* An implementation of the Elliptic Curve Digital Signature Algorithm
-* Written by John G. Underhill
+* An implementation of the ECDSA asymmetric signature scheme
+* Rewritten for Misra compliance and library integration by John G. Underhill
+* Contact: support@vtdev.com
 * Updated on August 30, 2020
-* Contact: develop@vtdev.com 
 */
 
 /**
@@ -56,16 +56,11 @@
 * \endcode
 *
 * Reference implementations:
-* LibSodium by Frank Denis
-* https://github.com/jedisct1/libsodium
+* LibSodium by Frank Denis <a href="https://github.com/jedisct1/libsodium" /a>
+* curve25519-donna by Adam Langley <a href="https://github.com/agl/curve25519-donna" /a>
+* NaCI by Daniel J. Bernstein, Tanja Lange, Peter Schwabe <a href="https://nacl.cr.yp.to" /a>
 *
-* curve25519-donna by Adam Langley
-* https://github.com/agl/curve25519-donna
-*
-* NaCI by Daniel J. Bernstein, Tanja Lange, Peter Schwabe
-* https://nacl.cr.yp.to
-*
-* Rewritten for Misra compliance and optimizations by John G. Underhill
+* Rewritten for Misra compliance and library integration by John G. Underhill
 * September 21, 2020
 */
 
@@ -95,7 +90,7 @@
 #	define QSC_ECDSA_PUBLICKEY_SIZE 32
 
 #else
-#	error No ECDSA implementation is defined, check common.h!
+#	error "The ECDSA parameter set is invalid!"
 #endif
 
 /*!
@@ -130,7 +125,7 @@ QSC_EXPORT_API void qsc_ecdsa_generate_seeded_keypair(uint8_t* publickey, uint8_
 * \param privatekey: Pointer to the private signature-key array
 * \param rng_generate: Pointer to the random generator
 */
-QSC_EXPORT_API void qsc_ecdsa_generate_keypair(uint8_t* publickey, uint8_t* privatekey, void (*rng_generate)(uint8_t*, size_t));
+QSC_EXPORT_API void qsc_ecdsa_generate_keypair(uint8_t* publickey, uint8_t* privatekey, bool (*rng_generate)(uint8_t*, size_t));
 
 /**
 * \brief Takes the message as input and returns an array containing the signature followed by the message.

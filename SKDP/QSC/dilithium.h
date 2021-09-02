@@ -19,14 +19,15 @@
 *
 * Implementation Details:
 * An implementation of the Dilithium asymmetric signature scheme
-* Written by John G. Underhill
+* Rewritten for Misra compliance and library integration by John G. Underhill
+* Contact: support@vtdev.com
 * Updated on January 20, 2020
-* Contact: develop@vtdev.com 
 */
 
 /**
 * \file dilithium.h
 * \date November 13, 2018
+* \updated July 2, 2021
 *
 * \brief <b>The Dilithium API definitions</b> \n
 * Contains the primary public api for the Dilithium asymmetric signature scheme implementation.
@@ -55,10 +56,11 @@
 * }
 * \endcode
 *
-* \remarks Based entirely on the C reference branch of SHINCS+; including base code, comments, and api. \n
-* The <a href="https://sphincs.org/data/sphincs+-specification.pdf">SPHINCS+</a>: specification. \n
-* Sphincs+ entry in the <a href="https://csrc.nist.gov/projects/post-quantum-cryptography/round-1-submissions">NIST PQ Round 1</a> repository.
-* Github source code: <a href="https://github.com/sphincs/sphincsplus">SHINCS+</a> code reference.
+* \remarks 
+* Based entirely on the C reference branch of Dilithium taken from the NIST Post Quantum Competition Round 3 submission. \n
+* The NIST Post Quantum Competition <a href="https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions">Round 3</a> Finalists. \n
+* The <a href="https://pq-crystals.org/dilithium/index.shtml">Dilithium</a> website. \n
+* The Dilithium <a href="https://pq-crystals.org/dilithium/data/dilithium-specification-round3-20210208.pdf">Algorithm</a> Specification.
 */
 
 #ifndef QSC_DILITHIUM_H
@@ -66,68 +68,68 @@
 
 #include "common.h"
 
-#if defined(QSC_DILITHIUM_S1N256Q8380417)
-
-/*!
-* \def QSC_DILITHIUM_SIGNATURE_SIZE
-* \brief The byte size of the signature array
-*/
-#	define QSC_DILITHIUM_SIGNATURE_SIZE 2044
+#if defined(QSC_DILITHIUM_S2N256Q8380417K4)
 
 /*!
 * \def QSC_DILITHIUM_PRIVATEKEY_SIZE
 * \brief The byte size of the secret private-key array
 */
-#	define QSC_DILITHIUM_PRIVATEKEY_SIZE 2800
+#	define QSC_DILITHIUM_PRIVATEKEY_SIZE 2544
 
 /*!
 * \def QSC_DILITHIUM_PUBLICKEY_SIZE
 * \brief The byte size of the public-key array
 */
-#	define QSC_DILITHIUM_PUBLICKEY_SIZE 1184
-
-#elif defined(QSC_DILITHIUM_S2N256Q8380417)
+#	define QSC_DILITHIUM_PUBLICKEY_SIZE 1312
 
 /*!
 * \def QSC_DILITHIUM_SIGNATURE_SIZE
 * \brief The byte size of the signature array
 */
-#	define QSC_DILITHIUM_SIGNATURE_SIZE 2701
+#	define QSC_DILITHIUM_SIGNATURE_SIZE 2420
+
+#elif defined(QSC_DILITHIUM_S3N256Q8380417K6)
 
 /*!
 * \def QSC_DILITHIUM_PRIVATEKEY_SIZE
 * \brief The byte size of the secret private-key array
 */
-#	define QSC_DILITHIUM_PRIVATEKEY_SIZE 3504
+#	define QSC_DILITHIUM_PRIVATEKEY_SIZE 4016
 
 /*!
 * \def QSC_DILITHIUM_PUBLICKEY_SIZE
 * \brief The byte size of the public-key array
 */
-#	define QSC_DILITHIUM_PUBLICKEY_SIZE 1472
-
-#elif defined(QSC_DILITHIUM_S3N256Q8380417)
+#	define QSC_DILITHIUM_PUBLICKEY_SIZE 1952
 
 /*!
 * \def QSC_DILITHIUM_SIGNATURE_SIZE
 * \brief The byte size of the signature array
 */
-#	define QSC_DILITHIUM_SIGNATURE_SIZE 3366
+#	define QSC_DILITHIUM_SIGNATURE_SIZE 3293
+
+#elif defined(QSC_DILITHIUM_S5N256Q8380417K8)
 
 /*!
 * \def QSC_DILITHIUM_PRIVATEKEY_SIZE
 * \brief The byte size of the secret private-key array
 */
-#	define QSC_DILITHIUM_PRIVATEKEY_SIZE 3856
+#	define QSC_DILITHIUM_PRIVATEKEY_SIZE 4880
 
 /*!
 * \def QSC_DILITHIUM_PUBLICKEY_SIZE
 * \brief The byte size of the public-key array
 */
-#	define QSC_DILITHIUM_PUBLICKEY_SIZE 1760
+#	define QSC_DILITHIUM_PUBLICKEY_SIZE 2592
+
+/*!
+* \def QSC_DILITHIUM_SIGNATURE_SIZE
+* \brief The byte size of the signature array
+*/
+#	define QSC_DILITHIUM_SIGNATURE_SIZE 4595
 
 #else
-#	error No Dilithium implementation is defined, check common.h!
+#	error "The Dilithium parameter set is invalid!"
 #endif
 
 /*!
@@ -145,7 +147,7 @@
 * \param privatekey: Pointer to the private signature-key array
 * \param rng_generate: Pointer to the random generator
 */
-QSC_EXPORT_API void qsc_dilithium_generate_keypair(uint8_t* publickey, uint8_t* privatekey, void (*rng_generate)(uint8_t*, size_t));
+QSC_EXPORT_API void qsc_dilithium_generate_keypair(uint8_t* publickey, uint8_t* privatekey, bool (*rng_generate)(uint8_t*, size_t));
 
 /**
 * \brief Takes the message as input and returns an array containing the signature followed by the message.
@@ -159,7 +161,7 @@ QSC_EXPORT_API void qsc_dilithium_generate_keypair(uint8_t* publickey, uint8_t* 
 * \param privatekey: [const] Pointer to the private signature-key
 * \param rng_generate: Pointer to the random generator
 */
-QSC_EXPORT_API void qsc_dilithium_sign(uint8_t* signedmsg, size_t* smsglen, const uint8_t* message, size_t msglen, const uint8_t* privatekey, void (*rng_generate)(uint8_t*, size_t));
+QSC_EXPORT_API void qsc_dilithium_sign(uint8_t* signedmsg, size_t* smsglen, const uint8_t* message, size_t msglen, const uint8_t* privatekey, bool (*rng_generate)(uint8_t*, size_t));
 
 /**
 * \brief Verifies a signature-message pair with the public key.

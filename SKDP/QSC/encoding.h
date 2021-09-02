@@ -21,7 +21,7 @@
 * An implementation of supporting integer based functions
 * Written by John G. Underhill
 * Updated on January 20, 2020
-* Contact: develop@vtdev.com
+* Contact: support@vtdev.com
 */
 
 /*
@@ -81,10 +81,5 @@ QSC_EXPORT_API size_t qsc_encoding_base64_encoded_size(size_t length);
 * \return Returns true if the character is valid
 */
 QSC_EXPORT_API bool qsc_encoding_base64_is_valid_char(char c);
-
-/**
-* \brief Test the encoding and decoding functions
-*/
-QSC_EXPORT_API void qsc_encoding_self_test();
 
 #endif

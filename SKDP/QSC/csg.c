@@ -1,9 +1,9 @@
 #include "csg.h"
 #include "intutils.h"
 #include "memutils.h"
-#include "csp.h"
+#include "acp.h"
 
-static csg_fill_buffer(qsc_csg_state* ctx)
+static void csg_fill_buffer(qsc_csg_state* ctx)
 {
 	/* cache the block */
 	if (ctx->rate == QSC_KECCAK_512_RATE)
@@ -20,7 +20,7 @@ static csg_fill_buffer(qsc_csg_state* ctx)
 	ctx->cpos = 0;
 }
 
-static csg_auto_reseed(qsc_csg_state* ctx)
+static void csg_auto_reseed(qsc_csg_state* ctx)
 {
 	if (ctx->pres && ctx->bctr >= QSC_CSG_RESEED_THRESHHOLD)
 	{
@@ -28,7 +28,7 @@ static csg_auto_reseed(qsc_csg_state* ctx)
 		{
 			/* add a random seed to input seed and info */
 			uint8_t prand[QSC_CSG512_SEED_SIZE];
-			qsc_csp_generate(prand, sizeof(prand));
+			qsc_acp_generate(prand, sizeof(prand));
 
 			qsc_cshake_update(&ctx->kstate, qsc_keccak_rate_512, prand, sizeof(prand));
 		}
@@ -36,7 +36,7 @@ static csg_auto_reseed(qsc_csg_state* ctx)
 		{
 			/* add a random seed to input seed and info */
 			uint8_t prand[QSC_CSG256_SEED_SIZE];
-			qsc_csp_generate(prand, sizeof(prand));
+			qsc_acp_generate(prand, sizeof(prand));
 
 			qsc_cshake_update(&ctx->kstate, qsc_keccak_rate_256, prand, sizeof(prand));
 		}
@@ -84,7 +84,7 @@ void qsc_csg_initialize(qsc_csg_state* ctx, const uint8_t* seed, size_t seedlen,
 		{
 			/* add a random seed to input seed and info */
 			uint8_t prand[QSC_CSG512_SEED_SIZE];
-			qsc_csp_generate(prand, sizeof(prand));
+			qsc_acp_generate(prand, sizeof(prand));
 			qsc_cshake_initialize(&ctx->kstate, qsc_keccak_rate_512, seed, seedlen, info, infolen, prand, sizeof(prand));
 		}
 		else
@@ -98,7 +98,7 @@ void qsc_csg_initialize(qsc_csg_state* ctx, const uint8_t* seed, size_t seedlen,
 		if (ctx->pres)
 		{
 			uint8_t prand[QSC_CSG256_SEED_SIZE];
-			qsc_csp_generate(prand, sizeof(prand));
+			qsc_acp_generate(prand, sizeof(prand));
 			qsc_cshake_initialize(&ctx->kstate, qsc_keccak_rate_256, seed, seedlen, info, infolen, prand, sizeof(prand));
 		}
 		else
@@ -160,7 +160,7 @@ void qsc_csg_generate(qsc_csg_state* ctx, uint8_t* output, size_t outlen)
 	/* clear used bytes */
 	if (ctx->crmd != 0)
 	{
-		qsc_memutils_clear((uint8_t*)ctx->cache, ctx->cpos);
+		qsc_memutils_clear(ctx->cache, ctx->cpos);
 	}
 
 	/* reseed check */

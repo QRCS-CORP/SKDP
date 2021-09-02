@@ -2,17 +2,19 @@
 #define QSC_CPUID_H
 
 #include "common.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 #if defined(QSC_SYSTEM_COMPILER_MSC) && defined(QSC_SYSTEM_ARCH_X86_X64)
 #	include <intrin.h>
 #	pragma intrinsic(__cpuid)
 #elif defined(QSC_SYSTEM_COMPILER_GCC)
 #	include <cpuid.h>
-#	pragma GCC target ("aes")
+//#	pragma GCC target ("aes")
 #include <x86intrin.h>
 #endif
 
-QSC_EXPORT_API typedef struct qsc_cpu_features
+QSC_EXPORT_API typedef struct
 {
     bool aesni;
     bool avx;

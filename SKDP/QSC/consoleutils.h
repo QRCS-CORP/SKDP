@@ -1,6 +1,3 @@
-#ifndef QSC_CONSOLEUTILS_H
-#define QSC_CONSOLEUTILS_H
-
 /* The AGPL version 3 License (AGPLv3)
 *
 * Copyright (c) 2021 Digital Freedom Defence Inc.
@@ -24,7 +21,7 @@
 * An implementation of common console support functions
 * Written by John G. Underhill
 * Written on January 24, 2021
-* Contact: develop@vtdev.com 
+* Contact: support@vtdev.com
 */
 
 /*
@@ -33,7 +30,13 @@
 * January 24, 2021
 */
 
+#ifndef QSC_CONSOLEUTILS_H
+#define QSC_CONSOLEUTILS_H
+
 #include "common.h"
+
+/* bogus winbase.h error */
+QSC_SYSTEM_CONDITION_IGNORE(5105)
 
 #define CONSOLE_MAX_LINE 128
 
@@ -197,7 +200,7 @@ QSC_EXPORT_API void qsc_consoleutils_print_double(double digit);
 *
 * \param seconds: the number of seconds to run
 */
-QSC_EXPORT_API void qsc_consoleutils_progress_counter(int seconds);
+QSC_EXPORT_API void qsc_consoleutils_progress_counter(int32_t seconds);
 
 /**
 * \brief Set the size of the window scroll buffer

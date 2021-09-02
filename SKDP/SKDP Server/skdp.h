@@ -440,7 +440,7 @@ static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r01-skdp-rcs256-keccak
 * \def SKDP_ESTABLISH_REQUEST_SIZE
 * \brief The kex establish stage request packet size
 */
-#define SKDP_ESTABLISH_REQUEST_SIZE (SKDP_KID_SIZE + SKDP_MACTAG_SIZE + SKDP_HEADER_SIZE)
+#define SKDP_ESTABLISH_REQUEST_SIZE (SKDP_STH_SIZE + SKDP_MACTAG_SIZE + SKDP_HEADER_SIZE)
 
 /*!
 * \def SKDP_CONNECT_RESPONSE_SIZE
@@ -458,13 +458,13 @@ static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r01-skdp-rcs256-keccak
 * \def SKDP_ESTABLISH_RESPONSE_SIZE
 * \brief The kex establish stage response packet size
 */
-#define SKDP_ESTABLISH_RESPONSE_SIZE (SKDP_KID_SIZE + SKDP_MACTAG_SIZE + SKDP_HEADER_SIZE)
+#define SKDP_ESTABLISH_RESPONSE_SIZE (SKDP_HASH_SIZE + SKDP_MACTAG_SIZE + SKDP_HEADER_SIZE)
 
 /*!
 * \def SKDP_ESTABLISH_VERIFY_SIZE
 * \brief The kex establish verify stage response packet size
 */
-#define SKDP_ESTABLISH_VERIFY_SIZE (SKDP_KID_SIZE + SKDP_MACTAG_SIZE + SKDP_HEADER_SIZE)
+#define SKDP_ESTABLISH_VERIFY_SIZE (SKDP_HASH_SIZE + SKDP_MACTAG_SIZE + SKDP_HEADER_SIZE)
 
 /* error code strings */
 
@@ -492,6 +492,17 @@ static const char SKDP_ERROR_STRINGS[SKDP_ERROR_STRING_DEPTH][SKDP_ERROR_STRING_
 };
 
 /*!
+* \struct skdp_device_key
+* \brief The SKDP device key structure
+*/
+typedef struct skdp_device_key
+{
+	uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
+	uint8_t ddk[SKDP_DDK_SIZE];				/*!< The device derivation key */
+	uint64_t expiration;					/*!< The expiration time, in seconds from epoch */
+} skdp_device_key;
+
+/*!
 * \struct skdp_master_key
 * \brief The SKDP master key structure
 */
@@ -512,17 +523,6 @@ typedef struct skdp_server_key
 	uint8_t sdk[SKDP_SDK_SIZE];				/*!< The server derivation key */
 	uint64_t expiration;					/*!< The expiration time, in seconds from epoch */
 } skdp_server_key;
-
-/*!
-* \struct skdp_device_key
-* \brief The SKDP device key structure
-*/
-typedef struct skdp_device_key
-{
-	uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
-	uint8_t ddk[SKDP_DDK_SIZE];				/*!< The device derivation key */
-	uint64_t expiration;					/*!< The expiration time, in seconds from epoch */
-} skdp_device_key;
 
 /*!
 * \struct skdp_keep_alive_state

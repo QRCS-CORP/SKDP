@@ -1,7 +1,7 @@
 #include "hcg.h"
 #include "intutils.h"
 #include "memutils.h"
-#include "csp.h"
+#include "acp.h"
 
 /* QSC-HCG-SHA51201*/
 static const uint8_t QSC_DEFAULT_INFO[17] = { 0x51, 0x53, 0x43, 0x2D, 0x48, 0x43, 0x47, 0x2D, 0x53, 0x48, 0x41, 0x32, 0x35, 0x31, 0x32, 0x00, 0x01 };
@@ -31,13 +31,13 @@ static void hcg_fill_buffer(qsc_hcg_state* ctx)
 	ctx->cpos = 0;
 }
 
-static csg_auto_reseed(qsc_hcg_state* ctx)
+static void csg_auto_reseed(qsc_hcg_state* ctx)
 {
 	if (ctx->pres && ctx->bctr >= QSC_HCG_RESEED_THRESHHOLD)
 	{
 		/* add a random seed to input seed and info */
 		uint8_t prand[QSC_HMAC_512_RATE];
-		qsc_csp_generate(prand, sizeof(prand));
+		qsc_acp_generate(prand, sizeof(prand));
 
 		/* update hmac */
 		qsc_hmac512_update(&ctx->hstate, prand, sizeof(prand));
@@ -51,7 +51,7 @@ static csg_auto_reseed(qsc_hcg_state* ctx)
 void qsc_hcg_dispose(qsc_hcg_state* ctx)
 {
 	memset(ctx->cache, 0x00, sizeof(ctx->cache));
-	
+
 	ctx->bctr = 0;
 	ctx->cpos = 0;
 	ctx->crmd = 0;
@@ -87,7 +87,7 @@ void qsc_hcg_initialize(qsc_hcg_state* ctx, const uint8_t* seed, size_t seedlen,
 	{
 		/* add a random seed to hmac state */
 		uint8_t prand[QSC_HMAC_512_RATE];
-		qsc_csp_generate(prand, sizeof(prand));
+		qsc_acp_generate(prand, sizeof(prand));
 		qsc_hmac512_update(&ctx->hstate, prand, sizeof(prand));
 	}
 

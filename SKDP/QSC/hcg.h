@@ -19,8 +19,8 @@
 *
 * An implementation of a HMAC based DRBG.
 * Written by John G. Underhill
-* Updated on August 31, 2020
-* Contact: develop@vtdev.com 
+* Updated on June 14, 2021
+* Contact: support@vtdev.com 
 */
 
 /**
@@ -90,12 +90,12 @@ QSC_EXPORT_API typedef struct
 } qsc_hcg_state;
 
 /**
-* \brief Dispose of the HCG cipher state.
+* \brief Dispose of the HCG drbg state
 *
 * \warning The dispose function must be called when disposing of the cipher.
 * This function destroys the internal state of the cipher.
 *
-* \param ctx: [struct] The cipher state structure
+* \param ctx: [struct] The drbg state structure
 */
 QSC_EXPORT_API void qsc_hcg_dispose(qsc_hcg_state* ctx);
 

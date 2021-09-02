@@ -21,7 +21,7 @@
 * An implementation of the Rijndael-256 authenticated stream cipher.
 * Written by John G. Underhill
 * Updated October 28, 2020
-* Contact: develop@vtdev.com */
+* Contact: support@vtdev.com */
 
 /**
 * \file rcs.h
@@ -32,7 +32,7 @@
 * \version		1.0.0.0e
 * \date			October 20, 2019
 * \updated		October 28, 2020
-* \contact:		develop@vtdev.com
+* \contact:		support@vtdev.com
 * \copyright	GPL version 3 license (GPLv3)
 *
 *
@@ -157,8 +157,8 @@
 * Just for testing, add the QSC_RCS_AESNI_ENABLED preprocessor definition and enable SIMD and AES-NI.
 */
 #if !defined(QSC_RCS_AESNI_ENABLED)
-#	define QSC_RCS_AESNI_ENABLED
-#endif 
+//#	define QSC_RCS_AESNI_ENABLED
+#endif
 
 /***********************************
 *     RCS CONSTANTS AND SIZES      *
@@ -208,13 +208,13 @@
 /*! \enum cipher_mode
 * \brief The pre-defined cipher mode implementations
 */
-QSC_EXPORT_API typedef enum
+typedef enum
 {
 	RCS256 = 1,	/*!< The RCS-256 cipher */
 	RCS512 = 2,	/*!< The RCS-512 cipher */
 } rcs_cipher_type;
 
-/*! 
+/*!
 * \struct qsc_rcs_keyparams
 * \brief The key parameters structure containing key, nonce, and info arrays and lengths.
 * Use this structure to load an input cipher-key and optional info tweak, using the qsc_rcs_initialize function.
@@ -231,7 +231,7 @@ QSC_EXPORT_API typedef struct
 	size_t infolen;						/*!< The length in bytes of the information tweak */
 } qsc_rcs_keyparams;
 
-/*! 
+/*!
 * \struct qsc_rcs_state
 * \brief The internal state structure containing the round-key array.
 */

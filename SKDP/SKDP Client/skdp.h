@@ -457,13 +457,13 @@ static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r01-skdp-rcs256-keccak
 * \def SKDP_ESTABLISH_RESPONSE_SIZE
 * \brief The kex establish stage response packet size 
 */
-#define SKDP_ESTABLISH_RESPONSE_SIZE (SKDP_KID_SIZE + SKDP_MACTAG_SIZE + SKDP_HEADER_SIZE)
+#define SKDP_ESTABLISH_RESPONSE_SIZE (SKDP_HASH_SIZE + SKDP_MACTAG_SIZE + SKDP_HEADER_SIZE)
 
 /*!
 * \def SKDP_ESTABLISH_VERIFY_SIZE
 * \brief The kex establish verify stage response packet size
 */
-#define SKDP_ESTABLISH_VERIFY_SIZE (SKDP_KID_SIZE + SKDP_MACTAG_SIZE + SKDP_HEADER_SIZE)
+#define SKDP_ESTABLISH_VERIFY_SIZE (SKDP_HASH_SIZE + SKDP_MACTAG_SIZE + SKDP_HEADER_SIZE)
 
 /* error code strings */
 

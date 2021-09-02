@@ -49,7 +49,7 @@ typedef struct skdp_server_state
 * \param sock: A pointer to the initialized socket structure
 * \param error: The error code
 */
-void skdp_server_connection_close(skdp_server_state* ctx, qsc_socket* sock, skdp_errors error);
+void skdp_server_connection_close(skdp_server_state* ctx, const qsc_socket* sock, skdp_errors error);
 
 /**
 * \brief Send an error code to the remote host
@@ -57,7 +57,7 @@ void skdp_server_connection_close(skdp_server_state* ctx, qsc_socket* sock, skdp
 * \param sock: A pointer to the initialized socket structure
 * \param error: The error code
 */
-void skdp_server_send_error(qsc_socket* sock, skdp_errors error);
+void skdp_server_send_error(const qsc_socket* sock, skdp_errors error);
 
 /**
 * \brief Send a keep-alive to the remote host
@@ -65,7 +65,7 @@ void skdp_server_send_error(qsc_socket* sock, skdp_errors error);
 * \param kctx: The keep-alive state
 * \param sock: A pointer to the initialized socket structure
 */
-skdp_errors skdp_server_send_keep_alive(skdp_keep_alive_state* kctx, qsc_socket* sock);
+skdp_errors skdp_server_send_keep_alive(skdp_keep_alive_state* kctx, const qsc_socket* sock);
 
 /**
 * \brief Initialize the server state structure
@@ -121,6 +121,18 @@ skdp_errors skdp_server_decrypt_packet(skdp_server_state* ctx, const skdp_packet
 *
 * \return: The function error state
 */
-skdp_errors skdp_server_encrypt_packet(skdp_server_state* ctx, uint8_t* message, size_t msglen, skdp_packet* packetout);
+skdp_errors skdp_server_encrypt_packet(skdp_server_state* ctx, const uint8_t* message, size_t msglen, skdp_packet* packetout);
+
+/**
+* \brief A ratchet response sends an encrypted token to the client and re-keys the channel.
+* This is useful in a static tunnel configuration, where based on up time or data transferred,
+* additional entropy can be injected into the system on demand.
+*
+* \param ctx: A pointer to the server state structure
+* \param packetout: A pointer to the output packet structure
+*
+* \return: The function error state
+*/
+skdp_errors skdp_server_ratchet_response(skdp_server_state* ctx, skdp_packet* packetout);
 
 #endif

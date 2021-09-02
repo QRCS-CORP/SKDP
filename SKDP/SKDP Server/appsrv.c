@@ -18,7 +18,7 @@ static void server_print_error(skdp_errors error)
 {
 	const char* msg;
 
-	msg = skdp_error_to_string(skdp_error_bad_keep_alive);
+	msg = skdp_error_to_string(error);
 
 	if (msg != NULL)
 	{
@@ -42,7 +42,7 @@ static void server_print_message(const char* message)
 		}
 		else
 		{
-			qsc_consoleutils_print_safe("server> ");
+			qsc_consoleutils_print_line("server> ");
 		}
 	}
 }
@@ -57,8 +57,8 @@ static void server_print_banner()
 	qsc_consoleutils_print_line("****************************************************");
 	qsc_consoleutils_print_line("* SKDP: Symmetric Key Distribution Protocol Server *");
 	qsc_consoleutils_print_line("*                                                  *");
-	qsc_consoleutils_print_line("* Release:   v1.0.0.0a (A0)                        *");
-	qsc_consoleutils_print_line("* Date:      June 18, 2021                         *");
+	qsc_consoleutils_print_line("* Release:   v1.0.0.0b (A0)                        *");
+	qsc_consoleutils_print_line("* Date:      September 1, 2021                     *");
 	qsc_consoleutils_print_line("* Contact:   develop@vtdev.com                     *");
 	qsc_consoleutils_print_line("****************************************************");
 	qsc_consoleutils_print_line("");
@@ -162,7 +162,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 					/* set the keys master and server id strings */
 					qsc_intutils_hex_to_bin(strid, keyid, SKDP_KID_SIZE / 2);
 					/* generate a random client id */
-					res = qsc_acp_generate(((uint8_t*)keyid + (SKDP_KID_SIZE / 2)), SKDP_KID_SIZE / 2);
+					res = qsc_acp_generate((keyid + (SKDP_KID_SIZE / 2)), SKDP_KID_SIZE / 2);
 					
 					break;
 				}
@@ -239,7 +239,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 	return res;
 }
 
-static skdp_errors server_keep_alive_loop(qsc_socket* sock)
+static skdp_errors server_keep_alive_loop(const qsc_socket* sock)
 {
 	qsc_async_mutex mtx;
 	skdp_errors err;
@@ -264,7 +264,7 @@ static skdp_errors server_keep_alive_loop(qsc_socket* sock)
 	return err;
 }
 
-static skdp_errors server_listen_ipv4(skdp_server_key* skey)
+static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 {
 	qsc_socket_receive_async_state actx = { 0 };
 	qsc_socket ssck = { 0 };
@@ -272,8 +272,6 @@ static skdp_errors server_listen_ipv4(skdp_server_key* skey)
 	qsc_ipinfo_ipv4_address addt = { 0 };
 
 	uint8_t msgstr[SKDP_MESSAGE_MAX] = { 0 };
-	uint8_t devkey[SKDP_DEVKEY_ENCODED_SIZE] = { 0 };
-	uint8_t srvkey[SKDP_SRVKEY_ENCODED_SIZE] = { 0 };
 	char sin[SKDP_MESSAGE_MAX + 1] = { 0 };
 	skdp_errors err;
 	size_t mlen;
@@ -292,12 +290,12 @@ static skdp_errors server_listen_ipv4(skdp_server_key* skey)
 		qsc_consoleutils_print_line((char*)ssck.address);
 
 		/* start the keep-alive mechanism */
-		qsc_async_thread_initialize(server_keep_alive_loop, &ssck);
+		qsc_async_thread_initialize(&server_keep_alive_loop, &ssck);
 
 		/* send and receive loops */
 		memset((char*)&actx, 0x00, sizeof(qsc_socket_receive_async_state));
-		actx.callback = qsc_socket_receive_async_callback;
-		actx.error = qsc_socket_exception_callback;
+		actx.callback = &qsc_socket_receive_async_callback;
+		actx.error = &qsc_socket_exception_callback;
 		actx.source = &ssck;
 		qsc_socket_receive_async(&actx);
 
@@ -317,15 +315,12 @@ static skdp_errors server_listen_ipv4(skdp_server_key* skey)
 
 			mlen = qsc_consoleutils_get_line(sin, sizeof(sin));
 
-			if (mlen == 1 && sin[0] == '\n')
+			if (mlen == 1 && (sin[0] == '\n' || sin[0] == '\r'))
 			{
 				mlen = 0;
-				server_print_message("");
 			}
-			else
-			{
-				server_print_prompt();
-			}
+
+			server_print_prompt();
 		}
 
 		skdp_server_connection_close(&m_skdp_server_ctx, &ssck, skdp_error_none);
@@ -338,17 +333,20 @@ static skdp_errors server_listen_ipv4(skdp_server_key* skey)
 	return err;
 }
 
-void qsc_socket_exception_callback(qsc_socket* source, qsc_socket_exceptions error)
+void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_exceptions error)
 {
 	assert(source != NULL);
 
-	if (source != NULL)
+	const char* emsg;
+
+	if (source != NULL && error != qsc_socket_exception_success)
 	{
-		server_print_error(error);
+		emsg = qsc_socket_error_to_string(error);
+		server_print_message(emsg);
 	}
 }
 
-void qsc_socket_receive_async_callback(qsc_socket* source, uint8_t* message, size_t msglen)
+void qsc_socket_receive_async_callback(const qsc_socket* source, const uint8_t* message, size_t msglen)
 {
 	assert(message != NULL);
 	assert(source != NULL);

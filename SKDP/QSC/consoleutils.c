@@ -1,15 +1,18 @@
 #include "consoleutils.h"
 #include "stringutils.h"
+#include <stdio.h>
+#include <string.h>
+
 #if defined(QSC_SYSTEM_OS_WINDOWS)
 #	include <conio.h>
 #	include <tchar.h>
 #	include <Windows.h>
-#	pragma comment(lib, "user32.lib")
+#   if defined(QSC_SYSTEM_COMPILER_MSC)
+#	    pragma comment(lib, "user32.lib")
+#   endif
 #else
 #	include <unistd.h>
 #endif
-
-#include <stdio.h>
 
 void qsc_consoleutils_colored_message(const char* message, qsc_console_font_color color)
 {
@@ -17,7 +20,7 @@ void qsc_consoleutils_colored_message(const char* message, qsc_console_font_colo
 
 	assert(message != NULL);
 
-	int tcol;
+	int32_t tcol;
 
 	if (message != NULL)
 	{
@@ -37,14 +40,14 @@ void qsc_consoleutils_colored_message(const char* message, qsc_console_font_colo
 			tcol = FOREGROUND_RED;
 		}
 
-		SetConsoleTextAttribute(hcon, tcol);
+		SetConsoleTextAttribute(hcon, (WORD)tcol);
 		qsc_consoleutils_print_line(message);
 		SetConsoleTextAttribute(hcon, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
-
+	}
 #else
 
 #endif
-	}
+
 }
 
 char qsc_consoleutils_get_char()
@@ -65,7 +68,7 @@ size_t qsc_consoleutils_get_line(char* line, size_t maxlen)
 
 	if (line != NULL)
 	{
-		if (fgets(line, (int)maxlen, stdin) != NULL)
+		if (fgets(line, (int32_t)maxlen, stdin) != NULL)
 		{
 			slen = strlen(line);
 		}
@@ -84,7 +87,7 @@ size_t qsc_consoleutils_get_formatted_line(char* line, size_t maxlen)
 
 	if (line != NULL)
 	{
-		if (fgets(line, (int)maxlen, stdin) != NULL)
+		if (fgets(line, (int32_t)maxlen, stdin) != NULL)
 		{
 			qsc_stringutils_to_lowercase(line);
 			qsc_stringutils_trim_newline(line);
@@ -97,9 +100,7 @@ size_t qsc_consoleutils_get_formatted_line(char* line, size_t maxlen)
 
 void qsc_consoleutils_get_wait()
 {
-	wint_t res;
-
-	res = getwchar();
+	getwchar();
 }
 
 void qsc_consoleutils_hex_to_bin(const char* hexstr, uint8_t* output, size_t length)
@@ -107,9 +108,8 @@ void qsc_consoleutils_hex_to_bin(const char* hexstr, uint8_t* output, size_t len
 	assert(hexstr != NULL);
 	assert(output != NULL);
 
-	size_t  pos;
-	uint8_t  idx0;
-	uint8_t  idx1;
+	uint8_t idx0;
+	uint8_t idx1;
 
 	const uint8_t hashmap[] =
 	{
@@ -123,7 +123,7 @@ void qsc_consoleutils_hex_to_bin(const char* hexstr, uint8_t* output, size_t len
 	{
 		memset(output, 0, length);
 
-		for (pos = 0; pos < (length * 2); pos += 2)
+		for (size_t  pos = 0; pos < (length * 2); pos += 2)
 		{
 			idx0 = ((uint8_t)hexstr[pos + 0] & 0x1FU) ^ 0x10U;
 			idx1 = ((uint8_t)hexstr[pos + 1] & 0x1FU) ^ 0x10U;
@@ -163,7 +163,7 @@ size_t qsc_consoleutils_masked_password(uint8_t* output, size_t outlen)
 	{
 		do
 		{
-			c = _getch();
+			c = (char)_getch();
 
 			if (c != '\n' && c != '\r')
 			{
@@ -258,12 +258,11 @@ void qsc_consoleutils_print_formatted(const char* input, size_t inputlen)
 
 	if (input != NULL)
 	{
-		size_t i;
 		const char FLG = '\\';
 		const char RPC[] = "\\";
 		char inp;
 
-		for (i = 0; i < inputlen; ++i)
+		for (size_t i = 0; i < inputlen; ++i)
 		{
 			inp = input[i];
 
@@ -297,7 +296,7 @@ void qsc_consoleutils_print_safe(const char* input)
 {
 	assert(input != NULL);
 
-	if (input != NULL)
+	if (input != NULL && strlen(input) > 0)
 	{
 #if defined(QSC_SYSTEM_OS_WINDOWS)
 		printf_s(input);
@@ -323,12 +322,11 @@ void qsc_consoleutils_print_concatonated_line(const char** input, size_t count)
 {
 	assert(input != NULL);
 
-	size_t i;
 	size_t slen;
 
 	if (input != NULL)
 	{
-		for (i = 0; i < count; ++i)
+		for (size_t i = 0; i < count; ++i)
 		{
 			if (input[i] != NULL)
 			{
@@ -372,15 +370,14 @@ void qsc_consoleutils_print_double(double digit)
 #endif
 }
 
-void qsc_consoleutils_progress_counter(int seconds)
+void qsc_consoleutils_progress_counter(int32_t seconds)
 {
 	const char schr[] = { "-\\|/-\\|/-" };
-	size_t i;
 	size_t cnt;
 
 	cnt = seconds * 10;
 
-	for (i = 0; i < cnt; ++i)
+	for (size_t i = 0; i < cnt; ++i)
 	{
 		putchar(schr[i % sizeof(schr)]);
 		fflush(stdout);
@@ -435,7 +432,7 @@ void qsc_consoleutils_set_window_size(size_t width, size_t height)
 	HWND con = GetConsoleWindow();
 	RECT r;
 	GetWindowRect(con, &r);
-	MoveWindow(con, r.left, r.top, (int)width, (int)height, TRUE);
+	MoveWindow(con, r.left, r.top, (int32_t)width, (int32_t)height, TRUE);
 
 #else
 
@@ -450,7 +447,7 @@ void qsc_consoleutils_set_window_title(const char* title)
 
 	if (title != NULL)
 	{
-		SetConsoleTitle((LPCSTR)title);
+		SetConsoleTitle(title);
 	}
 
 #else

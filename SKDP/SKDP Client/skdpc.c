@@ -10,9 +10,9 @@ void skdp_deserialize_device_key(skdp_device_key* dkey, const uint8_t input[SKDP
 
 	qsc_memutils_copy(dkey->kid, input, SKDP_KID_SIZE);
 	pos = SKDP_KID_SIZE;
-	qsc_memutils_copy(dkey->ddk, ((uint8_t*)input + pos), SKDP_DDK_SIZE);
+	qsc_memutils_copy(dkey->ddk, (input + pos), SKDP_DDK_SIZE);
 	pos += SKDP_DDK_SIZE;
-	dkey->expiration = qsc_intutils_le8to64(((uint8_t*)input + pos));
+	dkey->expiration = qsc_intutils_le8to64((input + pos));
 }
 
 void skdp_serialize_device_key(uint8_t output[SKDP_DEVKEY_ENCODED_SIZE], const skdp_device_key* dkey)
@@ -21,9 +21,9 @@ void skdp_serialize_device_key(uint8_t output[SKDP_DEVKEY_ENCODED_SIZE], const s
 
 	qsc_memutils_copy(output, dkey->kid, SKDP_KID_SIZE);
 	pos = SKDP_KID_SIZE;
-	qsc_memutils_copy(((uint8_t*)output + pos), dkey->ddk, SKDP_DDK_SIZE);
+	qsc_memutils_copy((output + pos), dkey->ddk, SKDP_DDK_SIZE);
 	pos += SKDP_DDK_SIZE;
-	qsc_intutils_le64to8(((uint8_t*)output + pos), dkey->expiration);
+	qsc_intutils_le64to8((output + pos), dkey->expiration);
 }
 
 void skdp_deserialize_master_key(skdp_master_key* mkey, const uint8_t input[SKDP_MSTKEY_ENCODED_SIZE])
@@ -32,9 +32,9 @@ void skdp_deserialize_master_key(skdp_master_key* mkey, const uint8_t input[SKDP
 
 	qsc_memutils_copy(mkey->kid, input, SKDP_KID_SIZE);
 	pos = SKDP_KID_SIZE;
-	qsc_memutils_copy(mkey->mdk, ((uint8_t*)input + pos), SKDP_MDK_SIZE);
+	qsc_memutils_copy(mkey->mdk, (input + pos), SKDP_MDK_SIZE);
 	pos += SKDP_MDK_SIZE;
-	mkey->expiration = qsc_intutils_le8to64(((uint8_t*)input + pos));
+	mkey->expiration = qsc_intutils_le8to64((input + pos));
 }
 
 void skdp_serialize_master_key(uint8_t output[SKDP_MSTKEY_ENCODED_SIZE], const skdp_master_key* mkey)
@@ -43,9 +43,9 @@ void skdp_serialize_master_key(uint8_t output[SKDP_MSTKEY_ENCODED_SIZE], const s
 
 	qsc_memutils_copy(output, mkey->kid, SKDP_KID_SIZE);
 	pos = SKDP_KID_SIZE;
-	qsc_memutils_copy(((uint8_t*)output + pos), mkey->mdk, SKDP_MDK_SIZE);
+	qsc_memutils_copy((output + pos), mkey->mdk, SKDP_MDK_SIZE);
 	pos += SKDP_MDK_SIZE;
-	qsc_intutils_le64to8(((uint8_t*)output + pos), mkey->expiration);
+	qsc_intutils_le64to8((output + pos), mkey->expiration);
 }
 
 void skdp_deserialize_server_key(skdp_server_key* skey, const uint8_t input[SKDP_SRVKEY_ENCODED_SIZE])
@@ -54,9 +54,9 @@ void skdp_deserialize_server_key(skdp_server_key* skey, const uint8_t input[SKDP
 
 	qsc_memutils_copy(skey->kid, input, SKDP_KID_SIZE);
 	pos = SKDP_KID_SIZE;
-	qsc_memutils_copy(skey->sdk, ((uint8_t*)input + pos), SKDP_SDK_SIZE);
+	qsc_memutils_copy(skey->sdk, (input + pos), SKDP_SDK_SIZE);
 	pos += SKDP_SDK_SIZE;
-	skey->expiration = qsc_intutils_le8to64(((uint8_t*)input + pos));
+	skey->expiration = qsc_intutils_le8to64((input + pos));
 }
 
 void skdp_serialize_server_key(uint8_t output[SKDP_SRVKEY_ENCODED_SIZE], const skdp_server_key* skey)
@@ -65,9 +65,9 @@ void skdp_serialize_server_key(uint8_t output[SKDP_SRVKEY_ENCODED_SIZE], const s
 
 	qsc_memutils_copy(output, skey->kid, SKDP_KID_SIZE);
 	pos = SKDP_KID_SIZE;
-	qsc_memutils_copy(((uint8_t*)output + pos), skey->sdk, SKDP_SDK_SIZE);
+	qsc_memutils_copy((output + pos), skey->sdk, SKDP_SDK_SIZE);
 	pos += SKDP_SDK_SIZE;
-	qsc_intutils_le64to8(((uint8_t*)output + pos), skey->expiration);
+	qsc_intutils_le64to8((output + pos), skey->expiration);
 }
 
 bool skdp_generate_master_key(skdp_master_key* mkey, const uint8_t kid[SKDP_KID_SIZE])
@@ -157,8 +157,8 @@ void skdp_packet_header_deserialize(const uint8_t* header, skdp_packet* packet)
 	if (header != NULL && packet != NULL)
 	{
 		packet->flag = header[0];
-		packet->msglen = qsc_intutils_le8to32(((uint8_t*)header + sizeof(uint8_t)));
-		packet->sequence = qsc_intutils_le8to64(((uint8_t*)header + sizeof(uint8_t) + sizeof(uint32_t)));
+		packet->msglen = qsc_intutils_le8to32((header + sizeof(uint8_t)));
+		packet->sequence = qsc_intutils_le8to64((header + sizeof(uint8_t) + sizeof(uint32_t)));
 	}
 }
 
@@ -170,8 +170,8 @@ void skdp_packet_header_serialize(const skdp_packet* packet, uint8_t* header)
 	if (header != NULL && packet != NULL)
 	{
 		header[0] = packet->flag;
-		qsc_intutils_le32to8(((uint8_t*)header + sizeof(uint8_t)), packet->msglen);
-		qsc_intutils_le64to8(((uint8_t*)header + sizeof(uint8_t) + sizeof(uint32_t)), packet->sequence);
+		qsc_intutils_le32to8((header + sizeof(uint8_t)), packet->msglen);
+		qsc_intutils_le64to8((header + sizeof(uint8_t) + sizeof(uint32_t)), packet->sequence);
 	}
 }
 
@@ -187,12 +187,12 @@ size_t skdp_packet_to_stream(const skdp_packet* packet, uint8_t* pstream)
 	if (packet != NULL && pstream != NULL)
 	{
 		pstream[0] = packet->flag;
-		qsc_intutils_le32to8(((uint8_t*)pstream + sizeof(uint8_t)), packet->msglen);
-		qsc_intutils_le64to8(((uint8_t*)pstream + sizeof(uint8_t) + sizeof(uint32_t)), packet->sequence);
+		qsc_intutils_le32to8((pstream + sizeof(uint8_t)), packet->msglen);
+		qsc_intutils_le64to8((pstream + sizeof(uint8_t) + sizeof(uint32_t)), packet->sequence);
 
 		if (packet->msglen <= SKDP_MESSAGE_MAX)
 		{
-			qsc_memutils_copy(((uint8_t*)pstream + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t)), (uint8_t*)&packet->message, packet->msglen);
+			qsc_memutils_copy((pstream + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t)), (const uint8_t*)&packet->message, packet->msglen);
 			res = SKDP_HEADER_SIZE + packet->msglen;
 		}
 	}
@@ -208,12 +208,12 @@ void skdp_stream_to_packet(const uint8_t* pstream, skdp_packet* packet)
 	if (packet != NULL && pstream != NULL)
 	{
 		packet->flag = pstream[0];
-		packet->msglen = qsc_intutils_le8to32(((uint8_t*)pstream + sizeof(uint8_t)));
-		packet->sequence = qsc_intutils_le8to64(((uint8_t*)pstream + sizeof(uint8_t) + sizeof(uint32_t)));
+		packet->msglen = qsc_intutils_le8to32((pstream + sizeof(uint8_t)));
+		packet->sequence = qsc_intutils_le8to64((pstream + sizeof(uint8_t) + sizeof(uint32_t)));
 
 		if (packet->msglen <= SKDP_MESSAGE_MAX)
 		{
-			qsc_memutils_copy((uint8_t*)&packet->message, ((uint8_t*)pstream + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t)), packet->msglen);
+			qsc_memutils_copy((uint8_t*)&packet->message, (pstream + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t)), packet->msglen);
 		}
 	}
 }

@@ -48,7 +48,7 @@ typedef struct skdp_client_state
 * \param sock: A pointer to the initialized socket structure
 * \param error: The error code
 */
-void skdp_client_send_error(qsc_socket* sock, skdp_errors error);
+void skdp_client_send_error(const qsc_socket* sock, skdp_errors error);
 
 /**
 * \brief Initialize the client state structure
@@ -88,7 +88,7 @@ skdp_errors skdp_client_connect_ipv6(skdp_client_state* ctx, qsc_socket* sock, c
 * \param sock: A pointer to the initialized socket structure
 * \param error: The error code
 */
-void skdp_client_connection_close(skdp_client_state* ctx, qsc_socket* sock, skdp_errors error);
+void skdp_client_connection_close(skdp_client_state* ctx, const qsc_socket* sock, skdp_errors error);
 
 /**
 * \brief Decrypt a message and copy it to the message output
@@ -113,5 +113,17 @@ skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_packet
 * \return: The function error state
 */
 skdp_errors skdp_client_encrypt_packet(skdp_client_state* ctx, const uint8_t* message, size_t msglen, skdp_packet* packetout);
+
+/**
+* \brief A ratchet request asks the server fo a token key on demand.
+* This is useful in a static tunnel configuration, where based on up time or data transferred,
+* additional entropy can be injected into the system on demand.
+*
+* \param ctx: A pointer to the client state structure
+* \param packetout: A pointer to the output packet structure
+*
+* \return: The function error state
+*/
+skdp_errors skdp_client_ratchet_request(skdp_client_state* ctx, skdp_packet* packetout);
 
 #endif

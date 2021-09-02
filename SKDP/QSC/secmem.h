@@ -21,7 +21,7 @@
 * An implementation of secure locked memory
 * Written by John G. Underhill
 * Updated on June 3, 2020
-* Contact: develop@vtdev.com 
+* Contact: support@vtdev.com 
 */
 
 /*
@@ -34,6 +34,9 @@
 #define QSC_SECMEM_H
 
 #include "common.h"
+
+/* bogus winbase.h error */
+QSC_SYSTEM_CONDITION_IGNORE(5105)
 
 /**
 * \brief Allovcate a block of secure memory
