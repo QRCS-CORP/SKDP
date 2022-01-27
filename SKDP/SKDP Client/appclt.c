@@ -36,6 +36,14 @@ static void client_print_message(const char* message)
 	}
 }
 
+static void client_print_string(const char* message, size_t msglen)
+{
+	if (message != NULL && msglen != 0)
+	{
+		qsc_consoleutils_print_line(message);
+	}
+}
+
 static void client_print_error(skdp_errors error)
 {
 	const char* msg;
@@ -99,11 +107,11 @@ static bool client_ipv4_dialogue(skdp_device_key* ckey, qsc_ipinfo_ipv4_address*
 	{
 		client_print_message("Enter the path of the device key:");
 		client_print_prompt();
-		slen = qsc_consoleutils_get_formatted_line(fpath, sizeof(fpath));
+		slen = qsc_consoleutils_get_line(fpath, sizeof(fpath)) - 1;
 
-		if (qsc_filetools_file_exists(fpath) == true && qsc_stringutils_string_contains(fpath, SKDP_DEVKEY_EXT) == true)
+		if (qsc_fileutils_exists(fpath) == true && qsc_stringutils_string_contains(fpath, SKDP_DEVKEY_EXT) == true)
 		{
-			qsc_filetools_copy_file_to_stream(fpath, cskey, sizeof(cskey));
+			qsc_fileutils_copy_file_to_stream(fpath, cskey, sizeof(cskey));
 			skdp_deserialize_device_key(ckey, cskey);
 			res = true;
 		}
@@ -117,6 +125,78 @@ static bool client_ipv4_dialogue(skdp_device_key* ckey, qsc_ipinfo_ipv4_address*
 	}
 
 	return res;
+}
+
+static void qsc_socket_receive_async_callback(const qsc_socket* source, const uint8_t* message, size_t* msglen)
+{
+	assert(message != NULL);
+	assert(source != NULL);
+
+	skdp_packet pkt = { 0 };
+	char msgstr[SKDP_MESSAGE_MAX] = { 0 };
+	size_t mlen;
+	skdp_errors qerr;
+
+	if (message != NULL && source != NULL && msglen != NULL)
+	{
+		/* convert the bytes to packet */
+		skdp_stream_to_packet(message, &pkt);
+
+		if (pkt.flag == skdp_flag_encrypted_message)
+		{
+			qerr = skdp_client_decrypt_packet(&m_skdp_client_ctx, &pkt, (uint8_t*)msgstr, msglen);
+
+			if (qerr == skdp_error_none)
+			{
+				client_print_string(msgstr, *msglen);
+				client_print_message("");
+			}
+			else
+			{
+				client_print_message(skdp_error_to_string(qerr));
+			}
+		}
+		else if (pkt.flag == skdp_flag_connection_terminate)
+		{
+			client_print_message("The connection was terminated by the remote host.");
+			skdp_client_connection_close(&m_skdp_client_ctx, source, skdp_error_none);
+		}
+		else if (pkt.flag == skdp_flag_keepalive_request)
+		{
+			/* copy the keep-alive packet and send it back */
+			mlen = skdp_packet_to_stream(&pkt, msgstr);
+			qsc_socket_send(source, msgstr, mlen, qsc_socket_send_flag_none);
+		}
+		else if (pkt.flag == skdp_flag_error_condition)
+		{
+			if (pkt.msglen > 0)
+			{
+				qerr = (skdp_errors)pkt.message[0];
+				client_print_error(qerr);
+			}
+
+			client_print_message("The connection experienced a fatal error.");
+			skdp_client_connection_close(&m_skdp_client_ctx, source, skdp_error_connection_failure);
+		}
+		else
+		{
+			client_print_message("The connection experienced a fatal error.");
+			skdp_client_connection_close(&m_skdp_client_ctx, source, skdp_error_connection_failure);
+		}
+	}
+}
+
+static void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_exceptions error)
+{
+	assert(source != NULL);
+
+	const char* emsg;
+
+	if (source != NULL && error != qsc_socket_exception_success)
+	{
+		emsg = qsc_socket_error_to_string(error);
+		client_print_message(emsg);
+	}
 }
 
 static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, const skdp_device_key* ckey)
@@ -147,10 +227,11 @@ static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, const sk
 		actx.source = &csck;
 		qsc_socket_receive_async(&actx);
 		mlen = 0;
-		client_print_prompt();
 
 		while (qsc_consoleutils_line_contains(sin, "skdp quit") == false)
 		{
+			client_print_prompt();
+
 			if (mlen > 0)
 			{
 				/* convert the packet to bytes */
@@ -160,16 +241,12 @@ static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, const sk
 				qsc_socket_send(&csck, msgstr, mlen, qsc_socket_send_flag_none);
 			}
 
-			mlen = qsc_consoleutils_get_line(sin, sizeof(sin));
+			mlen = qsc_consoleutils_get_line(sin, sizeof(sin)) - 1;
 
-			if (mlen == 1 && sin[0] == '\n')
+			if (mlen > 0 && (sin[0] == '\r' || sin[0] == '\n'))
 			{
-				mlen = 0;
 				client_print_message("");
-			}
-			else
-			{
-				client_print_prompt();
+				mlen = 0;
 			}
 		}
 
@@ -178,81 +255,6 @@ static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, const sk
 	else
 	{
 		client_print_message("Could not connect to the remote host.");
-	}
-}
-
-void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_exceptions error)
-{
-	assert(source != NULL);
-
-	const char* emsg;
-
-	if (source != NULL && error != qsc_socket_exception_success)
-	{
-		emsg = qsc_socket_error_to_string(error);
-		client_print_message(emsg);
-	}
-}
-
-void qsc_socket_receive_async_callback(const qsc_socket* source, const uint8_t* message, size_t msglen)
-{
-	assert(message != NULL);
-	assert(source != NULL);
-
-	skdp_packet pkt = { 0 };
-	char msgstr[SKDP_MESSAGE_MAX] = { 0 };
-	size_t mlen;
-	skdp_errors err;
-
-	if (message != NULL && source != NULL && msglen > 0)
-	{
-		/* convert the bytes to packet */
-		skdp_stream_to_packet(message, &pkt);
-
-		if (pkt.flag == skdp_flag_encrypted_message)
-		{
-			err = skdp_client_decrypt_packet(&m_skdp_client_ctx, &pkt, (uint8_t*)msgstr, &msglen);
-
-			if (err == skdp_error_none)
-			{
-				if (msglen > 0)
-				{
-					qsc_consoleutils_print_formatted(msgstr, msglen);
-					client_print_prompt();
-				}
-			}
-			else
-			{
-				client_print_message(skdp_error_to_string(err));
-			}
-		}
-		else if (pkt.flag == skdp_flag_connection_terminate)
-		{
-			client_print_message("The connection was terminated by the remote host.");
-			skdp_client_connection_close(&m_skdp_client_ctx, source, skdp_error_none);
-		}
-		else if (pkt.flag == skdp_flag_keepalive_request)
-		{
-			/* copy the keep-alive packet and send it back */
-			mlen = skdp_packet_to_stream(&pkt, msgstr);
-			qsc_socket_send(source, msgstr, mlen, qsc_socket_send_flag_none);
-		}
-		else if (pkt.flag == skdp_flag_error_condition)
-		{
-			if (pkt.msglen > 0)
-			{
-				err = (skdp_errors)pkt.message[0];
-				client_print_error(err);
-			}
-
-			client_print_message("The connection experienced a fatal error.");
-			skdp_client_connection_close(&m_skdp_client_ctx, source, skdp_error_connection_failure);
-		}
-		else
-		{
-			client_print_message("The connection experienced a fatal error.");
-			skdp_client_connection_close(&m_skdp_client_ctx, source, skdp_error_connection_failure);
-		}
 	}
 }
 

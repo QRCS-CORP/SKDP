@@ -15,24 +15,19 @@
 *
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-*
-* Implementation Details:
-* An implementation of the Kyber asymmetric cipher
-* Rewritten for Misra compliance and library integration by John G. Underhill
-* Contact: support@vtdev.com
-* Updated on January 20, 2020
 */
+
+#ifndef QSC_KYBER_H
+#define QSC_KYBER_H
 
 /**
 * \file kyber.h
+* \brief Contains the primary public api for the Kyber CCA-secure Key Encapsulation Mechanism implementation
 * \date January 10, 2018
 * \updated July 2, 2021
 *
-* \brief <b>The Kyber KEM definitions</b> \n
-* Contains the primary public api for the Kyber CCA-secure Key Encapsulation Mechanism implementation.
 *
-* \para <b>Example</b> \n
+* \par Example
 * \code
 * // An example of key-pair creation, encryption, and decryption
 * uint8_t ct[QSC_KYBER_CIPHERTEXT_SIZE];
@@ -54,20 +49,17 @@
 * }
 * \endcode
 *
-* \remarks 
+* \remarks
 * Based on the C reference branch of PQ-Crystals Kyber; including base code, comments, and api. \n
-* Removed the K=2 parameter, and added a K=5. The NIST '512' parameter has fallen below the threshhold
+* Removed the K=2 parameter, and added a K=5. The NIST '512' parameter has fallen below the threshold
 * required by NIST PQ S1 minimum. \n
 * The new K5 parameter may have a better chance of long-term security, with only a small increase in cost. \n
-* 
+*
 * Based entirely on the C reference branch of Dilithium taken from the NIST Post Quantum Competition Round 3 submission. \n
 * The NIST Post Quantum Competition <a href="https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions">Round 3</a> Finalists. \n
 * The <a href="https://pq-crystals.org/kyber/index.shtml">Kyber</a> website. \n
 * The Kyber <a href="https://pq-crystals.org/kyber/data/kyber-specification-round3-20210131.pdf">Algorithm</a> Specification. \n
 */
-
-#ifndef QSC_KYBER_H
-#define QSC_KYBER_H
 
 #include "common.h"
 #if defined(QSC_SYSTEM_HAS_AVX2)

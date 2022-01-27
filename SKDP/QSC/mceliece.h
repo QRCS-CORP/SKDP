@@ -15,26 +15,19 @@
 *
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-*
-* Implementation Details:
-* An implementation of the McEliece asymmetric cipher
-* Rewritten for Misra compliance and library integration by John G. Underhill
-* Contact: support@vtdev.com
-* Updated on January 20, 2020
 */
+
+#ifndef QSC_MCELIECE_H
+#define QSC_MCELIECE_H
+
+#include "common.h"
 
 /**
 * \file mceliece.h
-* \date May 10, 2019
-* \updated July 2, 2021
+* \brief Contains the primary public api for the Niederreiter dual form of the McEliece asymmetric cipher implementation.
 *
-* \brief <b>The McEliece api definitions</b> \n
-* Contains the primary public api for the Niederreiter dual form of the McEliece asymmetric cipher implementation.
-*
-* \para <b>Example</b> \n
+* \par Example
 * \code
-* // An example of key-pair creation, encryption, and decryption
 * uint8_t ct[QSC_MCELIECE_CIPHERTEXT_SIZE];
 * uint8_t pk[QSC_MCELIECE_PUBLICKEY_SIZE];
 * uint8_t sk[QSC_MCELIECE_PRIVATEKEY_SIZE];
@@ -66,11 +59,6 @@
 * Authors: Daniel J. Bernstein, Tung Chou, Tanja Lange, and Peter Schwabe. \n
 * Updated by John Underhill, June 28 2021.
 */
-
-#ifndef QSC_MCELIECE_H
-#define QSC_MCELIECE_H
-
-#include "common.h"
 
 #if defined(QSC_MCELIECE_S3N4608T96)
 
@@ -201,7 +189,7 @@ QSC_EXPORT_API bool qsc_mceliece_decrypt(uint8_t* secret, const uint8_t* ciphert
 * \param secret: Pointer to a shared secret, a uint8_t array of QSC_MCELIECE_SHAREDSECRET_SIZE constant size
 * \param ciphertext: Pointer to the cipher-text array of QSC_MCELIECE_CIPHERTEXT_SIZE constant size
 * \param publickey: [const] Pointer to the public-key array of QSC_MCELIECE_PUBLICKEY_SIZE constant size
-* \param rng_generate: Pointer to the random generator
+* \param rng_generate: Pointer to a random generator function
 */
 QSC_EXPORT_API void qsc_mceliece_encapsulate(uint8_t* secret, uint8_t* ciphertext, const uint8_t* publickey, bool (*rng_generate)(uint8_t*, size_t));
 
@@ -209,7 +197,7 @@ QSC_EXPORT_API void qsc_mceliece_encapsulate(uint8_t* secret, uint8_t* ciphertex
 * \brief Generates cipher-text and encapsulates a shared secret key using a public-key
 * Used in conjunction with the encrypt function.
 *
-* \warning Ciphertext array must be sized to the QSC_KYBER_CIPHERTEXT_SIZE.
+* \warning Cipher-text array must be sized to the QSC_KYBER_CIPHERTEXT_SIZE.
 *
 * \param secret: Pointer to the shared secret key, a uint8_t array of QSC_KYBER_SHAREDSECRET_SIZE constant size
 * \param ciphertext: Pointer to the cipher-text array of QSC_KYBER_CIPHERTEXT_SIZE constant size

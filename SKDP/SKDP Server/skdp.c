@@ -93,7 +93,7 @@ void skdp_generate_server_key(skdp_server_key* skey, const skdp_master_key* mkey
 	uint8_t kbuf[QSC_KECCAK_STATE_BYTE_SIZE] = { 0 };
 	qsc_keccak_state kctx = { 0 };
 
-	qsc_cshake_initialize(&kctx, SKDP_PERMUTATION_RATE, mkey->mdk, SKDP_MDK_SIZE, SKDP_CONFIG_STRING, SKDP_CONFIG_SIZE, kid, SKDP_MID_SIZE + SKDP_SID_SIZE);
+	qsc_cshake_initialize(&kctx, SKDP_PERMUTATION_RATE, mkey->mdk, SKDP_MDK_SIZE, (uint8_t*)SKDP_CONFIG_STRING, SKDP_CONFIG_SIZE, kid, SKDP_MID_SIZE + SKDP_SID_SIZE);
 	qsc_cshake_squeezeblocks(&kctx, SKDP_PERMUTATION_RATE, kbuf, 1);
 	qsc_memutils_copy(skey->sdk, kbuf, SKDP_SDK_SIZE);
 	qsc_memutils_clear(skey->kid, SKDP_KID_SIZE);
@@ -106,7 +106,7 @@ void skdp_generate_device_key(skdp_device_key* dkey, const skdp_server_key* skey
 	uint8_t kbuf[QSC_KECCAK_STATE_BYTE_SIZE] = { 0 };
 	qsc_keccak_state kctx = { 0 };
 
-	qsc_cshake_initialize(&kctx, SKDP_PERMUTATION_RATE, skey->sdk, SKDP_SDK_SIZE, SKDP_CONFIG_STRING, SKDP_CONFIG_SIZE, kid, SKDP_KID_SIZE);
+	qsc_cshake_initialize(&kctx, SKDP_PERMUTATION_RATE, skey->sdk, SKDP_SDK_SIZE, (uint8_t*)SKDP_CONFIG_STRING, SKDP_CONFIG_SIZE, kid, SKDP_KID_SIZE);
 	qsc_cshake_squeezeblocks(&kctx, SKDP_PERMUTATION_RATE, kbuf, 1);
 	qsc_memutils_copy(dkey->ddk, kbuf, SKDP_DDK_SIZE);
 	qsc_memutils_clear(dkey->kid, SKDP_KID_SIZE);

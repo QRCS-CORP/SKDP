@@ -15,21 +15,6 @@
 *
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-*
-* Implementation Details:
-* An implementation of the secure random PRNG
-* Written by John G. Underhill
-* Updated on August 1, 2020
-* Contact: support@vtdev.com */
-
-/**
-* \file secrand.h
-* \author John Underhill
-* \date August 15, 2020
-*
-* \brief <b>n implementation of an secure pseudo-random generator</b> \n
-* Contains the public api and documentation for the secrand pseudo-random bytes generator.
 */
 
 #ifndef QSC_SECRAND_H
@@ -38,11 +23,23 @@
 #include "common.h"
 #include "csg.h"
 
+/*
+* \file secrand.h
+* \brief An implementation of an secure pseudo-random generator.
+* Must be pre-keyed using the secrand_initialize function.
+*/
+
+/*!
+* \def QSC_SECRAND_SEED_SIZE
+* \brief The input seed size
+*/
+#define QSC_SECRAND_SEED_SIZE 0x20
+
 /*!
 * \def QSC_SECRAND_CACHE_SIZE
 * \brief The internal cache size of the generator
 */
-#define QSC_SECRAND_CACHE_SIZE 1024
+#define QSC_SECRAND_CACHE_SIZE 0x400
 
 /*! 
 * \struct qsc_secrand_state
@@ -50,10 +47,10 @@
 */
 QSC_EXPORT_API typedef struct
 {
-    qsc_csg_state hstate;
-    uint8_t cache[QSC_SECRAND_CACHE_SIZE];
-    size_t cpos;
-    bool init;
+    qsc_csg_state hstate;                   /*!< The CSG state */
+    uint8_t cache[QSC_SECRAND_CACHE_SIZE];  /*!< The cache buffer */
+    size_t cpos;                            /*!< The cache position */
+    bool init;                              /*!< The initialized flag */
 } qsc_secrand_state;
 
 /**
@@ -61,28 +58,28 @@ QSC_EXPORT_API typedef struct
 *
 * \return Returns an signed 8-bit random integer
 */
-QSC_EXPORT_API int8_t qsc_secrand_next_char();
+QSC_EXPORT_API int8_t qsc_secrand_next_char(void);
 
 /**
 * \brief Generate a unsigned 8-bit random integer
 *
 * \return Returns an unsigned 8-bit random integer
 */
-QSC_EXPORT_API uint8_t qsc_secrand_next_uchar();
+QSC_EXPORT_API uint8_t qsc_secrand_next_uchar(void);
 
 /**
 * \brief Generate a random double integer
 *
 * \return Returns a random double integer
 */
-QSC_EXPORT_API double qsc_secrand_next_double();
+QSC_EXPORT_API double qsc_secrand_next_double(void);
 
 /**
 * \brief Generate a signed 16-bit random integer
 *
 * \return Returns a signed 16-bit random integer
 */
-QSC_EXPORT_API int16_t qsc_secrand_next_int16();
+QSC_EXPORT_API int16_t qsc_secrand_next_int16(void);
 
 /**
 * \brief Generate a signed 16-bit random integer of a maximum value
@@ -106,7 +103,7 @@ QSC_EXPORT_API int16_t qsc_secrand_next_int16_maxmin(int16_t maximum, int16_t mi
 *
 * \return Returns a unsigned 16-bit random integer
 */
-QSC_EXPORT_API uint16_t qsc_secrand_next_uint16();
+QSC_EXPORT_API uint16_t qsc_secrand_next_uint16(void);
 
 /**
 * \brief Generate a unsigned 16-bit random integer of a maximum value
@@ -130,7 +127,7 @@ QSC_EXPORT_API uint16_t qsc_secrand_next_uint16_maxmin(uint16_t maximum, uint16_
 *
 * \return Returns a signed 32-bit random integer
 */
-QSC_EXPORT_API int32_t qsc_secrand_next_int32();
+QSC_EXPORT_API int32_t qsc_secrand_next_int32(void);
 
 /**
 * \brief Generate a signed 32-bit random integer of a maximum value
@@ -154,7 +151,7 @@ QSC_EXPORT_API int32_t qsc_secrand_next_int32_maxmin(int32_t maximum, int32_t mi
 *
 * \return Returns a unsigned 32-bit random integer
 */
-QSC_EXPORT_API uint32_t qsc_secrand_next_uint32();
+QSC_EXPORT_API uint32_t qsc_secrand_next_uint32(void);
 
 /**
 * \brief Generate a unsigned 32-bit random integer of a maximum value
@@ -178,7 +175,7 @@ QSC_EXPORT_API uint32_t qsc_secrand_next_uint32_maxmin(uint32_t maximum, uint32_
 *
 * \return Returns a signed 64-bit random integer
 */
-QSC_EXPORT_API int64_t qsc_secrand_next_int64();
+QSC_EXPORT_API int64_t qsc_secrand_next_int64(void);
 
 /**
 * \brief Generate a signed 64-bit random integer of a maximum value
@@ -202,7 +199,7 @@ QSC_EXPORT_API int64_t qsc_secrand_next_int64_maxmin(int64_t maximum, int64_t mi
 *
 * \return Returns a unsigned 64-bit random integer
 */
-QSC_EXPORT_API uint64_t qsc_secrand_next_uint64();
+QSC_EXPORT_API uint64_t qsc_secrand_next_uint64(void);
 
 /**
 * \brief Generate a unsigned 64-bit random integer of a maximum value
@@ -224,7 +221,7 @@ QSC_EXPORT_API uint64_t qsc_secrand_next_uint64_maxmin(uint64_t maximum, uint64_
 /**
 * \brief Clear the buffer and destroy the internal state
 */
-QSC_EXPORT_API void qsc_secrand_destroy();
+QSC_EXPORT_API void qsc_secrand_destroy(void);
 
 /**
 * \brief Initialize the random generator with a seed and optional customization array

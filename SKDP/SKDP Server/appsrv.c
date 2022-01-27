@@ -47,6 +47,14 @@ static void server_print_message(const char* message)
 	}
 }
 
+static void server_print_string(const char* message, size_t msglen)
+{
+	if (message != NULL && msglen != 0)
+	{
+		qsc_consoleutils_print_line(message);
+	}
+}
+
 static void server_print_prompt()
 {
 	qsc_consoleutils_print_safe("server> ");
@@ -92,7 +100,7 @@ static bool server_prikey_exists()
 		qsc_stringutils_concat_strings(fpath, sizeof(fpath), "\\");
 		qsc_stringutils_concat_strings(fpath, sizeof(fpath), SKDP_SRVKEY_NAME);
 
-		res = qsc_filetools_file_exists(fpath);
+		res = qsc_fileutils_exists(fpath);
 	}
 
 	return res;
@@ -114,7 +122,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 			qsc_stringutils_copy_string(fpath, sizeof(fpath), dir);
 			qsc_stringutils_concat_strings(fpath, sizeof(fpath), "\\");
 			qsc_stringutils_concat_strings(fpath, sizeof(fpath), SKDP_SRVKEY_NAME);
-			res = qsc_filetools_copy_file_to_stream(fpath, serskey, sizeof(serskey));
+			res = qsc_fileutils_copy_file_to_stream(fpath, (char*)serskey, sizeof(serskey));
 
 			if (res == true)
 			{
@@ -180,7 +188,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 				qsc_stringutils_concat_strings(fpath, sizeof(fpath), "\\");
 				qsc_stringutils_concat_strings(fpath, sizeof(fpath), SKDP_DEVKEY_NAME);
 				skdp_serialize_device_key(serdkey, &dkey);
-				res = qsc_filetools_copy_stream_to_file(fpath, serdkey, sizeof(serdkey));
+				res = qsc_fileutils_copy_stream_to_file(fpath, (char*)serdkey, sizeof(serdkey));
 
 				if (res == true)
 				{
@@ -194,7 +202,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 					qsc_stringutils_concat_strings(fpath, sizeof(fpath), "\\");
 					qsc_stringutils_concat_strings(fpath, sizeof(fpath), SKDP_SRVKEY_NAME);
 					skdp_serialize_server_key(serskey, skey);
-					res = qsc_filetools_copy_stream_to_file(fpath, serskey, sizeof(serskey));
+					res = qsc_fileutils_copy_stream_to_file(fpath, (char*)serskey, sizeof(serskey));
 
 					if (res == true)
 					{
@@ -207,7 +215,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 						qsc_stringutils_concat_strings(fpath, sizeof(fpath), "\\");
 						qsc_stringutils_concat_strings(fpath, sizeof(fpath), SKDP_MSTKEY_NAME);
 						skdp_serialize_master_key(sermkey, &mkey);
-						res = qsc_filetools_copy_stream_to_file(fpath, sermkey, sizeof(sermkey));
+						res = qsc_fileutils_copy_stream_to_file(fpath, (char*)sermkey, sizeof(sermkey));
 
 						if (res == true)
 						{
@@ -241,10 +249,10 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 
 static skdp_errors server_keep_alive_loop(const qsc_socket* sock)
 {
-	qsc_async_mutex mtx;
+	qsc_mutex mtx;
 	skdp_errors err;
 
-	qsc_async_mutex_lock_ex(&mtx);
+	mtx = qsc_async_mutex_lock_ex();
 
 	do
 	{
@@ -259,122 +267,37 @@ static skdp_errors server_keep_alive_loop(const qsc_socket* sock)
 		}
 	} 	while (err == skdp_error_none);
 
-	qsc_async_mutex_unlock_ex(&mtx);
+	qsc_async_mutex_unlock_ex(mtx);
 
 	return err;
 }
 
-static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
-{
-	qsc_socket_receive_async_state actx = { 0 };
-	qsc_socket ssck = { 0 };
-	skdp_packet pkt = { 0 };
-	qsc_ipinfo_ipv4_address addt = { 0 };
-
-	uint8_t msgstr[SKDP_MESSAGE_MAX] = { 0 };
-	char sin[SKDP_MESSAGE_MAX + 1] = { 0 };
-	skdp_errors err;
-	size_t mlen;
-
-	qsc_memutils_clear((uint8_t*)&m_skdp_server_ctx, sizeof(m_skdp_server_ctx));
-	addt = qsc_ipinfo_ipv4_address_any();
-
-	/* initialize the server */
-	skdp_server_initialize(&m_skdp_server_ctx, skey);
-	/* begin listening on the port, when a client connects it triggers the key exchange*/
-	err = skdp_server_listen_ipv4(&m_skdp_server_ctx, &ssck, &addt, SKDP_SERVER_PORT);
-
-	if (err == skdp_error_none)
-	{
-		qsc_consoleutils_print_safe("server> Connected to remote host: ");
-		qsc_consoleutils_print_line((char*)ssck.address);
-
-		/* start the keep-alive mechanism */
-		qsc_async_thread_initialize(&server_keep_alive_loop, &ssck);
-
-		/* send and receive loops */
-		memset((char*)&actx, 0x00, sizeof(qsc_socket_receive_async_state));
-		actx.callback = &qsc_socket_receive_async_callback;
-		actx.error = &qsc_socket_exception_callback;
-		actx.source = &ssck;
-		qsc_socket_receive_async(&actx);
-
-		mlen = 0;
-		server_print_prompt();
-
-		while (qsc_consoleutils_line_contains(sin, "qsmp quit") == false)
-		{
-			if (mlen > 0)
-			{
-				/* convert the packet to bytes */
-				skdp_server_encrypt_packet(&m_skdp_server_ctx, (uint8_t*)sin, mlen, &pkt);
-				qsc_memutils_clear((uint8_t*)sin, mlen);
-				mlen = skdp_packet_to_stream(&pkt, msgstr);
-				qsc_socket_send(&ssck, msgstr, mlen, qsc_socket_send_flag_none);
-			}
-
-			mlen = qsc_consoleutils_get_line(sin, sizeof(sin));
-
-			if (mlen == 1 && (sin[0] == '\n' || sin[0] == '\r'))
-			{
-				mlen = 0;
-			}
-
-			server_print_prompt();
-		}
-
-		skdp_server_connection_close(&m_skdp_server_ctx, &ssck, skdp_error_none);
-	}
-	else
-	{
-		server_print_message("Could not connect to the remote host.");
-	}
-
-	return err;
-}
-
-void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_exceptions error)
-{
-	assert(source != NULL);
-
-	const char* emsg;
-
-	if (source != NULL && error != qsc_socket_exception_success)
-	{
-		emsg = qsc_socket_error_to_string(error);
-		server_print_message(emsg);
-	}
-}
-
-void qsc_socket_receive_async_callback(const qsc_socket* source, const uint8_t* message, size_t msglen)
+static void qsc_socket_receive_async_callback(const qsc_socket* source, const uint8_t* message, size_t* msglen)
 {
 	assert(message != NULL);
 	assert(source != NULL);
 
 	skdp_packet pkt = { 0 };
 	char msgstr[SKDP_MESSAGE_MAX] = { 0 };
-	skdp_errors err;
+	skdp_errors qerr;
 
-	if (message != NULL && source != NULL && msglen > 0)
+	if (message != NULL && source != NULL && msglen != NULL)
 	{
 		/* convert the bytes to packet */
 		skdp_stream_to_packet(message, &pkt);
 
 		if (pkt.flag == skdp_flag_encrypted_message)
 		{
-			err = skdp_server_decrypt_packet(&m_skdp_server_ctx, &pkt, (uint8_t*)msgstr, &msglen);
+			qerr = skdp_server_decrypt_packet(&m_skdp_server_ctx, &pkt, (uint8_t*)msgstr, msglen);
 
-			if (err == skdp_error_none)
+			if (qerr == skdp_error_none)
 			{
-				if (msglen > 0)
-				{
-					qsc_consoleutils_print_formatted(msgstr, msglen);
-					server_print_prompt();
-				}
+				server_print_string(msgstr, *msglen);
+				server_print_prompt();
 			}
 			else
 			{
-				server_print_message(skdp_error_to_string(err));
+				server_print_message(skdp_error_to_string(qerr));
 			}
 		}
 		else if (pkt.flag == skdp_flag_connection_terminate)
@@ -411,10 +334,97 @@ void qsc_socket_receive_async_callback(const qsc_socket* source, const uint8_t* 
 		}
 		else
 		{
-			server_print_message("The connection experienced a fatal error.");
+			server_print_error(skdp_error_channel_down);
 			skdp_server_connection_close(&m_skdp_server_ctx, source, skdp_error_connection_failure);
 		}
 	}
+}
+
+static void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_exceptions error)
+{
+	assert(source != NULL);
+
+	const char* emsg;
+
+	if (source != NULL && error != qsc_socket_exception_success)
+	{
+		emsg = qsc_socket_error_to_string(error);
+		server_print_message(emsg);
+	}
+}
+
+static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
+{
+	qsc_socket_receive_async_state actx = { 0 };
+	qsc_socket ssck = { 0 };
+	skdp_packet pkt = { 0 };
+	qsc_ipinfo_ipv4_address addt = { 0 };
+	uint8_t msgstr[SKDP_MESSAGE_MAX] = { 0 };
+	char sin[SKDP_MESSAGE_MAX + 1] = { 0 };
+	qsc_thread mthd;
+	skdp_errors err;
+	size_t mlen;
+
+	qsc_memutils_clear((uint8_t*)&m_skdp_server_ctx, sizeof(m_skdp_server_ctx));
+	addt = qsc_ipinfo_ipv4_address_any();
+
+	/* initialize the server */
+	skdp_server_initialize(&m_skdp_server_ctx, skey);
+	/* begin listening on the port, when a client connects it triggers the key exchange*/
+	err = skdp_server_listen_ipv4(&m_skdp_server_ctx, &ssck, &addt, SKDP_SERVER_PORT);
+
+	if (err == skdp_error_none)
+	{
+		qsc_consoleutils_print_safe("server> Connected to remote host: ");
+		qsc_consoleutils_print_line((char*)ssck.address);
+
+		/* start the keep-alive mechanism */
+		mthd = qsc_async_thread_create((void*)&server_keep_alive_loop, (void*)&ssck);
+
+		if (mthd != 0)
+		{
+			/* send and receive loops */
+			memset((char*)&actx, 0x00, sizeof(qsc_socket_receive_async_state));
+			actx.callback = &qsc_socket_receive_async_callback;
+			actx.error = &qsc_socket_exception_callback;
+			actx.source = &ssck;
+			qsc_socket_receive_async(&actx);
+
+			mlen = 0;
+
+			while (qsc_consoleutils_line_contains(sin, "qsmp quit") == false)
+			{
+				server_print_prompt();
+
+				if (mlen > 0)
+				{
+					/* convert the packet to bytes */
+					skdp_server_encrypt_packet(&m_skdp_server_ctx, (uint8_t*)sin, mlen, &pkt);
+					qsc_memutils_clear((uint8_t*)sin, mlen);
+					mlen = skdp_packet_to_stream(&pkt, msgstr);
+					qsc_socket_send(&ssck, msgstr, mlen, qsc_socket_send_flag_none);
+				}
+
+				mlen = qsc_consoleutils_get_line(sin, sizeof(sin)) - 1;
+
+				if (mlen > 0 && (sin[0] == '\n' || sin[0] == '\r'))
+				{
+					server_print_message("");
+					mlen = 0;
+				}
+			}
+
+			qsc_async_thread_terminate(mthd);
+		}
+
+		skdp_server_connection_close(&m_skdp_server_ctx, &ssck, skdp_error_none);
+	}
+	else
+	{
+		server_print_message("Could not connect to the remote host.");
+	}
+
+	return err;
 }
 
 int main(void)

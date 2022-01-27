@@ -1,14 +1,14 @@
 #include "csx.h"
 #include "intutils.h"
 #include "memutils.h"
-#include <stdlib.h>
 
 #if defined(QSC_SYSTEM_HAS_AVX)
 #	include "intrinsics.h"
 #endif
+#include <stdlib.h>
 
 /*!
-\def CSX256_ROUND_COUNT
+\def CSX_ROUND_COUNT
 * \brief The number of mixing rounds used by CSX-512
 */
 #define CSX_ROUND_COUNT 40
@@ -29,10 +29,20 @@ static const uint8_t csx_info[QSC_CSX_INFO_SIZE] =
 	0x31, 0x63, 0x20, 0x43, 0x45, 0x58, 0x2B, 0x2B, 0x20, 0x6C, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79
 };
 
+#if	defined(QSC_CSX_AUTHENTICATED)
 static const uint8_t csx_name[CSX_NAME_LENGTH] =
 {
 	0x43, 0x53, 0x58, 0x35, 0x31, 0x32, 0x2D, 0x4B, 0x4D, 0x41, 0x43, 0x35, 0x31, 0x32
 };
+
+#	if defined(QSC_CSX_AUTH_KMACR12)
+#		define QSC_CSX_AUTH_KMACR12
+static const uint8_t csx_kmacr12_name[CSX_NAME_LENGTH] =
+{
+	0x43, 0x53, 0x58, 0x35, 0x31, 0x32, 0x2D, 0x4B, 0x4D, 0x41, 0x43, 0x52, 0x31, 0x32
+};
+#	endif
+#endif
 
 static void csx_increment(qsc_csx_state* ctx)
 {
@@ -366,7 +376,7 @@ static __m256i csx_load256(const uint8_t* v)
 
 static void csx_store256(uint8_t* output, const __m256i x)
 {
-	uint64_t tmp[4];
+	QSC_ALIGN(32) uint64_t tmp[4];
 
 	_mm256_storeu_si256((__m256i*)tmp, x);
 
@@ -524,8 +534,8 @@ static void csx_permute_p4x1024h(csx_avx256_state* ctx)
 
 static void csx_mac_update(qsc_csx_state* ctx, const uint8_t* input, size_t length)
 {
-#if defined(QSC_CSX_KPA_AUTHENTICATION)
-	qsc_kpa_update(&ctx->kstate, input, length);
+#if defined(QSC_CSX_AUTH_KMACR12)
+	qsc_keccak_update(&ctx->kstate, qsc_keccak_rate_512, input, length, QSC_KECCAK_PERMUTATION_MIN_ROUNDS);
 #else
 	qsc_kmac_update(&ctx->kstate, qsc_keccak_rate_512, input, length);
 #endif
@@ -603,7 +613,7 @@ static void csx_transform(qsc_csx_state* ctx, uint8_t* output, const uint8_t* in
 
 			for (i = 0; i < 16; ++i)
 			{
-				tmpin = csx_load256((input + oft + (i * 8)));
+				tmpin = csx_load256(input + oft + (i * 8));
 				ctxw.outw[i] = _mm256_xor_si256(ctxw.outw[i], tmpin);
 				csx_store256((output + oft + (i * 8)), ctxw.outw[i]);
 			}
@@ -613,7 +623,7 @@ static void csx_transform(qsc_csx_state* ctx, uint8_t* output, const uint8_t* in
 			length -= CSX_AVX2_BLOCK;
 		}
 
-		uint8_t ctrblk[32];
+		QSC_ALIGN(32) uint8_t ctrblk[32];
 		/* store the nonce */
 		_mm256_storeu_si256((__m256i*)ctrblk, ctxw.state[12]);
 		ctx->state[12] = qsc_intutils_le8to64((ctrblk + 24));
@@ -644,7 +654,7 @@ static void csx_transform(qsc_csx_state* ctx, uint8_t* output, const uint8_t* in
 	}
 }
 
-static void csx_load(qsc_csx_state* ctx, const uint8_t* key, const uint8_t* nonce, const uint8_t* code)
+static void csx_load_key(qsc_csx_state* ctx, const uint8_t* key, const uint8_t* nonce, const uint8_t* code)
 {
 #if defined(QSC_SYSTEM_IS_LITTLE_ENDIAN)
 	qsc_memutils_copy((uint8_t*)ctx->state, key, 64);
@@ -672,6 +682,7 @@ static void csx_load(qsc_csx_state* ctx, const uint8_t* key, const uint8_t* nonc
 #endif
 }
 
+#if	defined(QSC_CSX_AUTHENTICATED)
 static void csx_finalize(qsc_csx_state* ctx, uint8_t* output)
 {
 	uint8_t ctr[sizeof(uint64_t)] = { 0 };
@@ -679,14 +690,17 @@ static void csx_finalize(qsc_csx_state* ctx, uint8_t* output)
 	qsc_intutils_le64to8(ctr, ctx->counter);
 	csx_mac_update(ctx, ctr, sizeof(ctr));
 
-#if defined(QSC_CSX_KPA_AUTHENTICATION)
+#if defined(QSC_CSX_AUTH_KMACR12)
+	/* update the counter */
+	qsc_keccak_update(&ctx->kstate, qsc_keccak_rate_512, ctr, sizeof(ctr), QSC_KECCAK_PERMUTATION_MIN_ROUNDS);
 	/* finalize the mac and append code to output */
-	qsc_kpa_finalize(&ctx->kstate, output, QSC_CSX_MAC_SIZE);
+	qsc_keccak_finalize(&ctx->kstate, qsc_keccak_rate_512, output, QSC_CSX_MAC_SIZE, QSC_KECCAK_KMAC_DOMAIN_ID, QSC_KECCAK_PERMUTATION_MIN_ROUNDS);
 #else
 	/* finalize the mac and append code to output */
 	qsc_kmac_finalize(&ctx->kstate, qsc_keccak_rate_512, output, QSC_CSX_MAC_SIZE);
 #endif
 }
+#endif
 
 /* csx common */
 
@@ -698,11 +712,7 @@ void qsc_csx_dispose(qsc_csx_state* ctx)
 	if (ctx != NULL)
 	{
 #if defined(QSC_CSX_AUTHENTICATED)
-#	if defined(QSC_CSX_KPA_AUTHENTICATION)
-		qsc_kpa_dispose(&ctx->kstate);
-#	else
-		qsc_keccak_dispose(&ctx->kstate);
-#	endif
+	qsc_keccak_dispose(&ctx->kstate);
 #endif
 
 		qsc_intutils_clear64(ctx->state, QSC_CSX_STATE_SIZE);
@@ -745,7 +755,7 @@ void qsc_csx_initialize(qsc_csx_state* ctx, const qsc_csx_keyparams* keyparams, 
 	/* extract the cipher key */
 	qsc_cshake_squeezeblocks(&kstate, qsc_keccak_rate_512, buf, 1);
 	qsc_memutils_copy(cpk, buf, QSC_CSX_KEY_SIZE);
-	csx_load(ctx, cpk, keyparams->nonce, csx_info);
+	csx_load_key(ctx, cpk, keyparams->nonce, csx_info);
 
 	/* extract the mac key */
 	qsc_cshake_squeezeblocks(&kstate, qsc_keccak_rate_512, buf, 1);
@@ -754,8 +764,9 @@ void qsc_csx_initialize(qsc_csx_state* ctx, const qsc_csx_keyparams* keyparams, 
 	/* initialize the mac generator */
 	qsc_memutils_clear((uint8_t*)ctx->kstate.state, sizeof(ctx->kstate.state));
 
-#if defined(QSC_CSX_KPA_AUTHENTICATION)
-	qsc_kpa_initialize(&ctx->kstate, mck, sizeof(mck), NULL, 0);
+#if defined(QSC_CSX_AUTH_KMACR12)
+	qsc_keccak_initialize_state(&ctx->kstate);
+	qsc_keccak_absorb_key_custom(&ctx->kstate, qsc_keccak_rate_512, mck, sizeof(mck), NULL, 0, csx_kmacr12_name, CSX_NAME_LENGTH, QSC_KECCAK_PERMUTATION_MIN_ROUNDS);
 #else
 	qsc_kmac_initialize(&ctx->kstate, qsc_keccak_rate_512, mck, sizeof(mck), NULL, 0);
 #endif
@@ -776,7 +787,7 @@ void qsc_csx_initialize(qsc_csx_state* ctx, const qsc_csx_keyparams* keyparams, 
 	}
 
 	qsc_memutils_clear((uint8_t*)ctx->state, sizeof(ctx->state));
-	csx_load(ctx, keyparams->key, keyparams->nonce, inf);
+	csx_load_key(ctx, keyparams->key, keyparams->nonce, inf);
 
 #endif
 }
@@ -846,6 +857,83 @@ bool qsc_csx_transform(qsc_csx_state* ctx, uint8_t* output, const uint8_t* input
 
 		/* compare the mac code with the one embedded in the cipher-text, bypassing the transform if the mac check fails */
 		if (qsc_intutils_verify(code, input + length, QSC_CSX_MAC_SIZE) == 0)
+		{
+			/* generate the key-stream and decrypt the array */
+			csx_transform(ctx, output, input, length);
+			res = true;
+		}
+	}
+
+#else
+
+	csx_transform(ctx, output, input, length);
+	res = true;
+
+#endif
+
+	return res;
+}
+
+bool qsc_csx_extended_transform(qsc_csx_state* ctx, uint8_t* output, const uint8_t* input, size_t length, bool finalize)
+{
+	assert(ctx != NULL);
+	assert(output != NULL);
+	assert(input != NULL);
+
+	bool res;
+
+#if defined(QSC_CSX_AUTHENTICATED)
+
+	uint8_t ncopy[QSC_CSX_NONCE_SIZE] = { 0 };
+	res = false;
+
+	/* store the nonce */
+	qsc_intutils_le64to8(ncopy, ctx->state[12]);
+	qsc_intutils_le64to8(ncopy + sizeof(uint64_t), ctx->state[13]);
+
+	/* update the processed bytes counter */
+	ctx->counter += length;
+
+	/* update the mac with the nonce */
+	csx_mac_update(ctx, ncopy, sizeof(ncopy));
+
+	if (ctx->encrypt)
+	{
+		/* use the transform to generate the key-stream and encrypt the data  */
+		csx_transform(ctx, output, input, length);
+
+		/* update the mac with the cipher-text */
+		csx_mac_update(ctx, output, length);
+
+		if (finalize == true)
+		{
+			/* mac the cipher-text appending the code to the end of the array */
+			csx_finalize(ctx, output + length);
+		}
+
+		res = true;
+	}
+	else
+	{
+		uint8_t code[QSC_CSX_MAC_SIZE] = { 0 };
+
+		/* update the mac with the cipher-text */
+		csx_mac_update(ctx, input, length);
+
+		if (finalize == true)
+		{
+			/* generate the internal mac code */
+			csx_finalize(ctx, code);
+
+			/* compare the mac code with the one embedded in the cipher-text, bypassing the transform if the mac check fails */
+			if (qsc_intutils_verify(code, input + length, QSC_CSX_MAC_SIZE) == 0)
+			{
+				/* generate the key-stream and decrypt the array */
+				csx_transform(ctx, output, input, length);
+				res = true;
+			}
+		}
+		else
 		{
 			/* generate the key-stream and decrypt the array */
 			csx_transform(ctx, output, input, length);

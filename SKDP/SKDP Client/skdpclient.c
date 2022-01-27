@@ -3,6 +3,7 @@
 #include "../QSC/intutils.h"
 #include "../QSC/memutils.h"
 #include "../QSC/sha3.h"
+#include "../QSC/socket.h"
 #include "../QSC/socketclient.h"
 
 static void client_dispose(skdp_client_state* ctx)
@@ -44,7 +45,7 @@ skdp_errors client_connect_request(skdp_client_state* ctx, skdp_packet* packetou
 	{
 		qsc_keccak_state kctx = { 0 };
 
-		/* assign the packet parameters */
+		/* copy the KID, configuration string, and STOK to the message */
 		qsc_memutils_copy(packetout->message, ctx->kid, SKDP_KID_SIZE);
 		qsc_memutils_copy((packetout->message + SKDP_KID_SIZE), SKDP_CONFIG_STRING, SKDP_CONFIG_SIZE);
 		qsc_memutils_copy((packetout->message + SKDP_KID_SIZE + SKDP_CONFIG_SIZE), stok, SKDP_STOK_SIZE);
@@ -266,11 +267,13 @@ static skdp_errors client_key_exchange(skdp_client_state* ctx, qsc_socket* sock)
 
 		if (slen == plen + QSC_SOCKET_TERMINATOR_SIZE)
 		{
+			const size_t CONLEN = SKDP_CONNECT_RESPONSE_SIZE + QSC_SOCKET_TERMINATOR_SIZE;
+
 			ctx->txseq += 1;
 			/* blocking receive waits for server */
-			rlen = qsc_socket_receive(sock, spct, sizeof(spct), qsc_socket_receive_flag_none);
+			rlen = qsc_socket_receive(sock, spct, CONLEN, qsc_socket_receive_flag_wait_all);
 
-			if (rlen == SKDP_CONNECT_RESPONSE_SIZE + QSC_SOCKET_TERMINATOR_SIZE)
+			if (rlen == CONLEN)
 			{
 				/* convert server response to packet */
 				skdp_stream_to_packet(spct, &resp);
@@ -330,11 +333,13 @@ static skdp_errors client_key_exchange(skdp_client_state* ctx, qsc_socket* sock)
 
 		if (slen == plen + QSC_SOCKET_TERMINATOR_SIZE)
 		{
+			const size_t EXCLEN = SKDP_EXCHANGE_RESPONSE_SIZE + QSC_SOCKET_TERMINATOR_SIZE;
+
 			ctx->txseq += 1;
 			/* blocking receive waits for server */
-			rlen = qsc_socket_receive(sock, spct, sizeof(spct), qsc_socket_receive_flag_none);
+			rlen = qsc_socket_receive(sock, spct, EXCLEN, qsc_socket_receive_flag_wait_all);
 
-			if (rlen == SKDP_EXCHANGE_RESPONSE_SIZE + QSC_SOCKET_TERMINATOR_SIZE)
+			if (rlen == EXCLEN)
 			{
 				/* convert server response to packet */
 				skdp_stream_to_packet(spct, &resp);
@@ -394,9 +399,11 @@ static skdp_errors client_key_exchange(skdp_client_state* ctx, qsc_socket* sock)
 
 		if (slen == plen + QSC_SOCKET_TERMINATOR_SIZE)
 		{
+			const size_t ESTLEN = SKDP_ESTABLISH_RESPONSE_SIZE + QSC_SOCKET_TERMINATOR_SIZE;
+
 			ctx->txseq += 1;
 			/* wait for establish response */
-			rlen = qsc_socket_receive(sock, spct, sizeof(spct), qsc_socket_receive_flag_none);
+			rlen = qsc_socket_receive(sock, spct, ESTLEN, qsc_socket_receive_flag_wait_all);
 
 			if (rlen == SKDP_ESTABLISH_RESPONSE_SIZE + QSC_SOCKET_TERMINATOR_SIZE)
 			{

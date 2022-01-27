@@ -1,7 +1,6 @@
 #include "rcs.h"
 #include "intutils.h"
 #include "memutils.h"
-#include <stdlib.h>
 
 /*!
 \def RCS256_ROUND_COUNT
@@ -835,6 +834,93 @@ bool qsc_rcs_transform(qsc_rcs_state* ctx, uint8_t* output, const uint8_t* input
 				rcs_ctr_transform(ctx, output, input, length);
 				res = true;
 			}
+		}
+	}
+
+#else
+
+	rcs_ctr_transform(ctx, output, input, length);
+	res = true;
+
+#endif
+
+	return res;
+}
+
+bool qsc_rcs_extended_transform(qsc_rcs_state* ctx, uint8_t* output, const uint8_t* input, size_t length, bool finalize)
+{
+	assert(ctx != NULL);
+	assert(output != NULL);
+	assert(input != NULL);
+
+	bool res;
+
+#if defined(QSC_RCS_AUTHENTICATED)
+
+	res = false;
+
+	/* update the processed bytes counter */
+	ctx->counter += length;
+
+	/* update the mac with the current nonce position */
+	rcs_mac_update(ctx, ctx->nonce, QSC_RCS_BLOCK_SIZE);
+
+	if (ctx->encrypt == true)
+	{
+		/* transform the plain-text with the counter-mode cipher */
+		rcs_ctr_transform(ctx, output, input, length);
+
+		/* update the mac with the cipher-text */
+		rcs_mac_update(ctx, output, length);
+
+		if (finalize == true)
+		{
+			/* mac the cipher-text appending the code to the end of the array */
+			rcs_mac_finalize(ctx, output + length);
+		}
+
+		res = true;
+	}
+	else
+	{
+		/* update the mac with the cipher-text */
+		rcs_mac_update(ctx, input, length);
+
+		if (finalize == true)
+		{
+			if (ctx->ctype == RCS256)
+			{
+				uint8_t code[QSC_RCS256_MAC_SIZE] = { 0 };
+
+				/* mac the cipher-text to a temp array for comparison */
+				rcs_mac_finalize(ctx, code);
+
+				/* test the mac for equality, bypassing the transform if the mac check fails */
+				if (qsc_intutils_verify(code, input + length, QSC_RCS256_MAC_SIZE) == 0)
+				{
+					/* transform the plain-text with the counter-mode cipher */
+					rcs_ctr_transform(ctx, output, input, length);
+					res = true;
+				}
+			}
+			else
+			{
+				uint8_t code[QSC_RCS512_MAC_SIZE] = { 0 };
+
+				rcs_mac_finalize(ctx, code);
+
+				if (qsc_intutils_verify(code, input + length, QSC_RCS512_MAC_SIZE) == 0)
+				{
+					rcs_ctr_transform(ctx, output, input, length);
+					res = true;
+				}
+			}
+		}
+		else
+		{
+			/* transform the plain-text with the counter-mode cipher */
+			rcs_ctr_transform(ctx, output, input, length);
+			res = true;
 		}
 	}
 

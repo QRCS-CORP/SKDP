@@ -21,6 +21,7 @@
 
 #include "common.h"
 
+#define SKDP_SERVER_MESSAGE_MAX 1024
 static const char SKDP_DEVKEY_NAME[] = "devkey.dkey";
 static const char SKDP_SRVKEY_NAME[] = "srvkey.skey";
 static const char SKDP_MSTKEY_NAME[] = "mstkey.mkey";
