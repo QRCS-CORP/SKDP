@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="skdpserver.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="appsrv.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="skdp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,13 +23,7 @@
     <ClInclude Include="appsrv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="skdpserver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="skdp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

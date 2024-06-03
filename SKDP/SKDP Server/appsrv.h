@@ -1,19 +1,19 @@
-/* 2021 Digital Freedom Defense Incorporated
+
+/* 2024 Quantum Resistant Cryptographic Solutions Corporation
  * All Rights Reserved.
  *
  * NOTICE:  All information contained herein is, and remains
- * the property of Digital Freedom Defense Incorporated.
+ * the property of Quantum Resistant Cryptographic Solutions Incorporated.
  * The intellectual and technical concepts contained
- * herein are proprietary to Digital Freedom Defense Incorporated
+ * herein are proprietary to Quantum Resistant Cryptographic Solutions Incorporated
  * and its suppliers and may be covered by U.S. and Foreign Patents,
  * patents in process, and are protected by trade secret or copyright law.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from Digital Freedom Defense Incorporated.
+ * from Quantum Resistant Cryptographic Solutions Incorporated.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * Written by John G. Underhill
+ * Contact: develop@qrcs.ca
  */
 
 #ifndef SKDP_SERVER_APP_H
@@ -25,6 +25,6 @@
 static const char SKDP_DEVKEY_NAME[] = "devkey.dkey";
 static const char SKDP_SRVKEY_NAME[] = "srvkey.skey";
 static const char SKDP_MSTKEY_NAME[] = "mstkey.mkey";
-static const char SKDP_APP_PATH[] = "\\SKDP";
+static const char SKDP_APP_PATH[] = "SKDP";
 
 #endif

@@ -1,15 +1,33 @@
+
+/* 2024 Quantum Resistant Cryptographic Solutions Corporation
+ * All Rights Reserved.
+ *
+ * NOTICE:  All information contained herein is, and remains
+ * the property of Quantum Resistant Cryptographic Solutions Incorporated.
+ * The intellectual and technical concepts contained
+ * herein are proprietary to Quantum Resistant Cryptographic Solutions Incorporated
+ * and its suppliers and may be covered by U.S. and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Quantum Resistant Cryptographic Solutions Incorporated.
+ *
+ * Written by John G. Underhill
+ * Contact: develop@qrcs.ca
+ */
+
 #include "appsrv.h"
-#include "skdp.h"
-#include "skdpserver.h"
-#include "../QSC/acp.h"
-#include "../QSC/consoleutils.h"
-#include "../QSC/fileutils.h"
-#include "../QSC/folderutils.h"
-#include "../QSC/ipinfo.h"
-#include "../QSC/netutils.h"
-#include "../QSC/socketserver.h"
-#include "../QSC/stringutils.h"
-#include "../QSC/async.h"
+#include "../SKDP/skdp.h"
+#include "../SKDP/skdpserver.h"
+#include "../../QSC/QSC/acp.h"
+#include "../../QSC/QSC/consoleutils.h"
+#include "../../QSC/QSC/fileutils.h"
+#include "../../QSC/QSC/folderutils.h"
+#include "../../QSC/QSC/ipinfo.h"
+#include "../../QSC/QSC/netutils.h"
+#include "../../QSC/QSC/socketserver.h"
+#include "../../QSC/QSC/stringutils.h"
+#include "../../QSC/QSC/async.h"
 
 static skdp_keep_alive_state m_skdp_keep_alive;
 static skdp_server_state m_skdp_server_ctx;
@@ -72,17 +90,18 @@ static void server_print_banner()
 	qsc_consoleutils_print_line("");
 }
 
-static bool server_get_storage_path(char* path, size_t pathlen)
+static bool server_get_storage_path(char* fpath, size_t pathlen)
 {
 	bool res;
 
-	qsc_folderutils_get_directory(qsc_folderutils_directories_user_documents, path);
-	qsc_stringutils_concat_strings(path, pathlen, SKDP_APP_PATH);
-	res = qsc_folderutils_directory_exists(path);
+	qsc_folderutils_get_directory(qsc_folderutils_directories_user_documents, fpath);
+	qsc_folderutils_append_delimiter(fpath);
+	qsc_stringutils_concat_strings(fpath, pathlen, SKDP_APP_PATH);
+	res = qsc_folderutils_directory_exists(fpath);
 
 	if (res == false)
 	{
-		res = qsc_folderutils_create_directory(path);
+		res = qsc_folderutils_create_directory(fpath);
 	}
 
 	return res;
@@ -97,7 +116,7 @@ static bool server_prikey_exists()
 
 	if (res == true)
 	{
-		qsc_stringutils_concat_strings(fpath, sizeof(fpath), "\\");
+		qsc_folderutils_append_delimiter(fpath);
 		qsc_stringutils_concat_strings(fpath, sizeof(fpath), SKDP_SRVKEY_NAME);
 
 		res = qsc_fileutils_exists(fpath);
@@ -120,7 +139,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 		if (res == true)
 		{
 			qsc_stringutils_copy_string(fpath, sizeof(fpath), dir);
-			qsc_stringutils_concat_strings(fpath, sizeof(fpath), "\\");
+			qsc_folderutils_append_delimiter(fpath);
 			qsc_stringutils_concat_strings(fpath, sizeof(fpath), SKDP_SRVKEY_NAME);
 			res = qsc_fileutils_copy_file_to_stream(fpath, (char*)serskey, sizeof(serskey));
 
@@ -145,7 +164,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 		skdp_master_key mkey = { 0 };
 		uint8_t serdkey[SKDP_DEVKEY_ENCODED_SIZE] = { 0 };
 		uint8_t sermkey[SKDP_MSTKEY_ENCODED_SIZE] = { 0 };
-		char strid[SKDP_KID_SIZE + 1] = { 0 };
+		char strid[SKDP_KID_SIZE + 2] = { 0 };
 		size_t ctr;
 		size_t len;
 
@@ -154,8 +173,6 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 		if (res == true)
 		{
 			server_print_message("The server-key was not detected, generating new master/server keys.");
-			server_print_message("Enter an 16 character hexidecimal master/server key id, ex. 0102030405060708.");
-			qsc_consoleutils_print_safe("server> ");
 
 			ctr = 0;
 			res = false;
@@ -163,7 +180,9 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 			while (ctr < 3)
 			{
 				++ctr;
-				len = qsc_consoleutils_get_line(strid, sizeof(strid));
+				server_print_message("Enter an 16 character hexidecimal master/server key id, ex. 0102030405060708.");
+				qsc_consoleutils_print_safe("server> ");
+				len = qsc_consoleutils_get_line(strid, sizeof(strid)) - 1;
 
 				if (len == SKDP_KID_SIZE && qsc_stringutils_is_hex(strid, len))
 				{
@@ -185,7 +204,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 
 				/* serialize the device key and save it to a file */
 				qsc_stringutils_copy_string(fpath, sizeof(fpath), dir);
-				qsc_stringutils_concat_strings(fpath, sizeof(fpath), "\\");
+				qsc_folderutils_append_delimiter(fpath);
 				qsc_stringutils_concat_strings(fpath, sizeof(fpath), SKDP_DEVKEY_NAME);
 				skdp_serialize_device_key(serdkey, &dkey);
 				res = qsc_fileutils_copy_stream_to_file(fpath, (char*)serdkey, sizeof(serdkey));
@@ -199,7 +218,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 					/* store the server key */
 					qsc_stringutils_clear_string(fpath);
 					qsc_stringutils_copy_string(fpath, sizeof(fpath), dir);
-					qsc_stringutils_concat_strings(fpath, sizeof(fpath), "\\");
+					qsc_folderutils_append_delimiter(fpath);
 					qsc_stringutils_concat_strings(fpath, sizeof(fpath), SKDP_SRVKEY_NAME);
 					skdp_serialize_server_key(serskey, skey);
 					res = qsc_fileutils_copy_stream_to_file(fpath, (char*)serskey, sizeof(serskey));
@@ -212,7 +231,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 						/* store the master key */
 						qsc_stringutils_clear_string(fpath);
 						qsc_stringutils_copy_string(fpath, sizeof(fpath), dir);
-						qsc_stringutils_concat_strings(fpath, sizeof(fpath), "\\");
+						qsc_folderutils_append_delimiter(fpath);
 						qsc_stringutils_concat_strings(fpath, sizeof(fpath), SKDP_MSTKEY_NAME);
 						skdp_serialize_master_key(sermkey, &mkey);
 						res = qsc_fileutils_copy_stream_to_file(fpath, (char*)sermkey, sizeof(sermkey));
@@ -277,13 +296,15 @@ static void qsc_socket_receive_async_callback(const qsc_socket* source, const ui
 	assert(message != NULL);
 	assert(source != NULL);
 
-	skdp_packet pkt = { 0 };
+	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0 };
 	char msgstr[SKDP_MESSAGE_MAX] = { 0 };
+	skdp_packet pkt = { 0 };
 	skdp_errors qerr;
 
 	if (message != NULL && source != NULL && msglen != NULL)
 	{
 		/* convert the bytes to packet */
+		pkt.pmessage = mpkt;
 		skdp_stream_to_packet(message, &pkt);
 
 		if (pkt.flag == skdp_flag_encrypted_message)
@@ -313,7 +334,7 @@ static void qsc_socket_receive_async_callback(const qsc_socket* source, const ui
 			{
 				uint64_t tme;
 
-				tme = qsc_intutils_le8to64(pkt.message);
+				tme = qsc_intutils_le8to64(pkt.pmessage);
 
 				if (m_skdp_keep_alive.etime == tme)
 				{
@@ -355,11 +376,13 @@ static void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_e
 
 static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 {
+
 	qsc_socket_receive_async_state actx = { 0 };
 	qsc_socket ssck = { 0 };
 	skdp_packet pkt = { 0 };
 	qsc_ipinfo_ipv4_address addt = { 0 };
-	uint8_t msgstr[SKDP_MESSAGE_MAX] = { 0 };
+	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0 };
+	uint8_t msg[SKDP_MESSAGE_MAX] = { 0 };
 	char sin[SKDP_MESSAGE_MAX + 1] = { 0 };
 	qsc_thread mthd;
 	skdp_errors err;
@@ -389,7 +412,7 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 			actx.error = &qsc_socket_exception_callback;
 			actx.source = &ssck;
 			qsc_socket_receive_async(&actx);
-
+			pkt.pmessage = mpkt;
 			mlen = 0;
 
 			while (qsc_consoleutils_line_contains(sin, "qsmp quit") == false)
@@ -401,8 +424,8 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 					/* convert the packet to bytes */
 					skdp_server_encrypt_packet(&m_skdp_server_ctx, (uint8_t*)sin, mlen, &pkt);
 					qsc_memutils_clear((uint8_t*)sin, mlen);
-					mlen = skdp_packet_to_stream(&pkt, msgstr);
-					qsc_socket_send(&ssck, msgstr, mlen, qsc_socket_send_flag_none);
+					mlen = skdp_packet_to_stream(&pkt, msg);
+					qsc_socket_send(&ssck, msg, mlen, qsc_socket_send_flag_none);
 				}
 
 				mlen = qsc_consoleutils_get_line(sin, sizeof(sin)) - 1;

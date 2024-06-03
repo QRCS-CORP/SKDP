@@ -15,24 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="skdpclient.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="appclt.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="skdpc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="skdp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="skdpclient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="appclt.h">
