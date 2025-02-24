@@ -1,21 +1,3 @@
-
-/* 2024 Quantum Resistant Cryptographic Solutions Corporation
- * All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Quantum Resistant Cryptographic Solutions Incorporated.
- * The intellectual and technical concepts contained
- * herein are proprietary to Quantum Resistant Cryptographic Solutions Incorporated
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Quantum Resistant Cryptographic Solutions Incorporated.
- *
- * Written by John G. Underhill
- * Contact: develop@qrcs.ca
- */
-
 #include "appsrv.h"
 #include "../SKDP/skdp.h"
 #include "../SKDP/skdpserver.h"
@@ -24,6 +6,7 @@
 #include "../../QSC/QSC/fileutils.h"
 #include "../../QSC/QSC/folderutils.h"
 #include "../../QSC/QSC/ipinfo.h"
+#include "../../QSC/QSC/memutils.h"
 #include "../../QSC/QSC/netutils.h"
 #include "../../QSC/QSC/socketserver.h"
 #include "../../QSC/QSC/stringutils.h"
@@ -80,13 +63,13 @@ static void server_print_prompt()
 
 static void server_print_banner()
 {
-	qsc_consoleutils_print_line("****************************************************");
-	qsc_consoleutils_print_line("* SKDP: Symmetric Key Distribution Protocol Server *");
-	qsc_consoleutils_print_line("*                                                  *");
-	qsc_consoleutils_print_line("* Release:   v1.0.0.0b (A0)                        *");
-	qsc_consoleutils_print_line("* Date:      September 1, 2021                     *");
-	qsc_consoleutils_print_line("* Contact:   develop@vtdev.com                     *");
-	qsc_consoleutils_print_line("****************************************************");
+	qsc_consoleutils_print_line("******************************************************");
+	qsc_consoleutils_print_line("* SKDP: Symmetric Key Distribution Protocol Listener *");
+	qsc_consoleutils_print_line("*                                                    *");
+	qsc_consoleutils_print_line("* Release:   v1.1.0.0a (A1)                          *");
+	qsc_consoleutils_print_line("* Date:      December 02, 2024                       *");
+	qsc_consoleutils_print_line("* Contact:   john.underhill@protonmail.com           *");
+	qsc_consoleutils_print_line("******************************************************");
 	qsc_consoleutils_print_line("");
 }
 
@@ -291,14 +274,14 @@ static skdp_errors server_keep_alive_loop(const qsc_socket* sock)
 	return err;
 }
 
-static void qsc_socket_receive_async_callback(const qsc_socket* source, const uint8_t* message, size_t* msglen)
+static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t* message, size_t* msglen)
 {
 	assert(message != NULL);
 	assert(source != NULL);
 
 	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0 };
 	char msgstr[SKDP_MESSAGE_MAX] = { 0 };
-	skdp_packet pkt = { 0 };
+	skdp_network_packet pkt = { 0 };
 	skdp_errors qerr;
 
 	if (message != NULL && source != NULL && msglen != NULL)
@@ -376,10 +359,9 @@ static void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_e
 
 static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 {
-
 	qsc_socket_receive_async_state actx = { 0 };
 	qsc_socket ssck = { 0 };
-	skdp_packet pkt = { 0 };
+	skdp_network_packet pkt = { 0 };
 	qsc_ipinfo_ipv4_address addt = { 0 };
 	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0 };
 	uint8_t msg[SKDP_MESSAGE_MAX] = { 0 };
@@ -391,7 +373,7 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 	qsc_memutils_clear((uint8_t*)&m_skdp_server_ctx, sizeof(m_skdp_server_ctx));
 	addt = qsc_ipinfo_ipv4_address_any();
 
-	/* initialize the server */
+	/* initialize the client-to-client server */
 	skdp_server_initialize(&m_skdp_server_ctx, skey);
 	/* begin listening on the port, when a client connects it triggers the key exchange*/
 	err = skdp_server_listen_ipv4(&m_skdp_server_ctx, &ssck, &addt, SKDP_SERVER_PORT);
@@ -407,7 +389,7 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 		if (mthd != 0)
 		{
 			/* send and receive loops */
-			memset((char*)&actx, 0x00, sizeof(qsc_socket_receive_async_state));
+			qsc_memutils_clear((char*)&actx, sizeof(qsc_socket_receive_async_state));
 			actx.callback = &qsc_socket_receive_async_callback;
 			actx.error = &qsc_socket_exception_callback;
 			actx.source = &ssck;

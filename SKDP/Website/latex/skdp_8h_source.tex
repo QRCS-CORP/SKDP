@@ -1,0 +1,332 @@
+\doxysection{skdp.\+h}
+\hypertarget{skdp_8h_source}{}\label{skdp_8h_source}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/SKDP/SKDP/skdp.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/SKDP/SKDP/skdp.h}}
+\mbox{\hyperlink{skdp_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*\ 2025\ Quantum\ Resistant\ Cryptographic\ Solutions\ Corporation}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ NOTICE:\ This\ software\ and\ all\ accompanying\ materials\ are\ the\ exclusive\ }}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ property\ of\ Quantum\ Resistant\ Cryptographic\ Solutions\ Corporation\ (QRCS).}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ The\ intellectual\ and\ technical\ concepts\ contained\ within\ this\ implementation\ }}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *\ are\ proprietary\ to\ QRCS\ and\ its\ authorized\ licensors\ and\ are\ protected\ under\ }}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ applicable\ U.S.\ and\ international\ copyright,\ patent,\ and\ trade\ secret\ laws.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *\ CRYPTOGRAPHIC\ STANDARDS:}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ -\/\ This\ software\ includes\ implementations\ of\ cryptographic\ algorithms\ such\ as\ }}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ \ \ SHA3,\ AES,\ and\ others.\ These\ algorithms\ are\ public\ domain\ or\ standardized\ }}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ \ \ by\ organizations\ such\ as\ NIST\ and\ are\ NOT\ the\ property\ of\ QRCS.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ -\/\ However,\ all\ source\ code,\ optimizations,\ and\ implementations\ in\ this\ library\ }}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *\ \ \ are\ original\ works\ of\ QRCS\ and\ are\ protected\ under\ this\ license.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ RESTRICTIONS:}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ *\ -\/\ Redistribution,\ modification,\ or\ unauthorized\ distribution\ of\ this\ software,\ }}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ *\ \ \ in\ whole\ or\ in\ part,\ is\ strictly\ prohibited.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ *\ -\/\ This\ software\ is\ provided\ for\ non-\/commercial,\ educational,\ and\ research\ }}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ *\ \ \ purposes\ only.\ Commercial\ use\ in\ any\ form\ is\ expressly\ forbidden.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ *\ -\/\ Licensing\ and\ authorized\ distribution\ are\ solely\ at\ the\ discretion\ of\ QRCS.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ *\ -\/\ Any\ use\ of\ this\ software\ implies\ acceptance\ of\ these\ restrictions.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ *\ DISCLAIMER:}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ This\ software\ is\ provided\ "{}as\ is,"{}\ without\ warranty\ of\ any\ kind,\ express\ or\ }}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ implied,\ including\ but\ not\ limited\ to\ warranties\ of\ merchantability\ or\ fitness\ }}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ for\ a\ particular\ purpose.\ QRCS\ disclaims\ all\ liability\ for\ any\ direct,\ indirect,\ }}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ incidental,\ or\ consequential\ damages\ resulting\ from\ the\ use\ or\ misuse\ of\ this\ software.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ FULL\ LICENSE:}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ This\ software\ is\ subject\ to\ the\ **Quantum\ Resistant\ Cryptographic\ Solutions\ }}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ Proprietary\ License\ (QRCS-\/PL)**.\ The\ complete\ license\ terms\ are\ included\ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ in\ the\ LICENSE.txt\ file\ distributed\ with\ this\ software.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ *\ Written\ by:\ John\ G.\ Underhill}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ *\ Contact:\ john.underhill@protonmail.com}}
+\DoxyCodeLine{00038\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#ifndef\ SKPD\_H}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ SKPD\_H}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ "{}common.h"{}}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ "{}../../QSC/QSC/sha3.h"{}}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#define\ SKDP\_CONFIG\_SIZE\ 26}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#define\ SKDP\_ERROR\_SIZE\ 1}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\#define\ SKDP\_EXP\_SIZE\ 8}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#define\ SKDP\_HEADER\_SIZE\ 21}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#define\ SKDP\_KEEPALIVE\_MESSAGE\ 8}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#define\ SKDP\_KEEPALIVE\_STRING\ 20}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#define\ SKDP\_KEEPALIVE\_TIMEOUT\ (300\ *\ 1000)}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#define\ SKDP\_MESSAGE\_SIZE\ 1024}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\#define\ SKDP\_MESSAGE\_MAX\ (SKDP\_MESSAGE\_SIZE\ +\ SKDP\_HEADER\_SIZE)}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#define\ SKDP\_SERVER\_PORT\ 2201}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#define\ SKDP\_MID\_SIZE\ 4}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00154\ \textcolor{preprocessor}{\#define\ SKDP\_SID\_SIZE\ 8}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\#define\ SKDP\_DID\_SIZE\ 12}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00166\ \textcolor{preprocessor}{\#define\ SKDP\_TID\_SIZE\ 4}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00172\ \textcolor{preprocessor}{\#define\ SKDP\_KID\_SIZE\ 16}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00178\ \textcolor{preprocessor}{\#define\ SKDP\_SEQUENCE\_TERMINATOR\ 0xFFFFFFFF}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00186\ \textcolor{preprocessor}{\#if\ !defined(SKDP\_PROTOCOL\_SEC512)}}
+\DoxyCodeLine{00187\ \textcolor{preprocessor}{\#\ \ \ if\ !defined(SKDP\_PROTOCOL\_SEC256)}}
+\DoxyCodeLine{00188\ \textcolor{preprocessor}{\#\ \ \ \ \ \ \ define\ SKDP\_PROTOCOL\_SEC256}}
+\DoxyCodeLine{00189\ \textcolor{preprocessor}{\#\ \ \ endif}}
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \textcolor{preprocessor}{\#if\ defined(SKDP\_PROTOCOL\_SEC512)}}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \textcolor{comment}{/*\ 512-\/bit\ security\ configuration\ definitions\ */}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00200\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_CPRKEY\_SIZE\ 64}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00206\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_DDK\_SIZE\ 64}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00212\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_DTK\_SIZE\ 64}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00218\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_HASH\_SIZE\ 64}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00224\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_PERMUTATION\_RATE\ QSC\_KECCAK\_512\_RATE}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00230\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_MACKEY\_SIZE\ 64}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00236\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_MACTAG\_SIZE\ 64}}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00242\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_MDK\_SIZE\ 64}}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00248\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_SDK\_SIZE\ 64}}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00254\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_STH\_SIZE\ 64}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00260\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_STK\_SIZE\ 64}}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00266\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_STOK\_SIZE\ 64}}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00272\ \textcolor{preprocessor}{\#define\ SKDP\_EXCHANGE\_MAX\_MESSAGE\_SIZE\ (SKDP\_DTK\_SIZE\ +\ SKDP\_MACKEY\_SIZE\ +\ SKDP\_HEADER\_SIZE)}}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00277\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ SKDP\_CONFIG\_STRING[\mbox{\hyperlink{skdp_8h_aa1b87e3de02fe6d676015d358d6d1f3b}{SKDP\_CONFIG\_SIZE}}]\ =\ \textcolor{stringliteral}{"{}r01-\/skdp-\/rcs512-\/keccak512"{}};}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \textcolor{comment}{/*\ 256-\/bit\ security\ configuration\ definitions\ */}}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00287\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_CPRKEY\_SIZE\ 32}}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00293\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_DDK\_SIZE\ 32}}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00299\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_DTK\_SIZE\ 32}}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00305\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_HASH\_SIZE\ 32}}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00311\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_MACKEY\_SIZE\ 32}}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00317\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_MACTAG\_SIZE\ 32}}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00323\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_MDK\_SIZE\ 32}}
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00329\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_PERMUTATION\_RATE\ QSC\_KECCAK\_256\_RATE}}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00335\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_SDK\_SIZE\ 32}}
+\DoxyCodeLine{00336\ }
+\DoxyCodeLine{00341\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_STK\_SIZE\ 32}}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00347\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_STH\_SIZE\ 32}}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00353\ \textcolor{preprocessor}{\#\ \ \ define\ SKDP\_STOK\_SIZE\ 32}}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00359\ \textcolor{preprocessor}{\#define\ SKDP\_EXCHANGE\_MAX\_MESSAGE\_SIZE\ (SKDP\_KID\_SIZE\ +\ SKDP\_CONFIG\_SIZE\ +\ SKDP\_STOK\_SIZE\ +\ SKDP\_HEADER\_SIZE)}}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00364\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ SKDP\_CONFIG\_STRING[\mbox{\hyperlink{skdp_8h_aa1b87e3de02fe6d676015d358d6d1f3b}{SKDP\_CONFIG\_SIZE}}]\ =\ \textcolor{stringliteral}{"{}r01-\/skdp-\/rcs256-\/keccak256"{}};}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00372\ \textcolor{preprocessor}{\#define\ SKDP\_KEY\_DURATION\_DAYS\ 365}}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00382\ \textcolor{preprocessor}{\#define\ SKDP\_PACKET\_TIME\_THRESHOLD\ 60}}
+\DoxyCodeLine{00383\ }
+\DoxyCodeLine{00388\ \textcolor{preprocessor}{\#define\ SKDP\_KEY\_DURATION\_SECONDS\ (SKDP\_KEY\_DURATION\_DAYS\ *\ 24\ *\ 60\ *\ 60)}}
+\DoxyCodeLine{00389\ }
+\DoxyCodeLine{00394\ \textcolor{preprocessor}{\#define\ SKDP\_DEVKEY\_ENCODED\_SIZE\ (SKDP\_KID\_SIZE\ +\ SKDP\_DDK\_SIZE\ +\ SKDP\_EXP\_SIZE)}}
+\DoxyCodeLine{00395\ }
+\DoxyCodeLine{00400\ \textcolor{preprocessor}{\#define\ SKDP\_MSTKEY\_ENCODED\_SIZE\ (SKDP\_KID\_SIZE\ +\ SKDP\_MDK\_SIZE\ +\ SKDP\_EXP\_SIZE)}}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00406\ \textcolor{preprocessor}{\#define\ SKDP\_SRVKEY\_ENCODED\_SIZE\ (SKDP\_KID\_SIZE\ +\ SKDP\_SDK\_SIZE\ +\ SKDP\_EXP\_SIZE)}}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00416\ \textcolor{preprocessor}{\#define\ SKDP\_CONNECT\_REQUEST\_MESSAGE\_SIZE\ (SKDP\_KID\_SIZE\ +\ SKDP\_CONFIG\_SIZE\ +\ SKDP\_STOK\_SIZE)}}
+\DoxyCodeLine{00417\ }
+\DoxyCodeLine{00425\ \textcolor{preprocessor}{\#define\ SKDP\_CONNECT\_REQUEST\_PACKET\_SIZE\ (SKDP\_CONNECT\_REQUEST\_MESSAGE\_SIZE\ +\ SKDP\_HEADER\_SIZE)}}
+\DoxyCodeLine{00426\ }
+\DoxyCodeLine{00431\ \textcolor{preprocessor}{\#define\ SKDP\_EXCHANGE\_REQUEST\_MESSAGE\_SIZE\ (SKDP\_DTK\_SIZE\ +\ SKDP\_MACKEY\_SIZE)}}
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00440\ \textcolor{preprocessor}{\#define\ SKDP\_EXCHANGE\_REQUEST\_PACKET\_SIZE\ (SKDP\_EXCHANGE\_REQUEST\_MESSAGE\_SIZE\ +\ SKDP\_HEADER\_SIZE)}}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00446\ \textcolor{preprocessor}{\#define\ SKDP\_ESTABLISH\_REQUEST\_MESSAGE\_SIZE\ (SKDP\_STH\_SIZE\ +\ SKDP\_MACTAG\_SIZE)}}
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00455\ \textcolor{preprocessor}{\#define\ SKDP\_ESTABLISH\_REQUEST\_PACKET\_SIZE\ (SKDP\_ESTABLISH\_REQUEST\_MESSAGE\_SIZE\ +\ SKDP\_HEADER\_SIZE)}}
+\DoxyCodeLine{00456\ }
+\DoxyCodeLine{00461\ \textcolor{preprocessor}{\#define\ SKDP\_CONNECT\_RESPONSE\_MESSAGE\_SIZE\ (SKDP\_KID\_SIZE\ +\ SKDP\_CONFIG\_SIZE\ +\ SKDP\_STOK\_SIZE)}}
+\DoxyCodeLine{00462\ }
+\DoxyCodeLine{00470\ \textcolor{preprocessor}{\#define\ SKDP\_CONNECT\_RESPONSE\_PACKET\_SIZE\ (SKDP\_CONNECT\_RESPONSE\_MESSAGE\_SIZE\ +\ SKDP\_HEADER\_SIZE)}}
+\DoxyCodeLine{00471\ }
+\DoxyCodeLine{00476\ \textcolor{preprocessor}{\#define\ SKDP\_EXCHANGE\_RESPONSE\_MESSAGE\_SIZE\ (SKDP\_DTK\_SIZE\ +\ SKDP\_MACKEY\_SIZE)}}
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00485\ \textcolor{preprocessor}{\#define\ SKDP\_EXCHANGE\_RESPONSE\_PACKET\_SIZE\ (SKDP\_EXCHANGE\_RESPONSE\_MESSAGE\_SIZE\ +\ SKDP\_HEADER\_SIZE)}}
+\DoxyCodeLine{00486\ }
+\DoxyCodeLine{00491\ \textcolor{preprocessor}{\#define\ SKDP\_ESTABLISH\_RESPONSE\_MESSAGE\_SIZE\ (SKDP\_HASH\_SIZE\ +\ SKDP\_MACTAG\_SIZE)}}
+\DoxyCodeLine{00492\ }
+\DoxyCodeLine{00500\ \textcolor{preprocessor}{\#define\ SKDP\_ESTABLISH\_RESPONSE\_PACKET\_SIZE\ (SKDP\_ESTABLISH\_RESPONSE\_MESSAGE\_SIZE\ +\ SKDP\_HEADER\_SIZE)}}
+\DoxyCodeLine{00501\ }
+\DoxyCodeLine{00506\ \textcolor{preprocessor}{\#define\ SKDP\_ESTABLISH\_VERIFY\_MESSAGE\_SIZE\ (SKDP\_HASH\_SIZE\ +\ SKDP\_MACTAG\_SIZE)}}
+\DoxyCodeLine{00507\ }
+\DoxyCodeLine{00515\ \textcolor{preprocessor}{\#define\ SKDP\_ESTABLISH\_VERIFY\_PACKET\_SIZE\ (SKDP\_ESTABLISH\_VERIFY\_MESSAGE\_SIZE\ +\ SKDP\_HEADER\_SIZE)}}
+\DoxyCodeLine{00516\ }
+\DoxyCodeLine{00517\ \textcolor{comment}{/*\ error\ code\ strings\ */}}
+\DoxyCodeLine{00518\ }
+\DoxyCodeLine{00520\ \textcolor{preprocessor}{\#define\ SKDP\_ERROR\_STRING\_DEPTH\ 17}}
+\DoxyCodeLine{00521\ \textcolor{preprocessor}{\#define\ SKDP\_ERROR\_STRING\_WIDTH\ 128}}
+\DoxyCodeLine{00522\ }
+\DoxyCodeLine{00523\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ SKDP\_ERROR\_STRINGS[SKDP\_ERROR\_STRING\_DEPTH][SKDP\_ERROR\_STRING\_WIDTH]\ =}
+\DoxyCodeLine{00524\ \{}
+\DoxyCodeLine{00525\ \ \ \ \ \textcolor{stringliteral}{"{}No\ error\ was\ detected."{}},}
+\DoxyCodeLine{00526\ \ \ \ \ \textcolor{stringliteral}{"{}The\ cipher\ authentication\ has\ failed."{}},}
+\DoxyCodeLine{00527\ \ \ \ \ \textcolor{stringliteral}{"{}The\ kex\ authentication\ has\ failed."{}},}
+\DoxyCodeLine{00528\ \ \ \ \ \textcolor{stringliteral}{"{}The\ keep\ alive\ check\ failed."{}},}
+\DoxyCodeLine{00529\ \ \ \ \ \textcolor{stringliteral}{"{}The\ communications\ channel\ has\ failed."{}},}
+\DoxyCodeLine{00530\ \ \ \ \ \textcolor{stringliteral}{"{}The\ device\ could\ not\ make\ a\ connnection\ to\ the\ remote\ host."{}},}
+\DoxyCodeLine{00531\ \ \ \ \ \textcolor{stringliteral}{"{}The\ transmission\ failed\ at\ the\ kex\ establish\ phase."{}},}
+\DoxyCodeLine{00532\ \ \ \ \ \textcolor{stringliteral}{"{}The\ input\ is\ invalid."{}},}
+\DoxyCodeLine{00533\ \ \ \ \ \textcolor{stringliteral}{"{}The\ keep\ alive\ has\ expired\ with\ no\ response."{}},}
+\DoxyCodeLine{00534\ \ \ \ \ \textcolor{stringliteral}{"{}The\ key-\/id\ is\ not\ recognized."{}},}
+\DoxyCodeLine{00535\ \ \ \ \ \textcolor{stringliteral}{"{}The\ random\ generator\ experienced\ a\ failure."{}},}
+\DoxyCodeLine{00536\ \ \ \ \ \textcolor{stringliteral}{"{}The\ receiver\ failed\ at\ the\ network\ layer."{}},}
+\DoxyCodeLine{00537\ \ \ \ \ \textcolor{stringliteral}{"{}The\ transmitter\ failed\ at\ the\ network\ layer."{}},}
+\DoxyCodeLine{00538\ \ \ \ \ \textcolor{stringliteral}{"{}The\ protocol\ version\ is\ unknown."{}},}
+\DoxyCodeLine{00539\ \ \ \ \ \textcolor{stringliteral}{"{}The\ packet\ was\ received\ out\ of\ sequence."{}},}
+\DoxyCodeLine{00540\ \ \ \ \ \textcolor{stringliteral}{"{}The\ packet\ valid-\/time\ was\ exceeded"{}},}
+\DoxyCodeLine{00541\ \ \ \ \ \textcolor{stringliteral}{"{}The\ connection\ experienced\ an\ error"{}},}
+\DoxyCodeLine{00542\ \};}
+\DoxyCodeLine{00544\ }
+\DoxyCodeLine{00553\ SKDP\_EXPORT\_API\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structskdp__master__key}{skdp\_master\_key}}}
+\DoxyCodeLine{00554\ \{}
+\DoxyCodeLine{00555\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structskdp__master__key_a369b072365f540f7023477374cd93f4f}{kid}}[\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\_KID\_SIZE}}];\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00556\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structskdp__master__key_a903abdbcdd6f511a210c11ec47130053}{mdk}}[\mbox{\hyperlink{skdp_8h_a7e2bb1825d6473c72bf235b412cb93d7}{SKDP\_MDK\_SIZE}}];\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00557\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structskdp__master__key_a6d579765908169e6fcb1bdc8f105132d}{expiration}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00558\ \}\ \mbox{\hyperlink{structskdp__master__key}{skdp\_master\_key}};}
+\DoxyCodeLine{00559\ }
+\DoxyCodeLine{00568\ SKDP\_EXPORT\_API\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structskdp__server__key}{skdp\_server\_key}}}
+\DoxyCodeLine{00569\ \{}
+\DoxyCodeLine{00570\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structskdp__server__key_a369b072365f540f7023477374cd93f4f}{kid}}[\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\_KID\_SIZE}}];\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00571\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structskdp__server__key_af5ff5e235646f7fa86234c8e484240ac}{sdk}}[\mbox{\hyperlink{skdp_8h_a7bef3f263edd4d1446abd47e1d2f7051}{SKDP\_SDK\_SIZE}}];\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00572\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structskdp__server__key_a6d579765908169e6fcb1bdc8f105132d}{expiration}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00573\ \}\ \mbox{\hyperlink{structskdp__server__key}{skdp\_server\_key}};}
+\DoxyCodeLine{00574\ }
+\DoxyCodeLine{00583\ SKDP\_EXPORT\_API\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structskdp__device__key}{skdp\_device\_key}}}
+\DoxyCodeLine{00584\ \{}
+\DoxyCodeLine{00585\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structskdp__device__key_a369b072365f540f7023477374cd93f4f}{kid}}[\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\_KID\_SIZE}}];\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00586\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structskdp__device__key_aa9cd6bbc4e2607f7c970e570e8817328}{ddk}}[\mbox{\hyperlink{skdp_8h_a3c7e4caa4c090ac1133aa56a00ff8cf8}{SKDP\_DDK\_SIZE}}];\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00587\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structskdp__device__key_a6d579765908169e6fcb1bdc8f105132d}{expiration}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00588\ \}\ \mbox{\hyperlink{structskdp__device__key}{skdp\_device\_key}};}
+\DoxyCodeLine{00589\ }
+\DoxyCodeLine{00598\ SKDP\_EXPORT\_API\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structqsmp__keep__alive__state}{qsmp\_keep\_alive\_state}}}
+\DoxyCodeLine{00599\ \{}
+\DoxyCodeLine{00600\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structqsmp__keep__alive__state_af9c9d33a13c7df6c73f89251087a823b}{etime}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00601\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structqsmp__keep__alive__state_a66dfa775bb1a394931daa9db9c9770c1}{seqctr}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00602\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structqsmp__keep__alive__state_a25991bf44108e2f9d21a6eb1d92e377e}{recd}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00603\ \}\ skdp\_keep\_alive\_state;}
+\DoxyCodeLine{00604\ }
+\DoxyCodeLine{00613\ SKDP\_EXPORT\_API\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structskdp__network__packet}{skdp\_network\_packet}}}
+\DoxyCodeLine{00614\ \{}
+\DoxyCodeLine{00615\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structskdp__network__packet_aff31312fb16705aa73c53b945a1a6b30}{flag}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00616\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structskdp__network__packet_a907c53abb8da7fb88a7681171ffb51cd}{msglen}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00617\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structskdp__network__packet_acb520b7f5d67b3209787f3edb26d34fe}{sequence}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00618\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structskdp__network__packet_aa9e6c59abfe8b07a96afb6594e90dcb1}{utctime}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00619\ \ \ \ \ uint8\_t*\ \mbox{\hyperlink{structskdp__network__packet_a2a5694ff039cef244c87e65f549e2f98}{pmessage}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00620\ \}\ \mbox{\hyperlink{structskdp__network__packet}{skdp\_network\_packet}};}
+\DoxyCodeLine{00621\ }
+\DoxyCodeLine{00629\ SKDP\_EXPORT\_API\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\_errors}}}
+\DoxyCodeLine{00630\ \{}
+\DoxyCodeLine{00631\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba7620dd1e2afd16adce616612cba43e3b}{skdp\_error\_none}}\ =\ 0x00,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00632\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bad43617e34748457a0745181ce9774159}{skdp\_error\_cipher\_auth\_failure}}\ =\ 0x01,\ \ \ \ }
+\DoxyCodeLine{00633\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baac0754833c1884bce3639275e792fc83}{skdp\_error\_kex\_auth\_failure}}\ =\ 0x02,\ \ \ \ \ \ }
+\DoxyCodeLine{00634\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baa85041b9957e35f495782806933bfddf}{skdp\_error\_bad\_keep\_alive}}\ =\ 0x03,\ \ \ \ \ \ }
+\DoxyCodeLine{00635\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bab82fef1e9386582bac843725e59e62cc}{skdp\_error\_channel\_down}}\ =\ 0x04,\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00636\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba81bcb34729e0a1ec059abe876ad8677a}{skdp\_error\_connection\_failure}}\ =\ 0x05,\ \ }
+\DoxyCodeLine{00637\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3bbe4eb0fbf76d6a3addc2d36bd8cbf7}{skdp\_error\_establish\_failure}}\ =\ 0x06,\ \ \ \ }
+\DoxyCodeLine{00638\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bab33050c9bbb44505059b920a67e969e4}{skdp\_error\_invalid\_input}}\ =\ 0x07,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00639\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bacb89018a345e0278af4084cf53b0075c}{skdp\_error\_keep\_alive\_expired}}\ =\ 0x08,\ \ }
+\DoxyCodeLine{00640\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba47fef43890be9ed44a86a2d6b8f2dbb0}{skdp\_error\_key\_not\_recognized}}\ =\ 0x09,\ \ }
+\DoxyCodeLine{00641\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3d1cf31b06698de5a50ef14220085c3b}{skdp\_error\_random\_failure}}\ =\ 0x0A,\ \ \ \ \ \ }
+\DoxyCodeLine{00642\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba0768f687ebdf7377bdda8a69e3c2d685}{skdp\_error\_receive\_failure}}\ =\ 0x0B,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00643\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3ac82c2df466fb2fe874e9ff65ed1c02}{skdp\_error\_transmit\_failure}}\ =\ 0x0C,\ \ \ \ \ \ }
+\DoxyCodeLine{00644\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baaad33017ad262954e04665be18da850e}{skdp\_error\_unknown\_protocol}}\ =\ 0x0D,\ \ \ \ \ \ }
+\DoxyCodeLine{00645\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3ae37efd8ebdbe21a517bbdb098f4c08}{skdp\_error\_unsequenced}}\ =\ 0x0E,\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00646\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba441664cd6e880ebb61dae4ea5125cd90}{skdp\_error\_packet\_expired}}\ =\ 0x0F,\ \ \ \ \ \ }
+\DoxyCodeLine{00647\ \ \ \ \ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91babe29dbcd246165e6ad4e9d9938b04c43}{skdp\_error\_general\_failure}}\ =\ 0xFF,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00648\ \}\ \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\_errors}};}
+\DoxyCodeLine{00649\ }
+\DoxyCodeLine{00657\ SKDP\_EXPORT\_API\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2}{skdp\_flags}}}
+\DoxyCodeLine{00658\ \{}
+\DoxyCodeLine{00659\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a2c1c6513125d001a2bcfe98840464f21}{skdp\_flag\_none}}\ =\ 0x00,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00660\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2acd7d2034616cf684ae4c918b733eef56}{skdp\_flag\_connect\_request}}\ =\ 0x01,\ \ \ \ \ \ }
+\DoxyCodeLine{00661\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a535fe0d7288324529e8bf87b32322509}{skdp\_flag\_connect\_response}}\ =\ 0x02,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00662\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2ac6fb44d9e4e277c0fd449b2f35a26a5f}{skdp\_flag\_connection\_terminate}}\ =\ 0x03,\ \ \ \ }
+\DoxyCodeLine{00663\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a67772e3de0f7fe44192d0a0a6aeb4abe}{skdp\_flag\_encrypted\_message}}\ =\ 0x04,\ \ \ \ \ \ }
+\DoxyCodeLine{00664\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a82f60a98afdc8e860566a1a49e22aeec}{skdp\_flag\_exchange\_request}}\ =\ 0x05,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00665\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2acbf78a16500a2bef882ae17eab160cab}{skdp\_flag\_exchange\_response}}\ =\ 0x06,\ \ \ \ \ \ }
+\DoxyCodeLine{00666\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a6b4014e593842ccd6ed239795ed1e638}{skdp\_flag\_establish\_request}}\ =\ 0x07,\ \ \ \ \ \ }
+\DoxyCodeLine{00667\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a06e21a1f31b0dcb2a8f23a1bcf8fe03d}{skdp\_flag\_establish\_response}}\ =\ 0x08,\ \ \ \ }
+\DoxyCodeLine{00668\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2ab751629c3025b7bff6e9a076f9bbec1b}{skdp\_flag\_establish\_verify}}\ =\ 0x09,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00669\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a1210467c30c6d8fd858455218685d3ea}{skdp\_flag\_keepalive\_request}}\ =\ 0x0A,\ \ \ \ \ \ }
+\DoxyCodeLine{00670\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a61cfb626afb843c0e78d6d8f0442c6bf}{skdp\_flag\_session\_established}}\ =\ 0x0B,\ \ }
+\DoxyCodeLine{00671\ \ \ \ \ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2abe0e56ac1fa11ccdf12dceb43e867be7}{skdp\_flag\_error\_condition}}\ =\ 0xFF,\ \ \ \ \ \ }
+\DoxyCodeLine{00672\ \}\ \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2}{skdp\_flags}};}
+\DoxyCodeLine{00673\ }
+\DoxyCodeLine{00683\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_a099b357b3377ec86cc1385bb5043dcf9}{skdp\_deserialize\_device\_key}}(\mbox{\hyperlink{structskdp__device__key}{skdp\_device\_key}}*\ dkey,\ \textcolor{keyword}{const}\ uint8\_t\ input[\mbox{\hyperlink{skdp_8h_aafc94d05acb763d4d0773adfe6eb25e5}{SKDP\_DEVKEY\_ENCODED\_SIZE}}]);}
+\DoxyCodeLine{00684\ }
+\DoxyCodeLine{00694\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_a5db83771b6c66cf48b96261191cedb1f}{skdp\_serialize\_device\_key}}(uint8\_t\ output[\mbox{\hyperlink{skdp_8h_aafc94d05acb763d4d0773adfe6eb25e5}{SKDP\_DEVKEY\_ENCODED\_SIZE}}],\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structskdp__device__key}{skdp\_device\_key}}*\ dkey);}
+\DoxyCodeLine{00695\ }
+\DoxyCodeLine{00705\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_a1ad96069734b0b6fe86cdbff50ee7005}{skdp\_deserialize\_master\_key}}(\mbox{\hyperlink{structskdp__master__key}{skdp\_master\_key}}*\ mkey,\ \textcolor{keyword}{const}\ uint8\_t\ input[\mbox{\hyperlink{skdp_8h_ae0e7bae6a3eced2c4e774739102a485d}{SKDP\_MSTKEY\_ENCODED\_SIZE}}]);}
+\DoxyCodeLine{00706\ }
+\DoxyCodeLine{00716\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_a90b474586cf5eef64346d0f9d51e2983}{skdp\_serialize\_master\_key}}(uint8\_t\ output[\mbox{\hyperlink{skdp_8h_ae0e7bae6a3eced2c4e774739102a485d}{SKDP\_MSTKEY\_ENCODED\_SIZE}}],\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structskdp__master__key}{skdp\_master\_key}}*\ mkey);}
+\DoxyCodeLine{00717\ }
+\DoxyCodeLine{00727\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_afba78bf1c7b1d5fc318537531b1e74dc}{skdp\_deserialize\_server\_key}}(\mbox{\hyperlink{structskdp__server__key}{skdp\_server\_key}}*\ skey,\ \textcolor{keyword}{const}\ uint8\_t\ input[\mbox{\hyperlink{skdp_8h_af2fefa50f88c02d802c50d5efdfc0deb}{SKDP\_SRVKEY\_ENCODED\_SIZE}}]);}
+\DoxyCodeLine{00728\ }
+\DoxyCodeLine{00738\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_af2caf9606471db68b4c1113ed7c759e6}{skdp\_serialize\_server\_key}}(uint8\_t\ output[\mbox{\hyperlink{skdp_8h_af2fefa50f88c02d802c50d5efdfc0deb}{SKDP\_SRVKEY\_ENCODED\_SIZE}}],\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structskdp__server__key}{skdp\_server\_key}}*\ skey);}
+\DoxyCodeLine{00739\ }
+\DoxyCodeLine{00753\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{skdp_8h_a863c87a9379bb157f0e7b9bd83d45c78}{skdp\_generate\_master\_key}}(\mbox{\hyperlink{structskdp__master__key}{skdp\_master\_key}}*\ mkey,\ \textcolor{keyword}{const}\ uint8\_t\ kid[\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\_KID\_SIZE}}]);}
+\DoxyCodeLine{00754\ }
+\DoxyCodeLine{00766\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_a5c0560a25b61d4d5c696eaa5b820f2d7}{skdp\_generate\_server\_key}}(\mbox{\hyperlink{structskdp__server__key}{skdp\_server\_key}}*\ skey,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structskdp__master__key}{skdp\_master\_key}}*\ mkey,\ \textcolor{keyword}{const}\ uint8\_t\ kid[\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\_KID\_SIZE}}]);}
+\DoxyCodeLine{00767\ }
+\DoxyCodeLine{00779\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_a992530ebbcd1bea5e09dbc2a167bff5f}{skdp\_generate\_device\_key}}(\mbox{\hyperlink{structskdp__device__key}{skdp\_device\_key}}*\ dkey,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structskdp__server__key}{skdp\_server\_key}}*\ skey,\ \textcolor{keyword}{const}\ uint8\_t\ kid[\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\_KID\_SIZE}}]);}
+\DoxyCodeLine{00780\ }
+\DoxyCodeLine{00789\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_a231dfea4120d1abcb3d01cc783a6e0a8}{skdp\_packet\_clear}}(\mbox{\hyperlink{structskdp__network__packet}{skdp\_network\_packet}}*\ packet);}
+\DoxyCodeLine{00790\ }
+\DoxyCodeLine{00801\ SKDP\_EXPORT\_API\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{skdp_8h_a1218e0637db5cb10c3ae1accf81c4920}{skdp\_error\_to\_string}}(\mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\_errors}}\ error);}
+\DoxyCodeLine{00802\ }
+\DoxyCodeLine{00812\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_a236a0c65efef5dd4ad8745b83759b599}{skdp\_packet\_header\_deserialize}}(\textcolor{keyword}{const}\ uint8\_t*\ header,\ \mbox{\hyperlink{structskdp__network__packet}{skdp\_network\_packet}}*\ packet);}
+\DoxyCodeLine{00813\ }
+\DoxyCodeLine{00823\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_aedc511cb3ca00cbc8159c78a1071cabe}{skdp\_packet\_header\_serialize}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structskdp__network__packet}{skdp\_network\_packet}}*\ packet,\ uint8\_t*\ header);}
+\DoxyCodeLine{00824\ }
+\DoxyCodeLine{00833\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_a547f61f36cd12628fce9ba843ee78725}{skdp\_packet\_set\_utc\_time}}(\mbox{\hyperlink{structskdp__network__packet}{skdp\_network\_packet}}*\ packet);}
+\DoxyCodeLine{00834\ }
+\DoxyCodeLine{00846\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{skdp_8h_a47726d3817ee7f0b3bb58ef87b63be94}{skdp\_packet\_time\_valid}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structskdp__network__packet}{skdp\_network\_packet}}*\ packet);}
+\DoxyCodeLine{00847\ }
+\DoxyCodeLine{00859\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{skdp_8h_a8f340b4323fa0805eacffc74d7f85852}{skdp\_packet\_to\_stream}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structskdp__network__packet}{skdp\_network\_packet}}*\ packet,\ uint8\_t*\ pstream);}
+\DoxyCodeLine{00860\ }
+\DoxyCodeLine{00870\ SKDP\_EXPORT\_API\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{skdp_8h_abbcb7565b7deffd72e5e420119afdac7}{skdp\_stream\_to\_packet}}(\textcolor{keyword}{const}\ uint8\_t*\ pstream,\ \mbox{\hyperlink{structskdp__network__packet}{skdp\_network\_packet}}*\ packet);}
+\DoxyCodeLine{00871\ }
+\DoxyCodeLine{00872\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

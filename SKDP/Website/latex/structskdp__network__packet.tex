@@ -1,0 +1,67 @@
+\doxysection{skdp\+\_\+network\+\_\+packet Struct Reference}
+\hypertarget{structskdp__network__packet}{}\label{structskdp__network__packet}\index{skdp\_network\_packet@{skdp\_network\_packet}}
+
+
+The SKDP network packet structure.  
+
+
+
+
+{\ttfamily \#include $<$skdp.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structskdp__network__packet_aff31312fb16705aa73c53b945a1a6b30}{flag}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structskdp__network__packet_a907c53abb8da7fb88a7681171ffb51cd}{msglen}}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{structskdp__network__packet_acb520b7f5d67b3209787f3edb26d34fe}{sequence}}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{structskdp__network__packet_aa9e6c59abfe8b07a96afb6594e90dcb1}{utctime}}
+\item 
+uint8\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structskdp__network__packet_a2a5694ff039cef244c87e65f549e2f98}{pmessage}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The SKDP network packet structure. 
+
+This structure defines the format of a SKDP network packet. It includes a packet flag, the message length, a sequence number, a UTC timestamp for packet creation, and a pointer to the message data. 
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structskdp__network__packet_aff31312fb16705aa73c53b945a1a6b30}\index{skdp\_network\_packet@{skdp\_network\_packet}!flag@{flag}}
+\index{flag@{flag}!skdp\_network\_packet@{skdp\_network\_packet}}
+\doxysubsubsection{\texorpdfstring{flag}{flag}}
+{\footnotesize\ttfamily \label{structskdp__network__packet_aff31312fb16705aa73c53b945a1a6b30} 
+uint8\+\_\+t flag}
+
+The packet flag \Hypertarget{structskdp__network__packet_a907c53abb8da7fb88a7681171ffb51cd}\index{skdp\_network\_packet@{skdp\_network\_packet}!msglen@{msglen}}
+\index{msglen@{msglen}!skdp\_network\_packet@{skdp\_network\_packet}}
+\doxysubsubsection{\texorpdfstring{msglen}{msglen}}
+{\footnotesize\ttfamily \label{structskdp__network__packet_a907c53abb8da7fb88a7681171ffb51cd} 
+uint32\+\_\+t msglen}
+
+The message length in bytes \Hypertarget{structskdp__network__packet_a2a5694ff039cef244c87e65f549e2f98}\index{skdp\_network\_packet@{skdp\_network\_packet}!pmessage@{pmessage}}
+\index{pmessage@{pmessage}!skdp\_network\_packet@{skdp\_network\_packet}}
+\doxysubsubsection{\texorpdfstring{pmessage}{pmessage}}
+{\footnotesize\ttfamily \label{structskdp__network__packet_a2a5694ff039cef244c87e65f549e2f98} 
+uint8\+\_\+t\texorpdfstring{$\ast$}{*} pmessage}
+
+A pointer to the packet\textquotesingle{}s message data \Hypertarget{structskdp__network__packet_acb520b7f5d67b3209787f3edb26d34fe}\index{skdp\_network\_packet@{skdp\_network\_packet}!sequence@{sequence}}
+\index{sequence@{sequence}!skdp\_network\_packet@{skdp\_network\_packet}}
+\doxysubsubsection{\texorpdfstring{sequence}{sequence}}
+{\footnotesize\ttfamily \label{structskdp__network__packet_acb520b7f5d67b3209787f3edb26d34fe} 
+uint64\+\_\+t sequence}
+
+The packet sequence number \Hypertarget{structskdp__network__packet_aa9e6c59abfe8b07a96afb6594e90dcb1}\index{skdp\_network\_packet@{skdp\_network\_packet}!utctime@{utctime}}
+\index{utctime@{utctime}!skdp\_network\_packet@{skdp\_network\_packet}}
+\doxysubsubsection{\texorpdfstring{utctime}{utctime}}
+{\footnotesize\ttfamily \label{structskdp__network__packet_aa9e6c59abfe8b07a96afb6594e90dcb1} 
+uint64\+\_\+t utctime}
+
+The packet creation time in UTC seconds from epoch 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+SKDP/\+SKDP/\mbox{\hyperlink{skdp_8h}{skdp.\+h}}\end{DoxyCompactItemize}

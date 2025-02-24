@@ -1,0 +1,115 @@
+\doxysection{skdp\+\_\+server\+\_\+state Struct Reference}
+\hypertarget{structskdp__server__state}{}\label{structskdp__server__state}\index{skdp\_server\_state@{skdp\_server\_state}}
+
+
+The SKDP server state structure.  
+
+
+
+
+{\ttfamily \#include $<$skdpserver.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+qsc\+\_\+rcs\+\_\+state \mbox{\hyperlink{structskdp__server__state_aec1bc59ca91d898f673d2ca825c02853}{rxcpr}}
+\item 
+qsc\+\_\+rcs\+\_\+state \mbox{\hyperlink{structskdp__server__state_a9016aef42a7046d75b7d0d01f1f5cddb}{txcpr}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structskdp__server__state_aabd05f5b9ff0c1ba1bb9b22dad2db5f9}{did}} \mbox{[}\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}}\mbox{]}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structskdp__server__state_afc7ef82d49ccd5600f13bbfc164accdd}{dsh}} \mbox{[}\mbox{\hyperlink{skdp_8h_a0d846755283aba2c16e45d5df169a5d5}{SKDP\+\_\+\+STH\+\_\+\+SIZE}}\mbox{]}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structskdp__server__state_a369b072365f540f7023477374cd93f4f}{kid}} \mbox{[}\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}}\mbox{]}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structskdp__server__state_a241e9118c2e37444fc3920548f2baa40}{ssh}} \mbox{[}\mbox{\hyperlink{skdp_8h_a0d846755283aba2c16e45d5df169a5d5}{SKDP\+\_\+\+STH\+\_\+\+SIZE}}\mbox{]}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structskdp__server__state_af5ff5e235646f7fa86234c8e484240ac}{sdk}} \mbox{[}\mbox{\hyperlink{skdp_8h_a7bef3f263edd4d1446abd47e1d2f7051}{SKDP\+\_\+\+SDK\+\_\+\+SIZE}}\mbox{]}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{structskdp__server__state_a6d579765908169e6fcb1bdc8f105132d}{expiration}}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{structskdp__server__state_a9bc7a133c2f47895567d675d3679e15a}{rxseq}}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{structskdp__server__state_a1b9dac0a156c3747fc39192a04f01aa0}{txseq}}
+\item 
+\mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2}{skdp\+\_\+flags}} \mbox{\hyperlink{structskdp__server__state_aa4c3705c8c309ae2e443e93b73a54709}{exflag}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The SKDP server state structure. 
+
+This structure maintains the state of an SKDP server connection during the key exchange and secure communication session. It includes the cipher states for both the receive and transmit channels, identity and session hashes, as well as the server derivation key. The structure also holds expiration information and packet sequence numbers for both receiving and transmitting messages. The {\ttfamily exflag} field indicates the current position within the key exchange process. 
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structskdp__server__state_aabd05f5b9ff0c1ba1bb9b22dad2db5f9}\index{skdp\_server\_state@{skdp\_server\_state}!did@{did}}
+\index{did@{did}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{did}{did}}
+{\footnotesize\ttfamily \label{structskdp__server__state_aabd05f5b9ff0c1ba1bb9b22dad2db5f9} 
+uint8\+\_\+t did\mbox{[}\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}}\mbox{]}}
+
+The device identity string \Hypertarget{structskdp__server__state_afc7ef82d49ccd5600f13bbfc164accdd}\index{skdp\_server\_state@{skdp\_server\_state}!dsh@{dsh}}
+\index{dsh@{dsh}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{dsh}{dsh}}
+{\footnotesize\ttfamily \label{structskdp__server__state_afc7ef82d49ccd5600f13bbfc164accdd} 
+uint8\+\_\+t dsh\mbox{[}\mbox{\hyperlink{skdp_8h_a0d846755283aba2c16e45d5df169a5d5}{SKDP\+\_\+\+STH\+\_\+\+SIZE}}\mbox{]}}
+
+The device session hash \Hypertarget{structskdp__server__state_aa4c3705c8c309ae2e443e93b73a54709}\index{skdp\_server\_state@{skdp\_server\_state}!exflag@{exflag}}
+\index{exflag@{exflag}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{exflag}{exflag}}
+{\footnotesize\ttfamily \label{structskdp__server__state_aa4c3705c8c309ae2e443e93b73a54709} 
+\mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2}{skdp\+\_\+flags}} exflag}
+
+The key exchange (kex) position flag \Hypertarget{structskdp__server__state_a6d579765908169e6fcb1bdc8f105132d}\index{skdp\_server\_state@{skdp\_server\_state}!expiration@{expiration}}
+\index{expiration@{expiration}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{expiration}{expiration}}
+{\footnotesize\ttfamily \label{structskdp__server__state_a6d579765908169e6fcb1bdc8f105132d} 
+uint64\+\_\+t expiration}
+
+The expiration time, in seconds from epoch \Hypertarget{structskdp__server__state_a369b072365f540f7023477374cd93f4f}\index{skdp\_server\_state@{skdp\_server\_state}!kid@{kid}}
+\index{kid@{kid}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{kid}{kid}}
+{\footnotesize\ttfamily \label{structskdp__server__state_a369b072365f540f7023477374cd93f4f} 
+uint8\+\_\+t kid\mbox{[}\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}}\mbox{]}}
+
+The key identity string \Hypertarget{structskdp__server__state_aec1bc59ca91d898f673d2ca825c02853}\index{skdp\_server\_state@{skdp\_server\_state}!rxcpr@{rxcpr}}
+\index{rxcpr@{rxcpr}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{rxcpr}{rxcpr}}
+{\footnotesize\ttfamily \label{structskdp__server__state_aec1bc59ca91d898f673d2ca825c02853} 
+qsc\+\_\+rcs\+\_\+state rxcpr}
+
+The receive channel cipher state \Hypertarget{structskdp__server__state_a9bc7a133c2f47895567d675d3679e15a}\index{skdp\_server\_state@{skdp\_server\_state}!rxseq@{rxseq}}
+\index{rxseq@{rxseq}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{rxseq}{rxseq}}
+{\footnotesize\ttfamily \label{structskdp__server__state_a9bc7a133c2f47895567d675d3679e15a} 
+uint64\+\_\+t rxseq}
+
+The receive channel packet sequence number \Hypertarget{structskdp__server__state_af5ff5e235646f7fa86234c8e484240ac}\index{skdp\_server\_state@{skdp\_server\_state}!sdk@{sdk}}
+\index{sdk@{sdk}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{sdk}{sdk}}
+{\footnotesize\ttfamily \label{structskdp__server__state_af5ff5e235646f7fa86234c8e484240ac} 
+uint8\+\_\+t sdk\mbox{[}\mbox{\hyperlink{skdp_8h_a7bef3f263edd4d1446abd47e1d2f7051}{SKDP\+\_\+\+SDK\+\_\+\+SIZE}}\mbox{]}}
+
+The server derivation key \Hypertarget{structskdp__server__state_a241e9118c2e37444fc3920548f2baa40}\index{skdp\_server\_state@{skdp\_server\_state}!ssh@{ssh}}
+\index{ssh@{ssh}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{ssh}{ssh}}
+{\footnotesize\ttfamily \label{structskdp__server__state_a241e9118c2e37444fc3920548f2baa40} 
+uint8\+\_\+t ssh\mbox{[}\mbox{\hyperlink{skdp_8h_a0d846755283aba2c16e45d5df169a5d5}{SKDP\+\_\+\+STH\+\_\+\+SIZE}}\mbox{]}}
+
+The server session hash \Hypertarget{structskdp__server__state_a9016aef42a7046d75b7d0d01f1f5cddb}\index{skdp\_server\_state@{skdp\_server\_state}!txcpr@{txcpr}}
+\index{txcpr@{txcpr}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{txcpr}{txcpr}}
+{\footnotesize\ttfamily \label{structskdp__server__state_a9016aef42a7046d75b7d0d01f1f5cddb} 
+qsc\+\_\+rcs\+\_\+state txcpr}
+
+The transmit channel cipher state \Hypertarget{structskdp__server__state_a1b9dac0a156c3747fc39192a04f01aa0}\index{skdp\_server\_state@{skdp\_server\_state}!txseq@{txseq}}
+\index{txseq@{txseq}!skdp\_server\_state@{skdp\_server\_state}}
+\doxysubsubsection{\texorpdfstring{txseq}{txseq}}
+{\footnotesize\ttfamily \label{structskdp__server__state_a1b9dac0a156c3747fc39192a04f01aa0} 
+uint64\+\_\+t txseq}
+
+The transmit channel packet sequence number 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+SKDP/\+SKDP/\mbox{\hyperlink{skdpserver_8h}{skdpserver.\+h}}\end{DoxyCompactItemize}

@@ -1,21 +1,3 @@
-
-/* 2024 Quantum Resistant Cryptographic Solutions Corporation
- * All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Quantum Resistant Cryptographic Solutions Incorporated.
- * The intellectual and technical concepts contained
- * herein are proprietary to Quantum Resistant Cryptographic Solutions Incorporated
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Quantum Resistant Cryptographic Solutions Incorporated.
- *
- * Written by John G. Underhill
- * Contact: develop@qrcs.ca
- */
-
 #include "appclt.h"
 #include "../SKDP/skdp.h"
 #include "../SKDP/skdpclient.h"
@@ -79,9 +61,9 @@ static void client_print_banner()
 	qsc_consoleutils_print_line("****************************************************");
 	qsc_consoleutils_print_line("* SKDP: Symmetric Key Distribution Protocol Client *");
 	qsc_consoleutils_print_line("*                                                  *");
-	qsc_consoleutils_print_line("* Release:   v1.0.0.0b (A0)                        *");
-	qsc_consoleutils_print_line("* Date:      September 1, 2021                     *");
-	qsc_consoleutils_print_line("* Contact:   develop@vtdev.com                     *");
+	qsc_consoleutils_print_line("* Release:   v1.1.0.0 (A1)                        *");
+	qsc_consoleutils_print_line("* Date:      December 02, 2024                     *");
+	qsc_consoleutils_print_line("* Contact:   john.underhill@protonmail.com         *");
 	qsc_consoleutils_print_line("****************************************************");
 	qsc_consoleutils_print_line("");
 }
@@ -127,7 +109,8 @@ static bool client_ipv4_dialogue(skdp_device_key* ckey, qsc_ipinfo_ipv4_address*
 		client_print_prompt();
 		slen = qsc_consoleutils_get_line(fpath, sizeof(fpath)) - 1;
 
-		if (qsc_fileutils_exists(fpath) == true && qsc_stringutils_string_contains(fpath, SKDP_DEVKEY_EXT) == true)
+		if (qsc_fileutils_exists(fpath) == true && 
+			qsc_stringutils_string_contains(fpath, SKDP_DEVKEY_EXT) == true)
 		{
 			qsc_fileutils_copy_file_to_stream(fpath, (char*)cskey, sizeof(cskey));
 			skdp_deserialize_device_key(ckey, cskey);
@@ -145,14 +128,14 @@ static bool client_ipv4_dialogue(skdp_device_key* ckey, qsc_ipinfo_ipv4_address*
 	return res;
 }
 
-static void qsc_socket_receive_async_callback(const qsc_socket* source, const uint8_t* message, size_t* msglen)
+static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t* message, size_t* msglen)
 {
 	assert(message != NULL);
 	assert(source != NULL);
 
 	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0 };
 	char msgstr[SKDP_MESSAGE_MAX] = { 0 };
-	skdp_packet pkt = { 0 };
+	skdp_network_packet pkt = { 0 };
 	size_t mlen;
 	skdp_errors qerr;
 
@@ -178,7 +161,7 @@ static void qsc_socket_receive_async_callback(const qsc_socket* source, const ui
 		}
 		else if (pkt.flag == skdp_flag_connection_terminate)
 		{
-			client_print_message("The connection was terminated by the remote host.");
+			qsc_consoleutils_print_line("The connection was terminated by the remote host.");
 			skdp_client_connection_close(&m_skdp_client_ctx, source, skdp_error_none);
 		}
 		else if (pkt.flag == skdp_flag_keepalive_request)
@@ -226,7 +209,7 @@ static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, const sk
 	char sin[SKDP_MESSAGE_MAX + 1] = { 0 };
 	qsc_socket_receive_async_state actx = { 0 };
 	qsc_socket csck = { 0 };
-	skdp_packet pkt = { 0 };
+	skdp_network_packet pkt = { 0 };
 	skdp_errors err;
 	size_t mlen;
 
@@ -236,13 +219,13 @@ static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, const sk
 
 	if (err == skdp_error_none)
 	{
-		qsc_consoleutils_print_safe("client> Connected to server: ");
+		qsc_consoleutils_print_safe("Connected to server: ");
 		qsc_consoleutils_print_line((char*)csck.address);
-		client_print_message("Enter 'qsmp quit' to exit the application.");
+		client_print_message("Enter 'skdp quit' to exit the application.");
 
 		/* send and receive loops */
 
-		memset((char*)&actx, 0x00, sizeof(qsc_socket_receive_async_state));
+		qsc_memutils_clear((char*)&actx, sizeof(qsc_socket_receive_async_state));
 		actx.callback = &qsc_socket_receive_async_callback;
 		actx.error = &qsc_socket_exception_callback;
 		actx.source = &csck;
@@ -276,7 +259,7 @@ static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, const sk
 	}
 	else
 	{
-		client_print_message("Could not connect to the remote host.");
+		qsc_consoleutils_print_line("Could not connect to the remote host.");
 	}
 }
 

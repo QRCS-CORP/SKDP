@@ -1,0 +1,265 @@
+\doxysection{C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+SKDP/\+SKDP/skdpserver.h File Reference}
+\hypertarget{skdpserver_8h}{}\label{skdpserver_8h}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/SKDP/SKDP/skdpserver.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/SKDP/SKDP/skdpserver.h}}
+
+
+The SKDP listener.  
+
+
+{\ttfamily \#include "{}common.\+h"{}}\newline
+{\ttfamily \#include "{}skdp.\+h"{}}\newline
+{\ttfamily \#include "{}../../\+QSC/\+QSC/rcs.\+h"{}}\newline
+{\ttfamily \#include "{}../../\+QSC/\+QSC/socketserver.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}}
+\begin{DoxyCompactList}\small\item\em The SKDP server state structure. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{skdpserver_8h_a5a91fb2a6bcf84681796ca9222bc1bb9}\label{skdpserver_8h_a5a91fb2a6bcf84681796ca9222bc1bb9} 
+typedef SKDP\+\_\+\+EXPORT\+\_\+\+API struct skdp\+\_\+server\+\_\+state {\bfseries skdp\+\_\+server\+\_\+state}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdpserver_8h_ad92d1cfa6a2e1d682c6ae773242e533e}{skdp\+\_\+server\+\_\+connection\+\_\+close}} (\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, qsc\+\_\+socket \texorpdfstring{$\ast$}{*}sock, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} error)
+\begin{DoxyCompactList}\small\item\em Close the remote session and dispose of server resources. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdpserver_8h_a0aafc73e5fe1c1943c342a21c25f28cb}{skdp\+\_\+server\+\_\+send\+\_\+error}} (const qsc\+\_\+socket \texorpdfstring{$\ast$}{*}sock, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} error)
+\begin{DoxyCompactList}\small\item\em Send an error code to the remote host. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} \mbox{\hyperlink{skdpserver_8h_a11300f76037cba1e7bbc60b418f384e9}{skdp\+\_\+server\+\_\+send\+\_\+keep\+\_\+alive}} (skdp\+\_\+keep\+\_\+alive\+\_\+state \texorpdfstring{$\ast$}{*}kctx, const qsc\+\_\+socket \texorpdfstring{$\ast$}{*}sock)
+\begin{DoxyCompactList}\small\item\em Send a keep-\/alive message to the remote host. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdpserver_8h_a957f3d5e2a96eb6b257c5726d32d63c5}{skdp\+\_\+server\+\_\+initialize}} (\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, const \mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}} \texorpdfstring{$\ast$}{*}skey)
+\begin{DoxyCompactList}\small\item\em Initialize the SKDP server state. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} \mbox{\hyperlink{skdpserver_8h_afb92ce548cf98ba322b3cb566787e3ea}{skdp\+\_\+server\+\_\+listen\+\_\+ipv4}} (\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, qsc\+\_\+socket \texorpdfstring{$\ast$}{*}sock, const qsc\+\_\+ipinfo\+\_\+ipv4\+\_\+address \texorpdfstring{$\ast$}{*}address, uint16\+\_\+t port)
+\begin{DoxyCompactList}\small\item\em Run the IPv4 networked key exchange function. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} \mbox{\hyperlink{skdpserver_8h_a2201345a285b4cd9ebbee5074b88dcf6}{skdp\+\_\+server\+\_\+listen\+\_\+ipv6}} (\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, qsc\+\_\+socket \texorpdfstring{$\ast$}{*}sock, const qsc\+\_\+ipinfo\+\_\+ipv6\+\_\+address \texorpdfstring{$\ast$}{*}address, uint16\+\_\+t port)
+\begin{DoxyCompactList}\small\item\em Run the IPv6 networked key exchange function. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} \mbox{\hyperlink{skdpserver_8h_aaa9aaf212e9d4e09c2ed4b37ba20ff2b}{skdp\+\_\+server\+\_\+decrypt\+\_\+packet}} (\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, const \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}packetin, uint8\+\_\+t \texorpdfstring{$\ast$}{*}message, size\+\_\+t \texorpdfstring{$\ast$}{*}msglen)
+\begin{DoxyCompactList}\small\item\em Decrypt a received SKDP packet. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} \mbox{\hyperlink{skdpserver_8h_a3ae05196b9f9bfab988d6bcca2fdc135}{skdp\+\_\+server\+\_\+encrypt\+\_\+packet}} (\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, const uint8\+\_\+t \texorpdfstring{$\ast$}{*}message, size\+\_\+t msglen, \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}packetout)
+\begin{DoxyCompactList}\small\item\em Encrypt a message into an SKDP packet. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} \mbox{\hyperlink{skdpserver_8h_a12db25a989b17e3ee383acce52f501b7}{skdp\+\_\+server\+\_\+ratchet\+\_\+response}} (\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}ctx, \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}packetout)
+\begin{DoxyCompactList}\small\item\em Send a ratchet response to the client. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The SKDP listener. 
+
+This header defines the internal server functions for the Symmetric Key Distribution Protocol (SKDP). The SKDP listener is responsible for handling incoming connections from SKDP clients, managing the key exchange process, and maintaining secure communications. The functions in this header support both IPv4 and IPv6 connections, manage encryption and decryption of messages, and handle key ratcheting operations to periodically update session keys for forward secrecy.
+
+The server operates by accepting incoming connection requests, performing the key exchange with each client, and then maintaining an encrypted tunnel. The server also manages keep-\/alive messages and error reporting to ensure robust communication.
+
+\begin{DoxyNote}{Note}
+These functions and data structures are internal and non-\/exportable. 
+\end{DoxyNote}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{skdpserver_8h_ad92d1cfa6a2e1d682c6ae773242e533e}\index{skdpserver.h@{skdpserver.h}!skdp\_server\_connection\_close@{skdp\_server\_connection\_close}}
+\index{skdp\_server\_connection\_close@{skdp\_server\_connection\_close}!skdpserver.h@{skdpserver.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_server\_connection\_close()}{skdp\_server\_connection\_close()}}
+{\footnotesize\ttfamily \label{skdpserver_8h_ad92d1cfa6a2e1d682c6ae773242e533e} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+server\+\_\+connection\+\_\+close (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{qsc\+\_\+socket \texorpdfstring{$\ast$}{*}}]{sock}{, }\item[{\mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}}}]{error}{}\end{DoxyParamCaption})}
+
+
+
+Close the remote session and dispose of server resources. 
+
+This function gracefully closes the SKDP server session by terminating the connection on the given socket and releasing any resources associated with the server state. It sends an error code to the remote host (if applicable) before closing the connection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & A pointer to the SKDP server state structure. \\
+\hline
+{\em sock} & A pointer to the initialized socket structure. \\
+\hline
+{\em error} & The SKDP error code indicating the reason for closure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdpserver_8h_aaa9aaf212e9d4e09c2ed4b37ba20ff2b}\index{skdpserver.h@{skdpserver.h}!skdp\_server\_decrypt\_packet@{skdp\_server\_decrypt\_packet}}
+\index{skdp\_server\_decrypt\_packet@{skdp\_server\_decrypt\_packet}!skdpserver.h@{skdpserver.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_server\_decrypt\_packet()}{skdp\_server\_decrypt\_packet()}}
+{\footnotesize\ttfamily \label{skdpserver_8h_aaa9aaf212e9d4e09c2ed4b37ba20ff2b} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} skdp\+\_\+server\+\_\+decrypt\+\_\+packet (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{const \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}}]{packetin}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{message}{, }\item[{size\+\_\+t \texorpdfstring{$\ast$}{*}}]{msglen}{}\end{DoxyParamCaption})}
+
+
+
+Decrypt a received SKDP packet. 
+
+This function decrypts the message contained in an incoming SKDP network packet using the server\textquotesingle{}s current decryption state. The decrypted plaintext is copied into the provided output buffer, and its length is returned through the msglen parameter.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & A pointer to the SKDP server state structure. \\
+\hline
+{\em packetin} & \mbox{[}const\mbox{]} A pointer to the incoming SKDP network packet. \\
+\hline
+{\em message} & The output buffer where the decrypted message will be stored. \\
+\hline
+{\em msglen} & A pointer to a variable that will receive the length of the decrypted message.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a value of type {\ttfamily \doxylink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} indicating the result of the decryption operation. 
+\end{DoxyReturn}
+\Hypertarget{skdpserver_8h_a3ae05196b9f9bfab988d6bcca2fdc135}\index{skdpserver.h@{skdpserver.h}!skdp\_server\_encrypt\_packet@{skdp\_server\_encrypt\_packet}}
+\index{skdp\_server\_encrypt\_packet@{skdp\_server\_encrypt\_packet}!skdpserver.h@{skdpserver.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_server\_encrypt\_packet()}{skdp\_server\_encrypt\_packet()}}
+{\footnotesize\ttfamily \label{skdpserver_8h_a3ae05196b9f9bfab988d6bcca2fdc135} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} skdp\+\_\+server\+\_\+encrypt\+\_\+packet (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{message}{, }\item[{size\+\_\+t}]{msglen}{, }\item[{\mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}}]{packetout}{}\end{DoxyParamCaption})}
+
+
+
+Encrypt a message into an SKDP packet. 
+
+This function encrypts a plaintext message using the server\textquotesingle{}s current transmit cipher state. It then builds an SKDP network packet with the encrypted data, including appropriate header information (e.\+g., message length, sequence number, and UTC timestamp).
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & A pointer to the SKDP server state structure. \\
+\hline
+{\em message} & \mbox{[}const\mbox{]} The plaintext message to be encrypted. \\
+\hline
+{\em msglen} & The length of the plaintext message in bytes. \\
+\hline
+{\em packetout} & A pointer to the output SKDP network packet structure.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a value of type {\ttfamily \doxylink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} indicating the success or failure of the encryption process. 
+\end{DoxyReturn}
+\Hypertarget{skdpserver_8h_a957f3d5e2a96eb6b257c5726d32d63c5}\index{skdpserver.h@{skdpserver.h}!skdp\_server\_initialize@{skdp\_server\_initialize}}
+\index{skdp\_server\_initialize@{skdp\_server\_initialize}!skdpserver.h@{skdpserver.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_server\_initialize()}{skdp\_server\_initialize()}}
+{\footnotesize\ttfamily \label{skdpserver_8h_a957f3d5e2a96eb6b257c5726d32d63c5} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+server\+\_\+initialize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{const \mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{skey}{}\end{DoxyParamCaption})}
+
+
+
+Initialize the SKDP server state. 
+
+This function initializes the SKDP server state structure using the provided server key. It configures the necessary cipher states and copies key information into the server state, preparing it for the key exchange process and subsequent secure communications.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & A pointer to the SKDP server state structure to be initialized. \\
+\hline
+{\em skey} & \mbox{[}const\mbox{]} A pointer to the SKDP server key structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdpserver_8h_afb92ce548cf98ba322b3cb566787e3ea}\index{skdpserver.h@{skdpserver.h}!skdp\_server\_listen\_ipv4@{skdp\_server\_listen\_ipv4}}
+\index{skdp\_server\_listen\_ipv4@{skdp\_server\_listen\_ipv4}!skdpserver.h@{skdpserver.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_server\_listen\_ipv4()}{skdp\_server\_listen\_ipv4()}}
+{\footnotesize\ttfamily \label{skdpserver_8h_afb92ce548cf98ba322b3cb566787e3ea} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} skdp\+\_\+server\+\_\+listen\+\_\+ipv4 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{qsc\+\_\+socket \texorpdfstring{$\ast$}{*}}]{sock}{, }\item[{const qsc\+\_\+ipinfo\+\_\+ipv4\+\_\+address \texorpdfstring{$\ast$}{*}}]{address}{, }\item[{uint16\+\_\+t}]{port}{}\end{DoxyParamCaption})}
+
+
+
+Run the IPv4 networked key exchange function. 
+
+This function starts the SKDP server listener on an IPv4 interface. It waits for a client connection, performs the key exchange, and, upon successful completion, returns a connected socket along with an updated SKDP server state.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & A pointer to the SKDP server state structure. \\
+\hline
+{\em sock} & A pointer to the socket structure that will hold the connected socket. \\
+\hline
+{\em address} & A pointer to the server\textquotesingle{}s IPv4 network address. \\
+\hline
+{\em port} & The server\textquotesingle{}s port number.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a value of type {\ttfamily \doxylink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} indicating the success or failure of the IPv4 key exchange. 
+\end{DoxyReturn}
+\Hypertarget{skdpserver_8h_a2201345a285b4cd9ebbee5074b88dcf6}\index{skdpserver.h@{skdpserver.h}!skdp\_server\_listen\_ipv6@{skdp\_server\_listen\_ipv6}}
+\index{skdp\_server\_listen\_ipv6@{skdp\_server\_listen\_ipv6}!skdpserver.h@{skdpserver.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_server\_listen\_ipv6()}{skdp\_server\_listen\_ipv6()}}
+{\footnotesize\ttfamily \label{skdpserver_8h_a2201345a285b4cd9ebbee5074b88dcf6} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} skdp\+\_\+server\+\_\+listen\+\_\+ipv6 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{qsc\+\_\+socket \texorpdfstring{$\ast$}{*}}]{sock}{, }\item[{const qsc\+\_\+ipinfo\+\_\+ipv6\+\_\+address \texorpdfstring{$\ast$}{*}}]{address}{, }\item[{uint16\+\_\+t}]{port}{}\end{DoxyParamCaption})}
+
+
+
+Run the IPv6 networked key exchange function. 
+
+This function starts the SKDP server listener on an IPv6 interface. It accepts a client connection, performs the key exchange protocol, and returns a connected socket along with an updated SKDP server state.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & A pointer to the SKDP server state structure. \\
+\hline
+{\em sock} & A pointer to the socket structure that will hold the connected socket. \\
+\hline
+{\em address} & A pointer to the server\textquotesingle{}s IPv6 network address. \\
+\hline
+{\em port} & The server\textquotesingle{}s port number.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a value of type {\ttfamily \doxylink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} indicating the outcome of the IPv6 key exchange. 
+\end{DoxyReturn}
+\Hypertarget{skdpserver_8h_a12db25a989b17e3ee383acce52f501b7}\index{skdpserver.h@{skdpserver.h}!skdp\_server\_ratchet\_response@{skdp\_server\_ratchet\_response}}
+\index{skdp\_server\_ratchet\_response@{skdp\_server\_ratchet\_response}!skdpserver.h@{skdpserver.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_server\_ratchet\_response()}{skdp\_server\_ratchet\_response()}}
+{\footnotesize\ttfamily \label{skdpserver_8h_a12db25a989b17e3ee383acce52f501b7} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} skdp\+\_\+server\+\_\+ratchet\+\_\+response (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__server__state}{skdp\+\_\+server\+\_\+state}} \texorpdfstring{$\ast$}{*}}]{ctx}{, }\item[{\mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}}]{packetout}{}\end{DoxyParamCaption})}
+
+
+
+Send a ratchet response to the client. 
+
+In SKDP, a ratchet response is used to send an encrypted token to the client and re-\/key the communication channel. This mechanism is useful in static tunnel configurations where additional entropy is periodically injected based on uptime or data transfer. The function constructs a ratchet response packet using the current server state and sends it to the client.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ctx} & A pointer to the SKDP server state structure. \\
+\hline
+{\em packetout} & A pointer to the output SKDP network packet structure that will contain the ratchet response.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a value of type {\ttfamily \doxylink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} indicating the outcome of the ratchet response operation. 
+\end{DoxyReturn}
+\Hypertarget{skdpserver_8h_a0aafc73e5fe1c1943c342a21c25f28cb}\index{skdpserver.h@{skdpserver.h}!skdp\_server\_send\_error@{skdp\_server\_send\_error}}
+\index{skdp\_server\_send\_error@{skdp\_server\_send\_error}!skdpserver.h@{skdpserver.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_server\_send\_error()}{skdp\_server\_send\_error()}}
+{\footnotesize\ttfamily \label{skdpserver_8h_a0aafc73e5fe1c1943c342a21c25f28cb} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+server\+\_\+send\+\_\+error (\begin{DoxyParamCaption}\item[{const qsc\+\_\+socket \texorpdfstring{$\ast$}{*}}]{sock}{, }\item[{\mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}}}]{error}{}\end{DoxyParamCaption})}
+
+
+
+Send an error code to the remote host. 
+
+This function sends a specified SKDP error code over the given socket to notify the remote host of an error condition.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sock} & A pointer to the initialized socket structure. \\
+\hline
+{\em error} & The SKDP error code to be transmitted. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdpserver_8h_a11300f76037cba1e7bbc60b418f384e9}\index{skdpserver.h@{skdpserver.h}!skdp\_server\_send\_keep\_alive@{skdp\_server\_send\_keep\_alive}}
+\index{skdp\_server\_send\_keep\_alive@{skdp\_server\_send\_keep\_alive}!skdpserver.h@{skdpserver.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_server\_send\_keep\_alive()}{skdp\_server\_send\_keep\_alive()}}
+{\footnotesize\ttfamily \label{skdpserver_8h_a11300f76037cba1e7bbc60b418f384e9} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} skdp\+\_\+server\+\_\+send\+\_\+keep\+\_\+alive (\begin{DoxyParamCaption}\item[{skdp\+\_\+keep\+\_\+alive\+\_\+state \texorpdfstring{$\ast$}{*}}]{kctx}{, }\item[{const qsc\+\_\+socket \texorpdfstring{$\ast$}{*}}]{sock}{}\end{DoxyParamCaption})}
+
+
+
+Send a keep-\/alive message to the remote host. 
+
+This function sends a keep-\/alive message using the current SKDP keep-\/alive state over the provided socket. This mechanism is used to verify that the connection is still active and to maintain the session.
+
+
+\begin{DoxyParams}{Parameters}
+{\em kctx} & A pointer to the SKDP keep-\/alive state structure. \\
+\hline
+{\em sock} & A pointer to the initialized socket structure.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a value of type {\ttfamily \doxylink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} indicating the result of the keep-\/alive send operation. 
+\end{DoxyReturn}

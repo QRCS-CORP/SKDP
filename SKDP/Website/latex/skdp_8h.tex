@@ -1,0 +1,884 @@
+\doxysection{C\+:/\+Users/stepp/\+Documents/\+Visual Studio 2022/\+Projects/\+C/\+SKDP/\+SKDP/skdp.h File Reference}
+\hypertarget{skdp_8h}{}\label{skdp_8h}\index{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/SKDP/SKDP/skdp.h@{C:/Users/stepp/Documents/Visual Studio 2022/Projects/C/SKDP/SKDP/skdp.h}}
+
+
+The SKDP settings.  
+
+
+{\ttfamily \#include "{}common.\+h"{}}\newline
+{\ttfamily \#include "{}../../\+QSC/\+QSC/sha3.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structskdp__master__key}{skdp\+\_\+master\+\_\+key}}
+\begin{DoxyCompactList}\small\item\em The SKDP master key structure. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}}
+\begin{DoxyCompactList}\small\item\em The SKDP server key structure. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structskdp__device__key}{skdp\+\_\+device\+\_\+key}}
+\begin{DoxyCompactList}\small\item\em The SKDP device key structure. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structqsmp__keep__alive__state}{qsmp\+\_\+keep\+\_\+alive\+\_\+state}}
+\begin{DoxyCompactList}\small\item\em The SKDP keep alive state structure. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}}
+\begin{DoxyCompactList}\small\item\em The SKDP network packet structure. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{skdp_8h_aa1b87e3de02fe6d676015d358d6d1f3b}\label{skdp_8h_aa1b87e3de02fe6d676015d358d6d1f3b} 
+\#define {\bfseries SKDP\+\_\+\+CONFIG\+\_\+\+SIZE}~26
+\begin{DoxyCompactList}\small\item\em The size of the protocol configuration string. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a1d8afac3be5eeb9eb64c9d01ce07d9b9}\label{skdp_8h_a1d8afac3be5eeb9eb64c9d01ce07d9b9} 
+\#define {\bfseries SKDP\+\_\+\+ERROR\+\_\+\+SIZE}~1
+\begin{DoxyCompactList}\small\item\em The size of a system error message. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_aabaff4ed7a543ca90cd5e1d4c118a270}\label{skdp_8h_aabaff4ed7a543ca90cd5e1d4c118a270} 
+\#define {\bfseries SKDP\+\_\+\+EXP\+\_\+\+SIZE}~8
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the expiration field. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_abe4df208d56451b4aae07e352e5406a4}\label{skdp_8h_abe4df208d56451b4aae07e352e5406a4} 
+\#define {\bfseries SKDP\+\_\+\+HEADER\+\_\+\+SIZE}~21
+\begin{DoxyCompactList}\small\item\em The SKDP packet header size in bytes. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a8d0f83aff4b21e6c601288adbedbda1c}\label{skdp_8h_a8d0f83aff4b21e6c601288adbedbda1c} 
+\#define {\bfseries SKDP\+\_\+\+KEEPALIVE\+\_\+\+MESSAGE}~8
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the keep alive integer message. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_ad58bacb8dbbd27c062db8d3f68c7fb96}\label{skdp_8h_ad58bacb8dbbd27c062db8d3f68c7fb96} 
+\#define {\bfseries SKDP\+\_\+\+KEEPALIVE\+\_\+\+STRING}~20
+\begin{DoxyCompactList}\small\item\em The keep alive string size in bytes. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a8fe4d473a3629b91792a4961ba51f618}\label{skdp_8h_a8fe4d473a3629b91792a4961ba51f618} 
+\#define {\bfseries SKDP\+\_\+\+KEEPALIVE\+\_\+\+TIMEOUT}~(300 \texorpdfstring{$\ast$}{*} 1000)
+\begin{DoxyCompactList}\small\item\em The keep alive timeout in milliseconds (5 minutes). \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a0fa753eab1f323ab5cd560bdd7cb5c4d}\label{skdp_8h_a0fa753eab1f323ab5cd560bdd7cb5c4d} 
+\#define {\bfseries SKDP\+\_\+\+MESSAGE\+\_\+\+SIZE}~1024
+\begin{DoxyCompactList}\small\item\em The message size (in bytes) used during a communications session. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a6a24987ccde1f1d06ef3bb542eab3656}\label{skdp_8h_a6a24987ccde1f1d06ef3bb542eab3656} 
+\#define {\bfseries SKDP\+\_\+\+MESSAGE\+\_\+\+MAX}~(\mbox{\hyperlink{skdp_8h_a0fa753eab1f323ab5cd560bdd7cb5c4d}{SKDP\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The maximum message size in bytes (may exceed MTU). \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a487cbf3998134c7cf911bba0958308f4}\label{skdp_8h_a487cbf3998134c7cf911bba0958308f4} 
+\#define {\bfseries SKDP\+\_\+\+SERVER\+\_\+\+PORT}~2201
+\begin{DoxyCompactList}\small\item\em The default SKDP server port number. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_ae98d3df4469dcd9fdf8b7688cefa9464}\label{skdp_8h_ae98d3df4469dcd9fdf8b7688cefa9464} 
+\#define {\bfseries SKDP\+\_\+\+MID\+\_\+\+SIZE}~4
+\begin{DoxyCompactList}\small\item\em The master key identity size in bytes. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_ace840878a00f850f58346efd3ccf1e1f}\label{skdp_8h_ace840878a00f850f58346efd3ccf1e1f} 
+\#define {\bfseries SKDP\+\_\+\+SID\+\_\+\+SIZE}~8
+\begin{DoxyCompactList}\small\item\em The server ID size in bytes. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a59f17c8554278017b1d4549196dd962a}\label{skdp_8h_a59f17c8554278017b1d4549196dd962a} 
+\#define {\bfseries SKDP\+\_\+\+DID\+\_\+\+SIZE}~12
+\begin{DoxyCompactList}\small\item\em The device ID size in bytes. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a17233f40e863842fc422cd2f9af790a9}\label{skdp_8h_a17233f40e863842fc422cd2f9af790a9} 
+\#define {\bfseries SKDP\+\_\+\+TID\+\_\+\+SIZE}~4
+\begin{DoxyCompactList}\small\item\em The session ID size in bytes. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}\label{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44} 
+\#define {\bfseries SKDP\+\_\+\+KID\+\_\+\+SIZE}~16
+\begin{DoxyCompactList}\small\item\em The SKDP key identity size in bytes. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a37fdff409d94a6ed81309a733f698286}\label{skdp_8h_a37fdff409d94a6ed81309a733f698286} 
+\#define {\bfseries SKDP\+\_\+\+SEQUENCE\+\_\+\+TERMINATOR}~0x\+FFFFFFFF
+\begin{DoxyCompactList}\small\item\em The sequence number of a packet that closes a connection. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{skdp_8h_a342d486dda6bdf4859d1c907a7741f72}{SKDP\+\_\+\+PROTOCOL\+\_\+\+SEC256}}
+\begin{DoxyCompactList}\small\item\em The 256-\/bit security strength configuration flag. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_aab009297c07e7a3be7d6fdb26aac6e40}\label{skdp_8h_aab009297c07e7a3be7d6fdb26aac6e40} 
+\#define {\bfseries SKDP\+\_\+\+CPRKEY\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The symmetric cipher key size (in bytes) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a3c7e4caa4c090ac1133aa56a00ff8cf8}\label{skdp_8h_a3c7e4caa4c090ac1133aa56a00ff8cf8} 
+\#define {\bfseries SKDP\+\_\+\+DDK\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The device derivation key size (in bytes) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a4d3447c0a30857b7c469c57015c7f445}\label{skdp_8h_a4d3447c0a30857b7c469c57015c7f445} 
+\#define {\bfseries SKDP\+\_\+\+DTK\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The device token key size (in bytes) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a8669d1333986c69d55fdb1a2eaa1b9e2}\label{skdp_8h_a8669d1333986c69d55fdb1a2eaa1b9e2} 
+\#define {\bfseries SKDP\+\_\+\+HASH\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The output size (in bytes) of the hash function for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a771f695e9868f4048d691d3772161799}\label{skdp_8h_a771f695e9868f4048d691d3772161799} 
+\#define {\bfseries SKDP\+\_\+\+MACKEY\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The MAC key size (in bytes) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a573d74c149370560ab2ab3d6620d6818}\label{skdp_8h_a573d74c149370560ab2ab3d6620d6818} 
+\#define {\bfseries SKDP\+\_\+\+MACTAG\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The MAC tag size (in bytes) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a7e2bb1825d6473c72bf235b412cb93d7}\label{skdp_8h_a7e2bb1825d6473c72bf235b412cb93d7} 
+\#define {\bfseries SKDP\+\_\+\+MDK\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The master derivation key size (in bytes) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a42e47eb896fed661b9ec66703df54d89}\label{skdp_8h_a42e47eb896fed661b9ec66703df54d89} 
+\#define {\bfseries SKDP\+\_\+\+PERMUTATION\+\_\+\+RATE}~QSC\+\_\+\+KECCAK\+\_\+256\+\_\+\+RATE
+\begin{DoxyCompactList}\small\item\em The rate at which Keccak processes data for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a7bef3f263edd4d1446abd47e1d2f7051}\label{skdp_8h_a7bef3f263edd4d1446abd47e1d2f7051} 
+\#define {\bfseries SKDP\+\_\+\+SDK\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The server derivation key size (in bytes) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a9f9f18ed295265994c04c8733da28c0d}\label{skdp_8h_a9f9f18ed295265994c04c8733da28c0d} 
+\#define {\bfseries SKDP\+\_\+\+STK\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The session token key size (in bytes) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a0d846755283aba2c16e45d5df169a5d5}\label{skdp_8h_a0d846755283aba2c16e45d5df169a5d5} 
+\#define {\bfseries SKDP\+\_\+\+STH\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The session token hash size (in bytes) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a9a080df8134dc4a8c9355ec9caff416b}\label{skdp_8h_a9a080df8134dc4a8c9355ec9caff416b} 
+\#define {\bfseries SKDP\+\_\+\+STOK\+\_\+\+SIZE}~32
+\begin{DoxyCompactList}\small\item\em The session token size (in bytes) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_ae660cee98cae6b75f0c2a10a9b4dfe05}\label{skdp_8h_ae660cee98cae6b75f0c2a10a9b4dfe05} 
+\#define {\bfseries SKDP\+\_\+\+EXCHANGE\+\_\+\+MAX\+\_\+\+MESSAGE\+\_\+\+SIZE}~(\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_aa1b87e3de02fe6d676015d358d6d1f3b}{SKDP\+\_\+\+CONFIG\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a9a080df8134dc4a8c9355ec9caff416b}{SKDP\+\_\+\+STOK\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The maximum message size used in the key exchange (exchange stage) for 256-\/bit security. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_ab770223e5dc294ebf82cbbe595da5b0c}\label{skdp_8h_ab770223e5dc294ebf82cbbe595da5b0c} 
+\#define {\bfseries SKDP\+\_\+\+KEY\+\_\+\+DURATION\+\_\+\+DAYS}~365
+\begin{DoxyCompactList}\small\item\em The number of days a key remains valid. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{skdp_8h_ac5428850edd80fc5664dbea9f76b7d03}{SKDP\+\_\+\+PACKET\+\_\+\+TIME\+\_\+\+THRESHOLD}}~60
+\begin{DoxyCompactList}\small\item\em The maximum number of seconds a packet is considered valid. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a4820d78744b5aa7eb179718e34dfb91a}\label{skdp_8h_a4820d78744b5aa7eb179718e34dfb91a} 
+\#define {\bfseries SKDP\+\_\+\+KEY\+\_\+\+DURATION\+\_\+\+SECONDS}~(\mbox{\hyperlink{skdp_8h_ab770223e5dc294ebf82cbbe595da5b0c}{SKDP\+\_\+\+KEY\+\_\+\+DURATION\+\_\+\+DAYS}} \texorpdfstring{$\ast$}{*} 24 \texorpdfstring{$\ast$}{*} 60 \texorpdfstring{$\ast$}{*} 60)
+\begin{DoxyCompactList}\small\item\em The number of seconds a key remains valid. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_aafc94d05acb763d4d0773adfe6eb25e5}\label{skdp_8h_aafc94d05acb763d4d0773adfe6eb25e5} 
+\#define {\bfseries SKDP\+\_\+\+DEVKEY\+\_\+\+ENCODED\+\_\+\+SIZE}~(\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a3c7e4caa4c090ac1133aa56a00ff8cf8}{SKDP\+\_\+\+DDK\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_aabaff4ed7a543ca90cd5e1d4c118a270}{SKDP\+\_\+\+EXP\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the encoded device key. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_ae0e7bae6a3eced2c4e774739102a485d}\label{skdp_8h_ae0e7bae6a3eced2c4e774739102a485d} 
+\#define {\bfseries SKDP\+\_\+\+MSTKEY\+\_\+\+ENCODED\+\_\+\+SIZE}~(\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a7e2bb1825d6473c72bf235b412cb93d7}{SKDP\+\_\+\+MDK\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_aabaff4ed7a543ca90cd5e1d4c118a270}{SKDP\+\_\+\+EXP\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the encoded master key. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_af2fefa50f88c02d802c50d5efdfc0deb}\label{skdp_8h_af2fefa50f88c02d802c50d5efdfc0deb} 
+\#define {\bfseries SKDP\+\_\+\+SRVKEY\+\_\+\+ENCODED\+\_\+\+SIZE}~(\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a7bef3f263edd4d1446abd47e1d2f7051}{SKDP\+\_\+\+SDK\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_aabaff4ed7a543ca90cd5e1d4c118a270}{SKDP\+\_\+\+EXP\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the encoded server key. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{skdp_8h_a92fe276f545263857856bec9563ebb7b}{SKDP\+\_\+\+CONNECT\+\_\+\+REQUEST\+\_\+\+MESSAGE\+\_\+\+SIZE}}~(\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_aa1b87e3de02fe6d676015d358d6d1f3b}{SKDP\+\_\+\+CONFIG\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a9a080df8134dc4a8c9355ec9caff416b}{SKDP\+\_\+\+STOK\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the connection request message during the key exchange. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{skdp_8h_a5e57574d11ed2d7f10f7c032f463000e}{SKDP\+\_\+\+CONNECT\+\_\+\+REQUEST\+\_\+\+PACKET\+\_\+\+SIZE}}~(\mbox{\hyperlink{skdp_8h_a92fe276f545263857856bec9563ebb7b}{SKDP\+\_\+\+CONNECT\+\_\+\+REQUEST\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the connection request packet. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a6c98e53aac5203b357fd7fe54ab256c0}\label{skdp_8h_a6c98e53aac5203b357fd7fe54ab256c0} 
+\#define {\bfseries SKDP\+\_\+\+EXCHANGE\+\_\+\+REQUEST\+\_\+\+MESSAGE\+\_\+\+SIZE}~(\mbox{\hyperlink{skdp_8h_a4d3447c0a30857b7c469c57015c7f445}{SKDP\+\_\+\+DTK\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a771f695e9868f4048d691d3772161799}{SKDP\+\_\+\+MACKEY\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the key exchange request message. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{skdp_8h_afa800b114a6fb1c98187d6468d4046af}{SKDP\+\_\+\+EXCHANGE\+\_\+\+REQUEST\+\_\+\+PACKET\+\_\+\+SIZE}}~(\mbox{\hyperlink{skdp_8h_a6c98e53aac5203b357fd7fe54ab256c0}{SKDP\+\_\+\+EXCHANGE\+\_\+\+REQUEST\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the key exchange request packet. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_ab4c55ab8129dcb967e6e883d27072255}\label{skdp_8h_ab4c55ab8129dcb967e6e883d27072255} 
+\#define {\bfseries SKDP\+\_\+\+ESTABLISH\+\_\+\+REQUEST\+\_\+\+MESSAGE\+\_\+\+SIZE}~(\mbox{\hyperlink{skdp_8h_a0d846755283aba2c16e45d5df169a5d5}{SKDP\+\_\+\+STH\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a573d74c149370560ab2ab3d6620d6818}{SKDP\+\_\+\+MACTAG\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the establish request message. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{skdp_8h_ad76f5857308fb0efbcbe201432c9ab49}{SKDP\+\_\+\+ESTABLISH\+\_\+\+REQUEST\+\_\+\+PACKET\+\_\+\+SIZE}}~(\mbox{\hyperlink{skdp_8h_ab4c55ab8129dcb967e6e883d27072255}{SKDP\+\_\+\+ESTABLISH\+\_\+\+REQUEST\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the establish request packet. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a8d21b9795cf92cf72f1a2b3d6be43da5}\label{skdp_8h_a8d21b9795cf92cf72f1a2b3d6be43da5} 
+\#define {\bfseries SKDP\+\_\+\+CONNECT\+\_\+\+RESPONSE\+\_\+\+MESSAGE\+\_\+\+SIZE}~(\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_aa1b87e3de02fe6d676015d358d6d1f3b}{SKDP\+\_\+\+CONFIG\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a9a080df8134dc4a8c9355ec9caff416b}{SKDP\+\_\+\+STOK\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the connection response message. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{skdp_8h_aa18c9f54f0e271f23a7d2be037f7cc04}{SKDP\+\_\+\+CONNECT\+\_\+\+RESPONSE\+\_\+\+PACKET\+\_\+\+SIZE}}~(\mbox{\hyperlink{skdp_8h_a8d21b9795cf92cf72f1a2b3d6be43da5}{SKDP\+\_\+\+CONNECT\+\_\+\+RESPONSE\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the connection response packet. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_ad39a58760a9665916e8452b590c14546}\label{skdp_8h_ad39a58760a9665916e8452b590c14546} 
+\#define {\bfseries SKDP\+\_\+\+EXCHANGE\+\_\+\+RESPONSE\+\_\+\+MESSAGE\+\_\+\+SIZE}~(\mbox{\hyperlink{skdp_8h_a4d3447c0a30857b7c469c57015c7f445}{SKDP\+\_\+\+DTK\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a771f695e9868f4048d691d3772161799}{SKDP\+\_\+\+MACKEY\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the key exchange response message. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{skdp_8h_a4a25470e1ca15ac5d2dba7f23b6d400f}{SKDP\+\_\+\+EXCHANGE\+\_\+\+RESPONSE\+\_\+\+PACKET\+\_\+\+SIZE}}~(\mbox{\hyperlink{skdp_8h_ad39a58760a9665916e8452b590c14546}{SKDP\+\_\+\+EXCHANGE\+\_\+\+RESPONSE\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the key exchange response packet. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_abbac02e6077411ee81e03b801fef29f9}\label{skdp_8h_abbac02e6077411ee81e03b801fef29f9} 
+\#define {\bfseries SKDP\+\_\+\+ESTABLISH\+\_\+\+RESPONSE\+\_\+\+MESSAGE\+\_\+\+SIZE}~(\mbox{\hyperlink{skdp_8h_a8669d1333986c69d55fdb1a2eaa1b9e2}{SKDP\+\_\+\+HASH\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a573d74c149370560ab2ab3d6620d6818}{SKDP\+\_\+\+MACTAG\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the establish response message. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{skdp_8h_a509e5f04438ad73a67c944062f43f854}{SKDP\+\_\+\+ESTABLISH\+\_\+\+RESPONSE\+\_\+\+PACKET\+\_\+\+SIZE}}~(\mbox{\hyperlink{skdp_8h_abbac02e6077411ee81e03b801fef29f9}{SKDP\+\_\+\+ESTABLISH\+\_\+\+RESPONSE\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the establish response packet. \end{DoxyCompactList}\item 
+\Hypertarget{skdp_8h_a1597b7689dfe9762c785be2dd539924e}\label{skdp_8h_a1597b7689dfe9762c785be2dd539924e} 
+\#define {\bfseries SKDP\+\_\+\+ESTABLISH\+\_\+\+VERIFY\+\_\+\+MESSAGE\+\_\+\+SIZE}~(\mbox{\hyperlink{skdp_8h_a8669d1333986c69d55fdb1a2eaa1b9e2}{SKDP\+\_\+\+HASH\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a573d74c149370560ab2ab3d6620d6818}{SKDP\+\_\+\+MACTAG\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the establish verify message. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{skdp_8h_a9ee5765e8d9e3ee45479ecaf256cd13a}{SKDP\+\_\+\+ESTABLISH\+\_\+\+VERIFY\+\_\+\+PACKET\+\_\+\+SIZE}}~(\mbox{\hyperlink{skdp_8h_a1597b7689dfe9762c785be2dd539924e}{SKDP\+\_\+\+ESTABLISH\+\_\+\+VERIFY\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em The size (in bytes) of the establish verify packet. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{skdp_8h_a0eca4781b79b9e59061b1208d806b50f}\label{skdp_8h_a0eca4781b79b9e59061b1208d806b50f} 
+typedef SKDP\+\_\+\+EXPORT\+\_\+\+API struct skdp\+\_\+master\+\_\+key {\bfseries skdp\+\_\+master\+\_\+key}
+\item 
+\Hypertarget{skdp_8h_a6c81f99f7387359d7b21ad78b21f9328}\label{skdp_8h_a6c81f99f7387359d7b21ad78b21f9328} 
+typedef SKDP\+\_\+\+EXPORT\+\_\+\+API struct skdp\+\_\+server\+\_\+key {\bfseries skdp\+\_\+server\+\_\+key}
+\item 
+\Hypertarget{skdp_8h_a2c12a5f3b08f37c0b58c5afa8accddf6}\label{skdp_8h_a2c12a5f3b08f37c0b58c5afa8accddf6} 
+typedef SKDP\+\_\+\+EXPORT\+\_\+\+API struct skdp\+\_\+device\+\_\+key {\bfseries skdp\+\_\+device\+\_\+key}
+\item 
+\Hypertarget{skdp_8h_ac59b0d799e20a8cc8ab4bbd5877b221f}\label{skdp_8h_ac59b0d799e20a8cc8ab4bbd5877b221f} 
+typedef SKDP\+\_\+\+EXPORT\+\_\+\+API struct \mbox{\hyperlink{structqsmp__keep__alive__state}{qsmp\+\_\+keep\+\_\+alive\+\_\+state}} {\bfseries skdp\+\_\+keep\+\_\+alive\+\_\+state}
+\item 
+\Hypertarget{skdp_8h_a88ecef473b9a2efae143bc34102a246a}\label{skdp_8h_a88ecef473b9a2efae143bc34102a246a} 
+typedef SKDP\+\_\+\+EXPORT\+\_\+\+API struct skdp\+\_\+network\+\_\+packet {\bfseries skdp\+\_\+network\+\_\+packet}
+\item 
+\Hypertarget{skdp_8h_a809b35b560242372187e27acde347ff6}\label{skdp_8h_a809b35b560242372187e27acde347ff6} 
+typedef SKDP\+\_\+\+EXPORT\+\_\+\+API enum \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} {\bfseries skdp\+\_\+errors}
+\item 
+\Hypertarget{skdp_8h_a4a04772e2af4eeca92ab143c001eabc8}\label{skdp_8h_a4a04772e2af4eeca92ab143c001eabc8} 
+typedef SKDP\+\_\+\+EXPORT\+\_\+\+API enum \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2}{skdp\+\_\+flags}} {\bfseries skdp\+\_\+flags}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} \{ \newline
+\mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba7620dd1e2afd16adce616612cba43e3b}{skdp\+\_\+error\+\_\+none}} = 0x00
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bad43617e34748457a0745181ce9774159}{skdp\+\_\+error\+\_\+cipher\+\_\+auth\+\_\+failure}} = 0x01
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baac0754833c1884bce3639275e792fc83}{skdp\+\_\+error\+\_\+kex\+\_\+auth\+\_\+failure}} = 0x02
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baa85041b9957e35f495782806933bfddf}{skdp\+\_\+error\+\_\+bad\+\_\+keep\+\_\+alive}} = 0x03
+, \newline
+\mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bab82fef1e9386582bac843725e59e62cc}{skdp\+\_\+error\+\_\+channel\+\_\+down}} = 0x04
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba81bcb34729e0a1ec059abe876ad8677a}{skdp\+\_\+error\+\_\+connection\+\_\+failure}} = 0x05
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3bbe4eb0fbf76d6a3addc2d36bd8cbf7}{skdp\+\_\+error\+\_\+establish\+\_\+failure}} = 0x06
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bab33050c9bbb44505059b920a67e969e4}{skdp\+\_\+error\+\_\+invalid\+\_\+input}} = 0x07
+, \newline
+\mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bacb89018a345e0278af4084cf53b0075c}{skdp\+\_\+error\+\_\+keep\+\_\+alive\+\_\+expired}} = 0x08
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba47fef43890be9ed44a86a2d6b8f2dbb0}{skdp\+\_\+error\+\_\+key\+\_\+not\+\_\+recognized}} = 0x09
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3d1cf31b06698de5a50ef14220085c3b}{skdp\+\_\+error\+\_\+random\+\_\+failure}} = 0x0A
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba0768f687ebdf7377bdda8a69e3c2d685}{skdp\+\_\+error\+\_\+receive\+\_\+failure}} = 0x0B
+, \newline
+\mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3ac82c2df466fb2fe874e9ff65ed1c02}{skdp\+\_\+error\+\_\+transmit\+\_\+failure}} = 0x0C
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baaad33017ad262954e04665be18da850e}{skdp\+\_\+error\+\_\+unknown\+\_\+protocol}} = 0x0D
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3ae37efd8ebdbe21a517bbdb098f4c08}{skdp\+\_\+error\+\_\+unsequenced}} = 0x0E
+, \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba441664cd6e880ebb61dae4ea5125cd90}{skdp\+\_\+error\+\_\+packet\+\_\+expired}} = 0x0F
+, \newline
+\mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91babe29dbcd246165e6ad4e9d9938b04c43}{skdp\+\_\+error\+\_\+general\+\_\+failure}} = 0x\+FF
+ \}
+\begin{DoxyCompactList}\small\item\em The SKDP error values. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2}{skdp\+\_\+flags}} \{ \newline
+\mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a2c1c6513125d001a2bcfe98840464f21}{skdp\+\_\+flag\+\_\+none}} = 0x00
+, \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2acd7d2034616cf684ae4c918b733eef56}{skdp\+\_\+flag\+\_\+connect\+\_\+request}} = 0x01
+, \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a535fe0d7288324529e8bf87b32322509}{skdp\+\_\+flag\+\_\+connect\+\_\+response}} = 0x02
+, \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2ac6fb44d9e4e277c0fd449b2f35a26a5f}{skdp\+\_\+flag\+\_\+connection\+\_\+terminate}} = 0x03
+, \newline
+\mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a67772e3de0f7fe44192d0a0a6aeb4abe}{skdp\+\_\+flag\+\_\+encrypted\+\_\+message}} = 0x04
+, \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a82f60a98afdc8e860566a1a49e22aeec}{skdp\+\_\+flag\+\_\+exchange\+\_\+request}} = 0x05
+, \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2acbf78a16500a2bef882ae17eab160cab}{skdp\+\_\+flag\+\_\+exchange\+\_\+response}} = 0x06
+, \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a6b4014e593842ccd6ed239795ed1e638}{skdp\+\_\+flag\+\_\+establish\+\_\+request}} = 0x07
+, \newline
+\mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a06e21a1f31b0dcb2a8f23a1bcf8fe03d}{skdp\+\_\+flag\+\_\+establish\+\_\+response}} = 0x08
+, \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2ab751629c3025b7bff6e9a076f9bbec1b}{skdp\+\_\+flag\+\_\+establish\+\_\+verify}} = 0x09
+, \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a1210467c30c6d8fd858455218685d3ea}{skdp\+\_\+flag\+\_\+keepalive\+\_\+request}} = 0x0A
+, \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a61cfb626afb843c0e78d6d8f0442c6bf}{skdp\+\_\+flag\+\_\+session\+\_\+established}} = 0x0B
+, \newline
+\mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2abe0e56ac1fa11ccdf12dceb43e867be7}{skdp\+\_\+flag\+\_\+error\+\_\+condition}} = 0x\+FF
+ \}
+\begin{DoxyCompactList}\small\item\em The SKDP packet flag values. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_a099b357b3377ec86cc1385bb5043dcf9}{skdp\+\_\+deserialize\+\_\+device\+\_\+key}} (\mbox{\hyperlink{structskdp__device__key}{skdp\+\_\+device\+\_\+key}} \texorpdfstring{$\ast$}{*}dkey, const uint8\+\_\+t input\mbox{[}\mbox{\hyperlink{skdp_8h_aafc94d05acb763d4d0773adfe6eb25e5}{SKDP\+\_\+\+DEVKEY\+\_\+\+ENCODED\+\_\+\+SIZE}}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Deserialize a client device key. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_a5db83771b6c66cf48b96261191cedb1f}{skdp\+\_\+serialize\+\_\+device\+\_\+key}} (uint8\+\_\+t output\mbox{[}\mbox{\hyperlink{skdp_8h_aafc94d05acb763d4d0773adfe6eb25e5}{SKDP\+\_\+\+DEVKEY\+\_\+\+ENCODED\+\_\+\+SIZE}}\mbox{]}, const \mbox{\hyperlink{structskdp__device__key}{skdp\+\_\+device\+\_\+key}} \texorpdfstring{$\ast$}{*}dkey)
+\begin{DoxyCompactList}\small\item\em Serialize a client device key. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_a1ad96069734b0b6fe86cdbff50ee7005}{skdp\+\_\+deserialize\+\_\+master\+\_\+key}} (\mbox{\hyperlink{structskdp__master__key}{skdp\+\_\+master\+\_\+key}} \texorpdfstring{$\ast$}{*}mkey, const uint8\+\_\+t input\mbox{[}\mbox{\hyperlink{skdp_8h_ae0e7bae6a3eced2c4e774739102a485d}{SKDP\+\_\+\+MSTKEY\+\_\+\+ENCODED\+\_\+\+SIZE}}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Deserialize a master key from a byte array. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_a90b474586cf5eef64346d0f9d51e2983}{skdp\+\_\+serialize\+\_\+master\+\_\+key}} (uint8\+\_\+t output\mbox{[}\mbox{\hyperlink{skdp_8h_ae0e7bae6a3eced2c4e774739102a485d}{SKDP\+\_\+\+MSTKEY\+\_\+\+ENCODED\+\_\+\+SIZE}}\mbox{]}, const \mbox{\hyperlink{structskdp__master__key}{skdp\+\_\+master\+\_\+key}} \texorpdfstring{$\ast$}{*}mkey)
+\begin{DoxyCompactList}\small\item\em Serialize a master key into a byte array. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_afba78bf1c7b1d5fc318537531b1e74dc}{skdp\+\_\+deserialize\+\_\+server\+\_\+key}} (\mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}} \texorpdfstring{$\ast$}{*}skey, const uint8\+\_\+t input\mbox{[}\mbox{\hyperlink{skdp_8h_af2fefa50f88c02d802c50d5efdfc0deb}{SKDP\+\_\+\+SRVKEY\+\_\+\+ENCODED\+\_\+\+SIZE}}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Deserialize a server key from a byte array. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_af2caf9606471db68b4c1113ed7c759e6}{skdp\+\_\+serialize\+\_\+server\+\_\+key}} (uint8\+\_\+t output\mbox{[}\mbox{\hyperlink{skdp_8h_af2fefa50f88c02d802c50d5efdfc0deb}{SKDP\+\_\+\+SRVKEY\+\_\+\+ENCODED\+\_\+\+SIZE}}\mbox{]}, const \mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}} \texorpdfstring{$\ast$}{*}skey)
+\begin{DoxyCompactList}\small\item\em Serialize a server key into a byte array. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{skdp_8h_a863c87a9379bb157f0e7b9bd83d45c78}{skdp\+\_\+generate\+\_\+master\+\_\+key}} (\mbox{\hyperlink{structskdp__master__key}{skdp\+\_\+master\+\_\+key}} \texorpdfstring{$\ast$}{*}mkey, const uint8\+\_\+t kid\mbox{[}\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Generate a master key-\/set. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_a5c0560a25b61d4d5c696eaa5b820f2d7}{skdp\+\_\+generate\+\_\+server\+\_\+key}} (\mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}} \texorpdfstring{$\ast$}{*}skey, const \mbox{\hyperlink{structskdp__master__key}{skdp\+\_\+master\+\_\+key}} \texorpdfstring{$\ast$}{*}mkey, const uint8\+\_\+t kid\mbox{[}\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Generate a server key-\/set. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_a992530ebbcd1bea5e09dbc2a167bff5f}{skdp\+\_\+generate\+\_\+device\+\_\+key}} (\mbox{\hyperlink{structskdp__device__key}{skdp\+\_\+device\+\_\+key}} \texorpdfstring{$\ast$}{*}dkey, const \mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}} \texorpdfstring{$\ast$}{*}skey, const uint8\+\_\+t kid\mbox{[}\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Generate a device key-\/set. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_a231dfea4120d1abcb3d01cc783a6e0a8}{skdp\+\_\+packet\+\_\+clear}} (\mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}packet)
+\begin{DoxyCompactList}\small\item\em Clear a SKDP network packet. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{skdp_8h_a1218e0637db5cb10c3ae1accf81c4920}{skdp\+\_\+error\+\_\+to\+\_\+string}} (\mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}} error)
+\begin{DoxyCompactList}\small\item\em Return a string description of an SKDP error code. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_a236a0c65efef5dd4ad8745b83759b599}{skdp\+\_\+packet\+\_\+header\+\_\+deserialize}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}header, \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}packet)
+\begin{DoxyCompactList}\small\item\em Deserialize a byte array into a SKDP packet header. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_aedc511cb3ca00cbc8159c78a1071cabe}{skdp\+\_\+packet\+\_\+header\+\_\+serialize}} (const \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}packet, uint8\+\_\+t \texorpdfstring{$\ast$}{*}header)
+\begin{DoxyCompactList}\small\item\em Serialize a SKDP packet header into a byte array. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_a547f61f36cd12628fce9ba843ee78725}{skdp\+\_\+packet\+\_\+set\+\_\+utc\+\_\+time}} (\mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}packet)
+\begin{DoxyCompactList}\small\item\em Set the local UTC seconds time in a SKDP packet header. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API bool \mbox{\hyperlink{skdp_8h_a47726d3817ee7f0b3bb58ef87b63be94}{skdp\+\_\+packet\+\_\+time\+\_\+valid}} (const \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}packet)
+\begin{DoxyCompactList}\small\item\em Check if a SKDP packet is received within the valid time threshold. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t \mbox{\hyperlink{skdp_8h_a8f340b4323fa0805eacffc74d7f85852}{skdp\+\_\+packet\+\_\+to\+\_\+stream}} (const \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}packet, uint8\+\_\+t \texorpdfstring{$\ast$}{*}pstream)
+\begin{DoxyCompactList}\small\item\em Serialize a SKDP packet into a byte array. \end{DoxyCompactList}\item 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void \mbox{\hyperlink{skdp_8h_abbcb7565b7deffd72e5e420119afdac7}{skdp\+\_\+stream\+\_\+to\+\_\+packet}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}pstream, \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}packet)
+\begin{DoxyCompactList}\small\item\em Deserialize a byte stream into a SKDP network packet. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The SKDP settings. 
+
+This header defines the configuration parameters, macros, and constants used in the Symmetric Key Distribution Protocol (SKDP). SKDP is designed to securely distribute symmetric keys between a master, server, device, and session while providing forward secrecy. The protocol employs ephemeral keys for each session, ensuring that even if a device or server key is compromised, past communications remain secure.
+
+SKDP is structured into several phases\+:
+
+
+\begin{DoxyItemize}
+\item {\bfseries{Connect Request\+:}} The client sends its identity string, configuration string, and a random session token to the server. The client computes a device session hash from its device ID, configuration, and token.
+\item {\bfseries{Connect Response\+:}} The server verifies the client\textquotesingle{}s configuration and key identity, generates its own session token, computes its session hash, and responds with its server ID, configuration string, and token.
+\item {\bfseries{Exchange Request\+:}} The client generates a secret random token key, derives encryption and MAC keys using a combination of its device session hash and embedded key, and then encrypts and MACs the secret token before sending it to the server.
+\item {\bfseries{Exchange Response\+:}} The server verifies the MAC, decrypts the token, and derives the receive channel cipher key using its embedded key and the client\textquotesingle{}s device session hash.
+\item {\bfseries{Establish Request\+:}} The client verifies the server\textquotesingle{}s token hash and, if valid, encrypts its key identity to send to the server.
+\item {\bfseries{Establish Response\+:}} The server decrypts and verifies the key identity, then re-\/encrypts and echoes it back.
+\item {\bfseries{Establish Verify\+:}} The client decrypts the echoed key identity and verifies it, thereby finalizing the established session.
+\end{DoxyItemize}
+
+In addition, this header defines sizes for configuration strings, error messages, expiration fields, packet headers, keepalive messages, and various key and identity fields, ensuring consistency across SKDP implementations.
+
+\begin{DoxyNote}{Note}
+The SKDP settings provided herein are critical for the proper operation and security of the key distribution process. 
+\end{DoxyNote}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{skdp_8h_a92fe276f545263857856bec9563ebb7b}\index{skdp.h@{skdp.h}!SKDP\_CONNECT\_REQUEST\_MESSAGE\_SIZE@{SKDP\_CONNECT\_REQUEST\_MESSAGE\_SIZE}}
+\index{SKDP\_CONNECT\_REQUEST\_MESSAGE\_SIZE@{SKDP\_CONNECT\_REQUEST\_MESSAGE\_SIZE}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{SKDP\_CONNECT\_REQUEST\_MESSAGE\_SIZE}{SKDP\_CONNECT\_REQUEST\_MESSAGE\_SIZE}}
+{\footnotesize\ttfamily \label{skdp_8h_a92fe276f545263857856bec9563ebb7b} 
+\#define SKDP\+\_\+\+CONNECT\+\_\+\+REQUEST\+\_\+\+MESSAGE\+\_\+\+SIZE~(\mbox{\hyperlink{skdp_8h_a2c19f93041ea7c377b6a77158a3fbb44}{SKDP\+\_\+\+KID\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_aa1b87e3de02fe6d676015d358d6d1f3b}{SKDP\+\_\+\+CONFIG\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_a9a080df8134dc4a8c9355ec9caff416b}{SKDP\+\_\+\+STOK\+\_\+\+SIZE}})}
+
+
+
+The size (in bytes) of the connection request message during the key exchange. 
+
+This message includes the key identity, configuration string, and the session token, which is sent by the client to the server during the initial connection request. \Hypertarget{skdp_8h_a5e57574d11ed2d7f10f7c032f463000e}\index{skdp.h@{skdp.h}!SKDP\_CONNECT\_REQUEST\_PACKET\_SIZE@{SKDP\_CONNECT\_REQUEST\_PACKET\_SIZE}}
+\index{SKDP\_CONNECT\_REQUEST\_PACKET\_SIZE@{SKDP\_CONNECT\_REQUEST\_PACKET\_SIZE}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{SKDP\_CONNECT\_REQUEST\_PACKET\_SIZE}{SKDP\_CONNECT\_REQUEST\_PACKET\_SIZE}}
+{\footnotesize\ttfamily \label{skdp_8h_a5e57574d11ed2d7f10f7c032f463000e} 
+\#define SKDP\+\_\+\+CONNECT\+\_\+\+REQUEST\+\_\+\+PACKET\+\_\+\+SIZE~(\mbox{\hyperlink{skdp_8h_a92fe276f545263857856bec9563ebb7b}{SKDP\+\_\+\+CONNECT\+\_\+\+REQUEST\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})}
+
+
+
+The size (in bytes) of the connection request packet. 
+
+This value is the sum of the connection request message size and the SKDP packet header size. \Hypertarget{skdp_8h_aa18c9f54f0e271f23a7d2be037f7cc04}\index{skdp.h@{skdp.h}!SKDP\_CONNECT\_RESPONSE\_PACKET\_SIZE@{SKDP\_CONNECT\_RESPONSE\_PACKET\_SIZE}}
+\index{SKDP\_CONNECT\_RESPONSE\_PACKET\_SIZE@{SKDP\_CONNECT\_RESPONSE\_PACKET\_SIZE}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{SKDP\_CONNECT\_RESPONSE\_PACKET\_SIZE}{SKDP\_CONNECT\_RESPONSE\_PACKET\_SIZE}}
+{\footnotesize\ttfamily \label{skdp_8h_aa18c9f54f0e271f23a7d2be037f7cc04} 
+\#define SKDP\+\_\+\+CONNECT\+\_\+\+RESPONSE\+\_\+\+PACKET\+\_\+\+SIZE~(\mbox{\hyperlink{skdp_8h_a8d21b9795cf92cf72f1a2b3d6be43da5}{SKDP\+\_\+\+CONNECT\+\_\+\+RESPONSE\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})}
+
+
+
+The size (in bytes) of the connection response packet. 
+
+This value is the sum of the connection response message size and the SKDP packet header size. \Hypertarget{skdp_8h_ad76f5857308fb0efbcbe201432c9ab49}\index{skdp.h@{skdp.h}!SKDP\_ESTABLISH\_REQUEST\_PACKET\_SIZE@{SKDP\_ESTABLISH\_REQUEST\_PACKET\_SIZE}}
+\index{SKDP\_ESTABLISH\_REQUEST\_PACKET\_SIZE@{SKDP\_ESTABLISH\_REQUEST\_PACKET\_SIZE}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{SKDP\_ESTABLISH\_REQUEST\_PACKET\_SIZE}{SKDP\_ESTABLISH\_REQUEST\_PACKET\_SIZE}}
+{\footnotesize\ttfamily \label{skdp_8h_ad76f5857308fb0efbcbe201432c9ab49} 
+\#define SKDP\+\_\+\+ESTABLISH\+\_\+\+REQUEST\+\_\+\+PACKET\+\_\+\+SIZE~(\mbox{\hyperlink{skdp_8h_ab4c55ab8129dcb967e6e883d27072255}{SKDP\+\_\+\+ESTABLISH\+\_\+\+REQUEST\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})}
+
+
+
+The size (in bytes) of the establish request packet. 
+
+This value is the sum of the establish request message size and the SKDP packet header size. \Hypertarget{skdp_8h_a509e5f04438ad73a67c944062f43f854}\index{skdp.h@{skdp.h}!SKDP\_ESTABLISH\_RESPONSE\_PACKET\_SIZE@{SKDP\_ESTABLISH\_RESPONSE\_PACKET\_SIZE}}
+\index{SKDP\_ESTABLISH\_RESPONSE\_PACKET\_SIZE@{SKDP\_ESTABLISH\_RESPONSE\_PACKET\_SIZE}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{SKDP\_ESTABLISH\_RESPONSE\_PACKET\_SIZE}{SKDP\_ESTABLISH\_RESPONSE\_PACKET\_SIZE}}
+{\footnotesize\ttfamily \label{skdp_8h_a509e5f04438ad73a67c944062f43f854} 
+\#define SKDP\+\_\+\+ESTABLISH\+\_\+\+RESPONSE\+\_\+\+PACKET\+\_\+\+SIZE~(\mbox{\hyperlink{skdp_8h_abbac02e6077411ee81e03b801fef29f9}{SKDP\+\_\+\+ESTABLISH\+\_\+\+RESPONSE\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})}
+
+
+
+The size (in bytes) of the establish response packet. 
+
+This value is the sum of the establish response message size and the SKDP packet header size. \Hypertarget{skdp_8h_a9ee5765e8d9e3ee45479ecaf256cd13a}\index{skdp.h@{skdp.h}!SKDP\_ESTABLISH\_VERIFY\_PACKET\_SIZE@{SKDP\_ESTABLISH\_VERIFY\_PACKET\_SIZE}}
+\index{SKDP\_ESTABLISH\_VERIFY\_PACKET\_SIZE@{SKDP\_ESTABLISH\_VERIFY\_PACKET\_SIZE}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{SKDP\_ESTABLISH\_VERIFY\_PACKET\_SIZE}{SKDP\_ESTABLISH\_VERIFY\_PACKET\_SIZE}}
+{\footnotesize\ttfamily \label{skdp_8h_a9ee5765e8d9e3ee45479ecaf256cd13a} 
+\#define SKDP\+\_\+\+ESTABLISH\+\_\+\+VERIFY\+\_\+\+PACKET\+\_\+\+SIZE~(\mbox{\hyperlink{skdp_8h_a1597b7689dfe9762c785be2dd539924e}{SKDP\+\_\+\+ESTABLISH\+\_\+\+VERIFY\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})}
+
+
+
+The size (in bytes) of the establish verify packet. 
+
+This value is the sum of the establish verify message size and the SKDP packet header size. \Hypertarget{skdp_8h_afa800b114a6fb1c98187d6468d4046af}\index{skdp.h@{skdp.h}!SKDP\_EXCHANGE\_REQUEST\_PACKET\_SIZE@{SKDP\_EXCHANGE\_REQUEST\_PACKET\_SIZE}}
+\index{SKDP\_EXCHANGE\_REQUEST\_PACKET\_SIZE@{SKDP\_EXCHANGE\_REQUEST\_PACKET\_SIZE}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{SKDP\_EXCHANGE\_REQUEST\_PACKET\_SIZE}{SKDP\_EXCHANGE\_REQUEST\_PACKET\_SIZE}}
+{\footnotesize\ttfamily \label{skdp_8h_afa800b114a6fb1c98187d6468d4046af} 
+\#define SKDP\+\_\+\+EXCHANGE\+\_\+\+REQUEST\+\_\+\+PACKET\+\_\+\+SIZE~(\mbox{\hyperlink{skdp_8h_a6c98e53aac5203b357fd7fe54ab256c0}{SKDP\+\_\+\+EXCHANGE\+\_\+\+REQUEST\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})}
+
+
+
+The size (in bytes) of the key exchange request packet. 
+
+This value is the sum of the exchange request message size and the SKDP packet header size. \Hypertarget{skdp_8h_a4a25470e1ca15ac5d2dba7f23b6d400f}\index{skdp.h@{skdp.h}!SKDP\_EXCHANGE\_RESPONSE\_PACKET\_SIZE@{SKDP\_EXCHANGE\_RESPONSE\_PACKET\_SIZE}}
+\index{SKDP\_EXCHANGE\_RESPONSE\_PACKET\_SIZE@{SKDP\_EXCHANGE\_RESPONSE\_PACKET\_SIZE}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{SKDP\_EXCHANGE\_RESPONSE\_PACKET\_SIZE}{SKDP\_EXCHANGE\_RESPONSE\_PACKET\_SIZE}}
+{\footnotesize\ttfamily \label{skdp_8h_a4a25470e1ca15ac5d2dba7f23b6d400f} 
+\#define SKDP\+\_\+\+EXCHANGE\+\_\+\+RESPONSE\+\_\+\+PACKET\+\_\+\+SIZE~(\mbox{\hyperlink{skdp_8h_ad39a58760a9665916e8452b590c14546}{SKDP\+\_\+\+EXCHANGE\+\_\+\+RESPONSE\+\_\+\+MESSAGE\+\_\+\+SIZE}} + \mbox{\hyperlink{skdp_8h_abe4df208d56451b4aae07e352e5406a4}{SKDP\+\_\+\+HEADER\+\_\+\+SIZE}})}
+
+
+
+The size (in bytes) of the key exchange response packet. 
+
+This value is the sum of the exchange response message size and the SKDP packet header size. \Hypertarget{skdp_8h_ac5428850edd80fc5664dbea9f76b7d03}\index{skdp.h@{skdp.h}!SKDP\_PACKET\_TIME\_THRESHOLD@{SKDP\_PACKET\_TIME\_THRESHOLD}}
+\index{SKDP\_PACKET\_TIME\_THRESHOLD@{SKDP\_PACKET\_TIME\_THRESHOLD}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{SKDP\_PACKET\_TIME\_THRESHOLD}{SKDP\_PACKET\_TIME\_THRESHOLD}}
+{\footnotesize\ttfamily \label{skdp_8h_ac5428850edd80fc5664dbea9f76b7d03} 
+\#define SKDP\+\_\+\+PACKET\+\_\+\+TIME\+\_\+\+THRESHOLD~60}
+
+
+
+The maximum number of seconds a packet is considered valid. 
+
+On networks with a shared (NTP) time source, this may be set to as low as 1 second. On exterior networks, it should be adjusted (typically between 30 and 100 seconds) to account for clock differences. \Hypertarget{skdp_8h_a342d486dda6bdf4859d1c907a7741f72}\index{skdp.h@{skdp.h}!SKDP\_PROTOCOL\_SEC256@{SKDP\_PROTOCOL\_SEC256}}
+\index{SKDP\_PROTOCOL\_SEC256@{SKDP\_PROTOCOL\_SEC256}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{SKDP\_PROTOCOL\_SEC256}{SKDP\_PROTOCOL\_SEC256}}
+{\footnotesize\ttfamily \label{skdp_8h_a342d486dda6bdf4859d1c907a7741f72} 
+\#define SKDP\+\_\+\+PROTOCOL\+\_\+\+SEC256}
+
+
+
+The 256-\/bit security strength configuration flag. 
+
+\begin{DoxyNote}{Note}
+If SKDP\+\_\+\+PROTOCOL\+\_\+\+SEC512 is not defined, SKDP\+\_\+\+PROTOCOL\+\_\+\+SEC256 is assumed. 
+\end{DoxyNote}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}\index{skdp.h@{skdp.h}!skdp\_errors@{skdp\_errors}}
+\index{skdp\_errors@{skdp\_errors}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_errors}{skdp\_errors}}
+{\footnotesize\ttfamily \label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b} 
+enum \mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}}}
+
+
+
+The SKDP error values. 
+
+This enumeration defines the error codes returned by SKDP functions. \begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_none@{skdp\_error\_none}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_none@{skdp\_error\_none}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba7620dd1e2afd16adce616612cba43e3b}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba7620dd1e2afd16adce616612cba43e3b} 
+skdp\+\_\+error\+\_\+none&No error was detected \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_cipher\_auth\_failure@{skdp\_error\_cipher\_auth\_failure}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_cipher\_auth\_failure@{skdp\_error\_cipher\_auth\_failure}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bad43617e34748457a0745181ce9774159}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bad43617e34748457a0745181ce9774159} 
+skdp\+\_\+error\+\_\+cipher\+\_\+auth\+\_\+failure&The cipher authentication has failed \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_kex\_auth\_failure@{skdp\_error\_kex\_auth\_failure}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_kex\_auth\_failure@{skdp\_error\_kex\_auth\_failure}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baac0754833c1884bce3639275e792fc83}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baac0754833c1884bce3639275e792fc83} 
+skdp\+\_\+error\+\_\+kex\+\_\+auth\+\_\+failure&The key exchange authentication has failed \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_bad\_keep\_alive@{skdp\_error\_bad\_keep\_alive}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_bad\_keep\_alive@{skdp\_error\_bad\_keep\_alive}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baa85041b9957e35f495782806933bfddf}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baa85041b9957e35f495782806933bfddf} 
+skdp\+\_\+error\+\_\+bad\+\_\+keep\+\_\+alive&The keep alive check failed \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_channel\_down@{skdp\_error\_channel\_down}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_channel\_down@{skdp\_error\_channel\_down}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bab82fef1e9386582bac843725e59e62cc}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bab82fef1e9386582bac843725e59e62cc} 
+skdp\+\_\+error\+\_\+channel\+\_\+down&The communications channel has failed \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_connection\_failure@{skdp\_error\_connection\_failure}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_connection\_failure@{skdp\_error\_connection\_failure}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba81bcb34729e0a1ec059abe876ad8677a}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba81bcb34729e0a1ec059abe876ad8677a} 
+skdp\+\_\+error\+\_\+connection\+\_\+failure&The device could not make a connection to the remote host \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_establish\_failure@{skdp\_error\_establish\_failure}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_establish\_failure@{skdp\_error\_establish\_failure}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3bbe4eb0fbf76d6a3addc2d36bd8cbf7}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3bbe4eb0fbf76d6a3addc2d36bd8cbf7} 
+skdp\+\_\+error\+\_\+establish\+\_\+failure&The transmission failed at the key exchange establish phase \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_invalid\_input@{skdp\_error\_invalid\_input}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_invalid\_input@{skdp\_error\_invalid\_input}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bab33050c9bbb44505059b920a67e969e4}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bab33050c9bbb44505059b920a67e969e4} 
+skdp\+\_\+error\+\_\+invalid\+\_\+input&The input provided is invalid \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_keep\_alive\_expired@{skdp\_error\_keep\_alive\_expired}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_keep\_alive\_expired@{skdp\_error\_keep\_alive\_expired}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bacb89018a345e0278af4084cf53b0075c}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91bacb89018a345e0278af4084cf53b0075c} 
+skdp\+\_\+error\+\_\+keep\+\_\+alive\+\_\+expired&The keep alive has expired with no response \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_key\_not\_recognized@{skdp\_error\_key\_not\_recognized}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_key\_not\_recognized@{skdp\_error\_key\_not\_recognized}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba47fef43890be9ed44a86a2d6b8f2dbb0}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba47fef43890be9ed44a86a2d6b8f2dbb0} 
+skdp\+\_\+error\+\_\+key\+\_\+not\+\_\+recognized&The key identity is not recognized \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_random\_failure@{skdp\_error\_random\_failure}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_random\_failure@{skdp\_error\_random\_failure}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3d1cf31b06698de5a50ef14220085c3b}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3d1cf31b06698de5a50ef14220085c3b} 
+skdp\+\_\+error\+\_\+random\+\_\+failure&The random generator experienced a failure \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_receive\_failure@{skdp\_error\_receive\_failure}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_receive\_failure@{skdp\_error\_receive\_failure}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba0768f687ebdf7377bdda8a69e3c2d685}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba0768f687ebdf7377bdda8a69e3c2d685} 
+skdp\+\_\+error\+\_\+receive\+\_\+failure&The receiver failed at the network layer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_transmit\_failure@{skdp\_error\_transmit\_failure}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_transmit\_failure@{skdp\_error\_transmit\_failure}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3ac82c2df466fb2fe874e9ff65ed1c02}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3ac82c2df466fb2fe874e9ff65ed1c02} 
+skdp\+\_\+error\+\_\+transmit\+\_\+failure&The transmitter failed at the network layer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_unknown\_protocol@{skdp\_error\_unknown\_protocol}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_unknown\_protocol@{skdp\_error\_unknown\_protocol}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baaad33017ad262954e04665be18da850e}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91baaad33017ad262954e04665be18da850e} 
+skdp\+\_\+error\+\_\+unknown\+\_\+protocol&The protocol version is unknown \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_unsequenced@{skdp\_error\_unsequenced}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_unsequenced@{skdp\_error\_unsequenced}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3ae37efd8ebdbe21a517bbdb098f4c08}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba3ae37efd8ebdbe21a517bbdb098f4c08} 
+skdp\+\_\+error\+\_\+unsequenced&The packet was received out of sequence \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_packet\_expired@{skdp\_error\_packet\_expired}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_packet\_expired@{skdp\_error\_packet\_expired}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba441664cd6e880ebb61dae4ea5125cd90}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91ba441664cd6e880ebb61dae4ea5125cd90} 
+skdp\+\_\+error\+\_\+packet\+\_\+expired&The packet valid-\/time was exceeded \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_error\_general\_failure@{skdp\_error\_general\_failure}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_error\_general\_failure@{skdp\_error\_general\_failure}}}\Hypertarget{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91babe29dbcd246165e6ad4e9d9938b04c43}\label{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91babe29dbcd246165e6ad4e9d9938b04c43} 
+skdp\+\_\+error\+\_\+general\+\_\+failure&A general failure occurred \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2}\index{skdp.h@{skdp.h}!skdp\_flags@{skdp\_flags}}
+\index{skdp\_flags@{skdp\_flags}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_flags}{skdp\_flags}}
+{\footnotesize\ttfamily \label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2} 
+enum \mbox{\hyperlink{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2}{skdp\+\_\+flags}}}
+
+
+
+The SKDP packet flag values. 
+
+This enumeration defines the flag values used in SKDP packets to indicate the type and purpose of the packet. \begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_none@{skdp\_flag\_none}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_none@{skdp\_flag\_none}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a2c1c6513125d001a2bcfe98840464f21}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a2c1c6513125d001a2bcfe98840464f21} 
+skdp\+\_\+flag\+\_\+none&No flag was selected \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_connect\_request@{skdp\_flag\_connect\_request}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_connect\_request@{skdp\_flag\_connect\_request}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2acd7d2034616cf684ae4c918b733eef56}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2acd7d2034616cf684ae4c918b733eef56} 
+skdp\+\_\+flag\+\_\+connect\+\_\+request&The packet contains a connection request \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_connect\_response@{skdp\_flag\_connect\_response}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_connect\_response@{skdp\_flag\_connect\_response}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a535fe0d7288324529e8bf87b32322509}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a535fe0d7288324529e8bf87b32322509} 
+skdp\+\_\+flag\+\_\+connect\+\_\+response&The packet contains a connection response \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_connection\_terminate@{skdp\_flag\_connection\_terminate}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_connection\_terminate@{skdp\_flag\_connection\_terminate}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2ac6fb44d9e4e277c0fd449b2f35a26a5f}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2ac6fb44d9e4e277c0fd449b2f35a26a5f} 
+skdp\+\_\+flag\+\_\+connection\+\_\+terminate&Indicates that the connection is to be terminated \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_encrypted\_message@{skdp\_flag\_encrypted\_message}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_encrypted\_message@{skdp\_flag\_encrypted\_message}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a67772e3de0f7fe44192d0a0a6aeb4abe}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a67772e3de0f7fe44192d0a0a6aeb4abe} 
+skdp\+\_\+flag\+\_\+encrypted\+\_\+message&The packet contains an encrypted message \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_exchange\_request@{skdp\_flag\_exchange\_request}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_exchange\_request@{skdp\_flag\_exchange\_request}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a82f60a98afdc8e860566a1a49e22aeec}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a82f60a98afdc8e860566a1a49e22aeec} 
+skdp\+\_\+flag\+\_\+exchange\+\_\+request&The packet contains an exchange request \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_exchange\_response@{skdp\_flag\_exchange\_response}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_exchange\_response@{skdp\_flag\_exchange\_response}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2acbf78a16500a2bef882ae17eab160cab}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2acbf78a16500a2bef882ae17eab160cab} 
+skdp\+\_\+flag\+\_\+exchange\+\_\+response&The packet contains an exchange response \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_establish\_request@{skdp\_flag\_establish\_request}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_establish\_request@{skdp\_flag\_establish\_request}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a6b4014e593842ccd6ed239795ed1e638}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a6b4014e593842ccd6ed239795ed1e638} 
+skdp\+\_\+flag\+\_\+establish\+\_\+request&The packet contains an establish request \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_establish\_response@{skdp\_flag\_establish\_response}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_establish\_response@{skdp\_flag\_establish\_response}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a06e21a1f31b0dcb2a8f23a1bcf8fe03d}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a06e21a1f31b0dcb2a8f23a1bcf8fe03d} 
+skdp\+\_\+flag\+\_\+establish\+\_\+response&The packet contains an establish response \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_establish\_verify@{skdp\_flag\_establish\_verify}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_establish\_verify@{skdp\_flag\_establish\_verify}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2ab751629c3025b7bff6e9a076f9bbec1b}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2ab751629c3025b7bff6e9a076f9bbec1b} 
+skdp\+\_\+flag\+\_\+establish\+\_\+verify&The packet contains an establish verify message \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_keepalive\_request@{skdp\_flag\_keepalive\_request}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_keepalive\_request@{skdp\_flag\_keepalive\_request}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a1210467c30c6d8fd858455218685d3ea}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a1210467c30c6d8fd858455218685d3ea} 
+skdp\+\_\+flag\+\_\+keepalive\+\_\+request&The packet is a keep alive request \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_session\_established@{skdp\_flag\_session\_established}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_session\_established@{skdp\_flag\_session\_established}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a61cfb626afb843c0e78d6d8f0442c6bf}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2a61cfb626afb843c0e78d6d8f0442c6bf} 
+skdp\+\_\+flag\+\_\+session\+\_\+established&Indicates that the session has been established \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{skdp\_flag\_error\_condition@{skdp\_flag\_error\_condition}!skdp.h@{skdp.h}}\index{skdp.h@{skdp.h}!skdp\_flag\_error\_condition@{skdp\_flag\_error\_condition}}}\Hypertarget{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2abe0e56ac1fa11ccdf12dceb43e867be7}\label{skdp_8h_ad04ee36a40091375e40f963bd8d2a7e2abe0e56ac1fa11ccdf12dceb43e867be7} 
+skdp\+\_\+flag\+\_\+error\+\_\+condition&Indicates that the connection experienced an error \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{skdp_8h_a099b357b3377ec86cc1385bb5043dcf9}\index{skdp.h@{skdp.h}!skdp\_deserialize\_device\_key@{skdp\_deserialize\_device\_key}}
+\index{skdp\_deserialize\_device\_key@{skdp\_deserialize\_device\_key}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_deserialize\_device\_key()}{skdp\_deserialize\_device\_key()}}
+{\footnotesize\ttfamily \label{skdp_8h_a099b357b3377ec86cc1385bb5043dcf9} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+deserialize\+\_\+device\+\_\+key (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__device__key}{skdp\+\_\+device\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{dkey}{, }\item[{const uint8\+\_\+t}]{input}{\mbox{[}\+SKDP\+\_\+\+DEVKEY\+\_\+\+ENCODED\+\_\+\+SIZE\mbox{]}}\end{DoxyParamCaption})}
+
+
+
+Deserialize a client device key. 
+
+This function deserializes a byte array into a SKDP device key structure.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dkey} & The output SKDP device key structure. \\
+\hline
+{\em input} & The input serialized device key array of size {\ttfamily SKDP\+\_\+\+DEVKEY\+\_\+\+ENCODED\+\_\+\+SIZE}. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_a1ad96069734b0b6fe86cdbff50ee7005}\index{skdp.h@{skdp.h}!skdp\_deserialize\_master\_key@{skdp\_deserialize\_master\_key}}
+\index{skdp\_deserialize\_master\_key@{skdp\_deserialize\_master\_key}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_deserialize\_master\_key()}{skdp\_deserialize\_master\_key()}}
+{\footnotesize\ttfamily \label{skdp_8h_a1ad96069734b0b6fe86cdbff50ee7005} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+deserialize\+\_\+master\+\_\+key (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__master__key}{skdp\+\_\+master\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{mkey}{, }\item[{const uint8\+\_\+t}]{input}{\mbox{[}\+SKDP\+\_\+\+MSTKEY\+\_\+\+ENCODED\+\_\+\+SIZE\mbox{]}}\end{DoxyParamCaption})}
+
+
+
+Deserialize a master key from a byte array. 
+
+This function deserializes a byte array into a SKDP master key structure.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mkey} & The output SKDP master key structure. \\
+\hline
+{\em input} & The input serialized master key array of size {\ttfamily SKDP\+\_\+\+MSTKEY\+\_\+\+ENCODED\+\_\+\+SIZE}. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_afba78bf1c7b1d5fc318537531b1e74dc}\index{skdp.h@{skdp.h}!skdp\_deserialize\_server\_key@{skdp\_deserialize\_server\_key}}
+\index{skdp\_deserialize\_server\_key@{skdp\_deserialize\_server\_key}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_deserialize\_server\_key()}{skdp\_deserialize\_server\_key()}}
+{\footnotesize\ttfamily \label{skdp_8h_afba78bf1c7b1d5fc318537531b1e74dc} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+deserialize\+\_\+server\+\_\+key (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{skey}{, }\item[{const uint8\+\_\+t}]{input}{\mbox{[}\+SKDP\+\_\+\+SRVKEY\+\_\+\+ENCODED\+\_\+\+SIZE\mbox{]}}\end{DoxyParamCaption})}
+
+
+
+Deserialize a server key from a byte array. 
+
+This function deserializes a byte array into a SKDP server key structure.
+
+
+\begin{DoxyParams}{Parameters}
+{\em skey} & The output SKDP server key structure. \\
+\hline
+{\em input} & The input serialized server key array of size {\ttfamily SKDP\+\_\+\+SRVKEY\+\_\+\+ENCODED\+\_\+\+SIZE}. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_a1218e0637db5cb10c3ae1accf81c4920}\index{skdp.h@{skdp.h}!skdp\_error\_to\_string@{skdp\_error\_to\_string}}
+\index{skdp\_error\_to\_string@{skdp\_error\_to\_string}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_error\_to\_string()}{skdp\_error\_to\_string()}}
+{\footnotesize\ttfamily \label{skdp_8h_a1218e0637db5cb10c3ae1accf81c4920} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API const char \texorpdfstring{$\ast$}{*} skdp\+\_\+error\+\_\+to\+\_\+string (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{skdp_8h_a941c4d5a2c383c51c315a3b65d7ab91b}{skdp\+\_\+errors}}}]{error}{}\end{DoxyParamCaption})}
+
+
+
+Return a string description of an SKDP error code. 
+
+This function returns a human-\/readable string corresponding to the provided SKDP error code.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & The SKDP error code.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a pointer to the error description string, or NULL if the error code is not recognized. 
+\end{DoxyReturn}
+\Hypertarget{skdp_8h_a992530ebbcd1bea5e09dbc2a167bff5f}\index{skdp.h@{skdp.h}!skdp\_generate\_device\_key@{skdp\_generate\_device\_key}}
+\index{skdp\_generate\_device\_key@{skdp\_generate\_device\_key}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_generate\_device\_key()}{skdp\_generate\_device\_key()}}
+{\footnotesize\ttfamily \label{skdp_8h_a992530ebbcd1bea5e09dbc2a167bff5f} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+generate\+\_\+device\+\_\+key (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__device__key}{skdp\+\_\+device\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{dkey}{, }\item[{const \mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{skey}{, }\item[{const uint8\+\_\+t}]{kid}{\mbox{[}\+SKDP\+\_\+\+KID\+\_\+\+SIZE\mbox{]}}\end{DoxyParamCaption})}
+
+
+
+Generate a device key-\/set. 
+
+This function generates a new SKDP device key-\/set using the provided server key. It derives the device key from the server key and sets the key identity and expiration time.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dkey} & A pointer to the SKDP device key structure. \\
+\hline
+{\em skey} & \mbox{[}const\mbox{]} A pointer to the SKDP server key structure. \\
+\hline
+{\em kid} & \mbox{[}const\mbox{]} The key identity string. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_a863c87a9379bb157f0e7b9bd83d45c78}\index{skdp.h@{skdp.h}!skdp\_generate\_master\_key@{skdp\_generate\_master\_key}}
+\index{skdp\_generate\_master\_key@{skdp\_generate\_master\_key}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_generate\_master\_key()}{skdp\_generate\_master\_key()}}
+{\footnotesize\ttfamily \label{skdp_8h_a863c87a9379bb157f0e7b9bd83d45c78} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API bool skdp\+\_\+generate\+\_\+master\+\_\+key (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__master__key}{skdp\+\_\+master\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{mkey}{, }\item[{const uint8\+\_\+t}]{kid}{\mbox{[}\+SKDP\+\_\+\+KID\+\_\+\+SIZE\mbox{]}}\end{DoxyParamCaption})}
+
+
+
+Generate a master key-\/set. 
+
+This function generates a new SKDP master key-\/set. It populates the provided master key structure with a randomly generated master derivation key and the key identity, and sets the expiration time. The master key serves as the root from which branch keys are derived.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mkey} & A pointer to the SKDP master key structure. \\
+\hline
+{\em kid} & \mbox{[}const\mbox{]} The key identity string.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns false if the random generator fails; otherwise, returns true. 
+\end{DoxyReturn}
+\Hypertarget{skdp_8h_a5c0560a25b61d4d5c696eaa5b820f2d7}\index{skdp.h@{skdp.h}!skdp\_generate\_server\_key@{skdp\_generate\_server\_key}}
+\index{skdp\_generate\_server\_key@{skdp\_generate\_server\_key}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_generate\_server\_key()}{skdp\_generate\_server\_key()}}
+{\footnotesize\ttfamily \label{skdp_8h_a5c0560a25b61d4d5c696eaa5b820f2d7} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+generate\+\_\+server\+\_\+key (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{skey}{, }\item[{const \mbox{\hyperlink{structskdp__master__key}{skdp\+\_\+master\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{mkey}{, }\item[{const uint8\+\_\+t}]{kid}{\mbox{[}\+SKDP\+\_\+\+KID\+\_\+\+SIZE\mbox{]}}\end{DoxyParamCaption})}
+
+
+
+Generate a server key-\/set. 
+
+This function generates a new SKDP server key-\/set based on the provided master key. It populates the server key structure with a derived server key and sets the key identity and expiration time.
+
+
+\begin{DoxyParams}{Parameters}
+{\em skey} & A pointer to the SKDP server key structure. \\
+\hline
+{\em mkey} & \mbox{[}const\mbox{]} A pointer to the SKDP master key structure. \\
+\hline
+{\em kid} & \mbox{[}const\mbox{]} The key identity string. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_a231dfea4120d1abcb3d01cc783a6e0a8}\index{skdp.h@{skdp.h}!skdp\_packet\_clear@{skdp\_packet\_clear}}
+\index{skdp\_packet\_clear@{skdp\_packet\_clear}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_packet\_clear()}{skdp\_packet\_clear()}}
+{\footnotesize\ttfamily \label{skdp_8h_a231dfea4120d1abcb3d01cc783a6e0a8} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+packet\+\_\+clear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}}]{packet}{}\end{DoxyParamCaption})}
+
+
+
+Clear a SKDP network packet. 
+
+This function resets the fields of a SKDP network packet to zero, effectively clearing its state.
+
+
+\begin{DoxyParams}{Parameters}
+{\em packet} & A pointer to the SKDP network packet to clear. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_a236a0c65efef5dd4ad8745b83759b599}\index{skdp.h@{skdp.h}!skdp\_packet\_header\_deserialize@{skdp\_packet\_header\_deserialize}}
+\index{skdp\_packet\_header\_deserialize@{skdp\_packet\_header\_deserialize}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_packet\_header\_deserialize()}{skdp\_packet\_header\_deserialize()}}
+{\footnotesize\ttfamily \label{skdp_8h_a236a0c65efef5dd4ad8745b83759b599} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+packet\+\_\+header\+\_\+deserialize (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{header}{, }\item[{\mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}}]{packet}{}\end{DoxyParamCaption})}
+
+
+
+Deserialize a byte array into a SKDP packet header. 
+
+This function converts a serialized byte array representing a SKDP packet header into a structured SKDP network packet.
+
+
+\begin{DoxyParams}{Parameters}
+{\em header} & A pointer to the input header byte array. \\
+\hline
+{\em packet} & A pointer to the SKDP network packet structure to populate. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_aedc511cb3ca00cbc8159c78a1071cabe}\index{skdp.h@{skdp.h}!skdp\_packet\_header\_serialize@{skdp\_packet\_header\_serialize}}
+\index{skdp\_packet\_header\_serialize@{skdp\_packet\_header\_serialize}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_packet\_header\_serialize()}{skdp\_packet\_header\_serialize()}}
+{\footnotesize\ttfamily \label{skdp_8h_aedc511cb3ca00cbc8159c78a1071cabe} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+packet\+\_\+header\+\_\+serialize (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}}]{packet}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{header}{}\end{DoxyParamCaption})}
+
+
+
+Serialize a SKDP packet header into a byte array. 
+
+This function converts a structured SKDP network packet header into a serialized byte array for transmission.
+
+
+\begin{DoxyParams}{Parameters}
+{\em packet} & A pointer to the SKDP network packet structure to serialize. \\
+\hline
+{\em header} & The output header byte array. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_a547f61f36cd12628fce9ba843ee78725}\index{skdp.h@{skdp.h}!skdp\_packet\_set\_utc\_time@{skdp\_packet\_set\_utc\_time}}
+\index{skdp\_packet\_set\_utc\_time@{skdp\_packet\_set\_utc\_time}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_packet\_set\_utc\_time()}{skdp\_packet\_set\_utc\_time()}}
+{\footnotesize\ttfamily \label{skdp_8h_a547f61f36cd12628fce9ba843ee78725} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+packet\+\_\+set\+\_\+utc\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}}]{packet}{}\end{DoxyParamCaption})}
+
+
+
+Set the local UTC seconds time in a SKDP packet header. 
+
+This function updates the SKDP packet header with the current UTC time (in seconds).
+
+
+\begin{DoxyParams}{Parameters}
+{\em packet} & A pointer to the SKDP network packet structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_a47726d3817ee7f0b3bb58ef87b63be94}\index{skdp.h@{skdp.h}!skdp\_packet\_time\_valid@{skdp\_packet\_time\_valid}}
+\index{skdp\_packet\_time\_valid@{skdp\_packet\_time\_valid}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_packet\_time\_valid()}{skdp\_packet\_time\_valid()}}
+{\footnotesize\ttfamily \label{skdp_8h_a47726d3817ee7f0b3bb58ef87b63be94} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API bool skdp\+\_\+packet\+\_\+time\+\_\+valid (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}}]{packet}{}\end{DoxyParamCaption})}
+
+
+
+Check if a SKDP packet is received within the valid time threshold. 
+
+This function compares the UTC time in the SKDP packet header against the local time to verify that the packet was received within the allowed time threshold.
+
+
+\begin{DoxyParams}{Parameters}
+{\em packet} & A pointer to the SKDP network packet structure.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true if the packet was received within the valid time threshold; otherwise, returns false. 
+\end{DoxyReturn}
+\Hypertarget{skdp_8h_a8f340b4323fa0805eacffc74d7f85852}\index{skdp.h@{skdp.h}!skdp\_packet\_to\_stream@{skdp\_packet\_to\_stream}}
+\index{skdp\_packet\_to\_stream@{skdp\_packet\_to\_stream}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_packet\_to\_stream()}{skdp\_packet\_to\_stream()}}
+{\footnotesize\ttfamily \label{skdp_8h_a8f340b4323fa0805eacffc74d7f85852} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API size\+\_\+t skdp\+\_\+packet\+\_\+to\+\_\+stream (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}}]{packet}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{pstream}{}\end{DoxyParamCaption})}
+
+
+
+Serialize a SKDP packet into a byte array. 
+
+This function converts a SKDP network packet into a contiguous byte stream suitable for network transmission.
+
+
+\begin{DoxyParams}{Parameters}
+{\em packet} & A pointer to the SKDP network packet structure. \\
+\hline
+{\em pstream} & The output byte stream buffer.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the size (in bytes) of the serialized packet. 
+\end{DoxyReturn}
+\Hypertarget{skdp_8h_a5db83771b6c66cf48b96261191cedb1f}\index{skdp.h@{skdp.h}!skdp\_serialize\_device\_key@{skdp\_serialize\_device\_key}}
+\index{skdp\_serialize\_device\_key@{skdp\_serialize\_device\_key}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_serialize\_device\_key()}{skdp\_serialize\_device\_key()}}
+{\footnotesize\ttfamily \label{skdp_8h_a5db83771b6c66cf48b96261191cedb1f} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+serialize\+\_\+device\+\_\+key (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{output}{\mbox{[}\+SKDP\+\_\+\+DEVKEY\+\_\+\+ENCODED\+\_\+\+SIZE\mbox{]}, }\item[{const \mbox{\hyperlink{structskdp__device__key}{skdp\+\_\+device\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{dkey}{}\end{DoxyParamCaption})}
+
+
+
+Serialize a client device key. 
+
+This function serializes a SKDP device key structure into a byte array.
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & The output byte array to hold the serialized device key. \\
+\hline
+{\em dkey} & The input SKDP device key structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_a90b474586cf5eef64346d0f9d51e2983}\index{skdp.h@{skdp.h}!skdp\_serialize\_master\_key@{skdp\_serialize\_master\_key}}
+\index{skdp\_serialize\_master\_key@{skdp\_serialize\_master\_key}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_serialize\_master\_key()}{skdp\_serialize\_master\_key()}}
+{\footnotesize\ttfamily \label{skdp_8h_a90b474586cf5eef64346d0f9d51e2983} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+serialize\+\_\+master\+\_\+key (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{output}{\mbox{[}\+SKDP\+\_\+\+MSTKEY\+\_\+\+ENCODED\+\_\+\+SIZE\mbox{]}, }\item[{const \mbox{\hyperlink{structskdp__master__key}{skdp\+\_\+master\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{mkey}{}\end{DoxyParamCaption})}
+
+
+
+Serialize a master key into a byte array. 
+
+This function serializes a SKDP master key structure into a byte array.
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & The output byte array to hold the serialized master key. \\
+\hline
+{\em mkey} & The input SKDP master key structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_af2caf9606471db68b4c1113ed7c759e6}\index{skdp.h@{skdp.h}!skdp\_serialize\_server\_key@{skdp\_serialize\_server\_key}}
+\index{skdp\_serialize\_server\_key@{skdp\_serialize\_server\_key}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_serialize\_server\_key()}{skdp\_serialize\_server\_key()}}
+{\footnotesize\ttfamily \label{skdp_8h_af2caf9606471db68b4c1113ed7c759e6} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+serialize\+\_\+server\+\_\+key (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{output}{\mbox{[}\+SKDP\+\_\+\+SRVKEY\+\_\+\+ENCODED\+\_\+\+SIZE\mbox{]}, }\item[{const \mbox{\hyperlink{structskdp__server__key}{skdp\+\_\+server\+\_\+key}} \texorpdfstring{$\ast$}{*}}]{skey}{}\end{DoxyParamCaption})}
+
+
+
+Serialize a server key into a byte array. 
+
+This function serializes a SKDP server key structure into a byte array.
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & The output byte array to hold the serialized server key. \\
+\hline
+{\em skey} & The input SKDP server key structure. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{skdp_8h_abbcb7565b7deffd72e5e420119afdac7}\index{skdp.h@{skdp.h}!skdp\_stream\_to\_packet@{skdp\_stream\_to\_packet}}
+\index{skdp\_stream\_to\_packet@{skdp\_stream\_to\_packet}!skdp.h@{skdp.h}}
+\doxysubsubsection{\texorpdfstring{skdp\_stream\_to\_packet()}{skdp\_stream\_to\_packet()}}
+{\footnotesize\ttfamily \label{skdp_8h_abbcb7565b7deffd72e5e420119afdac7} 
+SKDP\+\_\+\+EXPORT\+\_\+\+API void skdp\+\_\+stream\+\_\+to\+\_\+packet (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{pstream}{, }\item[{\mbox{\hyperlink{structskdp__network__packet}{skdp\+\_\+network\+\_\+packet}} \texorpdfstring{$\ast$}{*}}]{packet}{}\end{DoxyParamCaption})}
+
+
+
+Deserialize a byte stream into a SKDP network packet. 
+
+This function converts a contiguous byte stream into a structured SKDP network packet.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pstream} & A pointer to the input byte stream. \\
+\hline
+{\em packet} & A pointer to the SKDP network packet structure to populate. \\
+\hline
+\end{DoxyParams}

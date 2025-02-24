@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SKDP Server", "SKDP Server\SKDP Server.vcxproj", "{02B33CB0-F735-424A-849F-C6E1288636C5}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SKDP", "SKDP\SKDPX.vcxproj", "{0E117AC1-2D72-48EC-B3D7-EC5FE4557EDD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QSC", "..\QSC\QSC\QSC.vcxproj", "{7B7F8E47-0F7C-4273-A229-A7AB2A452EA9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{40DAE6B3-0570-4E2E-B17D-A1EE689D4DB8}"
+	ProjectSection(SolutionItems) = preProject
+		SKDP\QRCS-PL License.txt = SKDP\QRCS-PL License.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
