@@ -4,7 +4,9 @@
 
 SKDP is a next-generation protocol designed to solve one of the most challenging problems in cryptography: secure key distribution. With the growth of the Internet as a global communications medium, traditional methods based on a single pre-shared symmetric key are increasingly vulnerable. In these systems, if a device or server key is compromised, an attacker may decrypt all encrypted communications—past, present, and future. Additionally, such systems often lack forward secrecy, meaning that the compromise of a session key can expose all historical communications.
 
-[View full documentation online](https://qrcs-corp.github.io/SKDP/)
+[SKDP Help Documentation](https://qrcs-corp.github.io/SKDP/)  
+[SKDP Protocol Specification](https://qrcs-corp.github.io/SKDP/pdf/SKDP_Specification.pdf)  
+[SKDP Summary Document](https://qrcs-corp.github.io/SKDP/pdf/SKDP_Summary.pdf)  
 
 ## Statement of the Problem
 
