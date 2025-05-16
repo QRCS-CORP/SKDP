@@ -43,6 +43,31 @@
 #include "common.h"
 #include "../../QSC/QSC/sha3.h"
 
+/*!
+* \def SKDP_USE_RCS_ENCRYPTION
+* \brief If the RCS encryption option is chosen SKDP uses the more modern RCS stream cipher with KMAC/QMAC authentication.
+* The default symmetric cipher/authenticator is AES-256/GCM (GMAC Counter Mode) NIST standardized per SP800-38a.
+*/
+//#define SKDP_USE_RCS_ENCRYPTION
+
+#if defined(SKDP_USE_RCS_ENCRYPTION)
+#	include "../../QSC/QSC/rcs.h"
+#	define skdp_cipher_state qsc_rcs_state
+#	define skdp_cipher_dispose qsc_rcs_dispose
+#	define skdp_cipher_initialize qsc_rcs_initialize
+#	define skdp_cipher_keyparams qsc_rcs_keyparams
+#	define skdp_cipher_set_associated qsc_rcs_set_associated
+#	define skdp_cipher_transform qsc_rcs_transform
+#else
+#	include "../../QSC/QSC/aes.h"
+#	define skdp_cipher_state qsc_aes_gcm256_state
+#	define skdp_cipher_dispose qsc_aes_gcm256_dispose
+#	define skdp_cipher_initialize qsc_aes_gcm256_initialize
+#	define skdp_cipher_keyparams qsc_aes_keyparams
+#	define skdp_cipher_set_associated qsc_aes_gcm256_set_associated
+#	define skdp_cipher_transform qsc_aes_gcm256_transform
+#endif
+
 /**
  * \file skdp.h
  * \brief The SKDP settings.
@@ -80,6 +105,18 @@
  * \note The SKDP settings provided herein are critical for the proper operation and security of the key distribution
  * process.
  */
+
+ /*!
+  * \def SKDP_PROTOCOL_SEC256
+  * \brief The 256-bit security strength configuration flag.
+  *
+  * \note If SKDP_PROTOCOL_SEC512 is not defined, SKDP_PROTOCOL_SEC256 is assumed.
+  */
+#if !defined(SKDP_PROTOCOL_SEC512)
+#	if !defined(SKDP_PROTOCOL_SEC256)
+#		define SKDP_PROTOCOL_SEC256
+#	endif
+#endif
 
 /*!
  * \def SKDP_CONFIG_SIZE
@@ -177,19 +214,7 @@
  */
 #define SKDP_SEQUENCE_TERMINATOR 0xFFFFFFFF
 
-/*!
- * \def SKDP_PROTOCOL_SEC256
- * \brief The 256-bit security strength configuration flag.
- *
- * \note If SKDP_PROTOCOL_SEC512 is not defined, SKDP_PROTOCOL_SEC256 is assumed.
- */
-#if !defined(SKDP_PROTOCOL_SEC512)
-#	if !defined(SKDP_PROTOCOL_SEC256)
-#		define SKDP_PROTOCOL_SEC256
-#	endif
-#endif
-
-#if defined(SKDP_PROTOCOL_SEC512)
+#if defined(SKDP_PROTOCOL_SEC512) && defined(SKDP_USE_RCS_ENCRYPTION)
 
 /* 512-bit security configuration definitions */
 
@@ -311,10 +336,14 @@ static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r01-skdp-rcs512-keccak
 #	define SKDP_MACKEY_SIZE 32
 
 /*!
- * \def SKDP_MACTAG_SIZE
- * \brief The MAC tag size (in bytes) for 256-bit security.
- */
+* \def SKDP_MACTAG_SIZE
+* \brief The MAC tag size (in bytes) for 256-bit security.
+*/
+#	if defined(SKDP_USE_RCS_ENCRYPTION)
 #	define SKDP_MACTAG_SIZE 32
+#else
+#	define SKDP_MACTAG_SIZE 16
+#endif
 
 /*!
  * \def SKDP_MDK_SIZE

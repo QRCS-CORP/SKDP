@@ -61,9 +61,9 @@ static void client_print_banner()
 	qsc_consoleutils_print_line("****************************************************");
 	qsc_consoleutils_print_line("* SKDP: Symmetric Key Distribution Protocol Client *");
 	qsc_consoleutils_print_line("*                                                  *");
-	qsc_consoleutils_print_line("* Release:   v1.1.0.0 (A1)                        *");
-	qsc_consoleutils_print_line("* Date:      December 02, 2024                     *");
-	qsc_consoleutils_print_line("* Contact:   john.underhill@protonmail.com         *");
+	qsc_consoleutils_print_line("* Release:   v1.2.0.0 (A1)                         *");
+	qsc_consoleutils_print_line("* Date:      May 14, 2024                          *");
+	qsc_consoleutils_print_line("* Contact:   contact@qrcscorp.ca                   *");
 	qsc_consoleutils_print_line("****************************************************");
 	qsc_consoleutils_print_line("");
 }

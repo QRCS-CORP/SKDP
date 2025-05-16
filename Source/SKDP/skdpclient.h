@@ -42,7 +42,6 @@
 
 #include "common.h"
 #include "skdp.h"
-#include "../../QSC/QSC/rcs.h"
 #include "../../QSC/QSC/socketclient.h"
 
 /**
@@ -83,8 +82,8 @@
  */
 SKDP_EXPORT_API typedef struct skdp_client_state
 {
-	qsc_rcs_state rxcpr;				/*!< The receive channel cipher state */
-	qsc_rcs_state txcpr;				/*!< The transmit channel cipher state */
+	skdp_cipher_state rxcpr;			/*!< The receive channel cipher state */
+	skdp_cipher_state txcpr;			/*!< The transmit channel cipher state */
 	uint8_t ddk[SKDP_DDK_SIZE];			/*!< The device derivation key */
 	uint8_t dsh[SKDP_STH_SIZE];			/*!< The device session hash */
 	uint8_t kid[SKDP_KID_SIZE];			/*!< The device identity string */

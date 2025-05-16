@@ -14,8 +14,8 @@ static void server_dispose(skdp_server_state* ctx)
 
 	if (ctx != NULL)
 	{
-		qsc_rcs_dispose(&ctx->rxcpr);
-		qsc_rcs_dispose(&ctx->txcpr);
+		skdp_cipher_dispose(&ctx->rxcpr);
+		skdp_cipher_dispose(&ctx->txcpr);
 		ctx->exflag = 0;
 		ctx->rxseq = 0;
 		ctx->txseq = 0;
@@ -144,7 +144,7 @@ static skdp_errors server_exchange_response(skdp_server_state* ctx, const skdp_n
 		{
 			uint8_t dtk[SKDP_DTK_SIZE] = { 0 };
 			uint8_t stk[SKDP_STK_SIZE] = { 0 };
-			qsc_rcs_keyparams kp;
+			skdp_cipher_keyparams kp;
 
 			/* decrypt the device token key */
 			qsc_memutils_copy(dtk, packetin->pmessage, SKDP_DTK_SIZE);
@@ -160,7 +160,7 @@ static skdp_errors server_exchange_response(skdp_server_state* ctx, const skdp_n
 			kp.nonce = (prnd + SKDP_CPRKEY_SIZE);
 			kp.info = NULL;
 			kp.infolen = 0;
-			qsc_rcs_initialize(&ctx->rxcpr, &kp, false);
+			skdp_cipher_initialize(&ctx->rxcpr, &kp, false);
 
 			/* create a new secret token used to key channel-2, encrypt, mac, and send to client */
 
@@ -178,7 +178,7 @@ static skdp_errors server_exchange_response(skdp_server_state* ctx, const skdp_n
 				kp.nonce = (prnd + SKDP_CPRKEY_SIZE);
 				kp.info = NULL;
 				kp.infolen = 0;
-				qsc_rcs_initialize(&ctx->txcpr, &kp, true);
+				skdp_cipher_initialize(&ctx->txcpr, &kp, true);
 
 				/* generate the encryption and mac keys */
 				qsc_memutils_clear(prnd, SKDP_PERMUTATION_RATE);
@@ -234,10 +234,10 @@ static skdp_errors server_establish_response(skdp_server_state* ctx, const skdp_
 
 	/* serialize the packet header and add it to associated data */
 	skdp_packet_header_serialize(packetin, shdr);
-	qsc_rcs_set_associated(&ctx->rxcpr, shdr, SKDP_HEADER_SIZE);
+	skdp_cipher_set_associated(&ctx->rxcpr, shdr, SKDP_HEADER_SIZE);
 
 	/* authenticate and decrypt the cipher-text */
-	if (qsc_rcs_transform(&ctx->rxcpr, msg, packetin->pmessage, packetin->msglen - SKDP_MACTAG_SIZE) == true)
+	if (skdp_cipher_transform(&ctx->rxcpr, msg, packetin->pmessage, packetin->msglen - SKDP_MACTAG_SIZE) == true)
 	{
 		qsc_keccak_state kctx = { 0 };
 		uint8_t mhash[SKDP_HASH_SIZE] = { 0 };
@@ -250,7 +250,7 @@ static skdp_errors server_establish_response(skdp_server_state* ctx, const skdp_
 		/* serialize the packet header and add it to the associated data */
 		qsc_memutils_clear(shdr, SKDP_HEADER_SIZE);
 		skdp_packet_header_serialize(packetout, shdr);
-		qsc_rcs_set_associated(&ctx->txcpr, shdr, SKDP_HEADER_SIZE);
+		skdp_cipher_set_associated(&ctx->txcpr, shdr, SKDP_HEADER_SIZE);
 
 		/* hash the random verification-token */
 		qsc_sha3_initialize(&kctx);
@@ -258,7 +258,7 @@ static skdp_errors server_establish_response(skdp_server_state* ctx, const skdp_
 		qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, mhash);
 
 		/* encrypt the message hash */
-		qsc_rcs_transform(&ctx->txcpr, packetout->pmessage, mhash, SKDP_HASH_SIZE);
+		skdp_cipher_transform(&ctx->txcpr, packetout->pmessage, mhash, SKDP_HASH_SIZE);
 		ctx->exflag = skdp_flag_session_established;
 	}
 	else
@@ -645,11 +645,11 @@ skdp_errors skdp_server_decrypt_packet(skdp_server_state* ctx, const skdp_networ
 				{
 					/* serialize the header and add it to the ciphers associated data */
 					skdp_packet_header_serialize(packetin, hdr);
-					qsc_rcs_set_associated(&ctx->rxcpr, hdr, SKDP_HEADER_SIZE);
+					skdp_cipher_set_associated(&ctx->rxcpr, hdr, SKDP_HEADER_SIZE);
 					*msglen = packetin->msglen - SKDP_MACTAG_SIZE;
 
 					/* authenticate then decrypt the data */
-					if (qsc_rcs_transform(&ctx->rxcpr, message, packetin->pmessage, *msglen) == true)
+					if (skdp_cipher_transform(&ctx->rxcpr, message, packetin->pmessage, *msglen) == true)
 					{
 						err = skdp_error_none;
 					}
@@ -707,9 +707,9 @@ skdp_errors skdp_server_encrypt_packet(skdp_server_state* ctx, const uint8_t* me
 			skdp_packet_set_utc_time(packetout);
 			/* serialize the header and add it to the ciphers associated data */
 			skdp_packet_header_serialize(packetout, hdr);
-			qsc_rcs_set_associated(&ctx->txcpr, hdr, SKDP_HEADER_SIZE);
+			skdp_cipher_set_associated(&ctx->txcpr, hdr, SKDP_HEADER_SIZE);
 			/* encrypt the message */
-			qsc_rcs_transform(&ctx->txcpr, packetout->pmessage, message, msglen);
+			skdp_cipher_transform(&ctx->txcpr, packetout->pmessage, message, msglen);
 
 			err = skdp_error_none;
 		}
