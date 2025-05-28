@@ -46,6 +46,7 @@
 #include <limits.h>
 #include <string.h>
 #include "../../QSC/QSC/common.h"
+#include "../../QSC/QSC/intrinsics.h"
 
 /**
 * \internal
