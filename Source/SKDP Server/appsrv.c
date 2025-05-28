@@ -50,7 +50,7 @@ static void server_print_message(const char* message)
 
 static void server_print_string(const char* message, size_t msglen)
 {
-	if (message != NULL && msglen != 0)
+	if (message != NULL && msglen != 0U)
 	{
 		qsc_consoleutils_print_line(message);
 	}
@@ -66,8 +66,8 @@ static void server_print_banner()
 	qsc_consoleutils_print_line("******************************************************");
 	qsc_consoleutils_print_line("* SKDP: Symmetric Key Distribution Protocol Listener *");
 	qsc_consoleutils_print_line("*                                                    *");
-	qsc_consoleutils_print_line("* Release:   v1.2.0.0a (A1)                          *");
-	qsc_consoleutils_print_line("* Date:      May 14, 2024                            *");
+	qsc_consoleutils_print_line("* Release:   v1.2.0.0b (A2)                          *");
+	qsc_consoleutils_print_line("* Date:      May 28, 2025                            *");
 	qsc_consoleutils_print_line("* Contact:   contact@qrcscorp.ca                     *");
 	qsc_consoleutils_print_line("******************************************************");
 	qsc_consoleutils_print_line("");
@@ -110,7 +110,7 @@ static bool server_prikey_exists()
 
 static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SIZE])
 {
-	uint8_t serskey[SKDP_SRVKEY_ENCODED_SIZE] = { 0 };
+	uint8_t serskey[SKDP_SRVKEY_ENCODED_SIZE] = { 0U };
 	char dir[QSC_SYSTEM_MAX_PATH] = { 0 };
 	char fpath[QSC_SYSTEM_MAX_PATH] = { 0 };
 	bool res;
@@ -145,9 +145,9 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 	{
 		skdp_device_key dkey = { 0 };
 		skdp_master_key mkey = { 0 };
-		uint8_t serdkey[SKDP_DEVKEY_ENCODED_SIZE] = { 0 };
-		uint8_t sermkey[SKDP_MSTKEY_ENCODED_SIZE] = { 0 };
-		char strid[SKDP_KID_SIZE + 2] = { 0 };
+		uint8_t serdkey[SKDP_DEVKEY_ENCODED_SIZE] = { 0U };
+		uint8_t sermkey[SKDP_MSTKEY_ENCODED_SIZE] = { 0U };
+		char strid[SKDP_KID_SIZE + 2U] = { 0 };
 		size_t ctr;
 		size_t len;
 
@@ -157,22 +157,22 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 		{
 			server_print_message("The server-key was not detected, generating new master/server keys.");
 
-			ctr = 0;
+			ctr = 0U;
 			res = false;
 
-			while (ctr < 3)
+			while (ctr < 3U)
 			{
 				++ctr;
 				server_print_message("Enter an 16 character hexidecimal master/server key id, ex. 0102030405060708.");
 				qsc_consoleutils_print_safe("server> ");
-				len = qsc_consoleutils_get_line(strid, sizeof(strid)) - 1;
+				len = qsc_consoleutils_get_line(strid, sizeof(strid)) - 1U;
 
 				if (len == SKDP_KID_SIZE && qsc_stringutils_is_hex(strid, len))
 				{
 					/* set the keys master and server id strings */
-					qsc_intutils_hex_to_bin(strid, keyid, SKDP_KID_SIZE / 2);
+					qsc_intutils_hex_to_bin(strid, keyid, SKDP_KID_SIZE / 2U);
 					/* generate a random client id */
-					res = qsc_acp_generate((keyid + (SKDP_KID_SIZE / 2)), SKDP_KID_SIZE / 2);
+					res = qsc_acp_generate((keyid + (SKDP_KID_SIZE / 2U)), SKDP_KID_SIZE / 2U);
 					
 					break;
 				}
@@ -276,10 +276,11 @@ static skdp_errors server_keep_alive_loop(const qsc_socket* sock)
 
 static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t* message, size_t* msglen)
 {
-	assert(message != NULL);
-	assert(source != NULL);
+	QSC_ASSERT(source != NULL);
+	QSC_ASSERT(message != NULL);
+	QSC_ASSERT(msglen != NULL);
 
-	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0 };
+	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0U };
 	char msgstr[SKDP_MESSAGE_MAX] = { 0 };
 	skdp_network_packet pkt = { 0 };
 	skdp_errors qerr;
@@ -321,7 +322,7 @@ static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t*
 
 				if (m_skdp_keep_alive.etime == tme)
 				{
-					m_skdp_keep_alive.seqctr += 1;
+					m_skdp_keep_alive.seqctr += 1U;
 					m_skdp_keep_alive.recd = true;
 				}
 				else
@@ -346,7 +347,7 @@ static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t*
 
 static void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_exceptions error)
 {
-	assert(source != NULL);
+	QSC_ASSERT(source != NULL);
 
 	const char* emsg;
 
@@ -363,8 +364,8 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 	qsc_socket ssck = { 0 };
 	skdp_network_packet pkt = { 0 };
 	qsc_ipinfo_ipv4_address addt = { 0 };
-	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0 };
-	uint8_t msg[SKDP_MESSAGE_MAX] = { 0 };
+	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0U };
+	uint8_t msg[SKDP_MESSAGE_MAX] = { 0U };
 	char sin[SKDP_MESSAGE_MAX + 1] = { 0 };
 	qsc_thread mthd;
 	skdp_errors err;
@@ -395,13 +396,13 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 			actx.source = &ssck;
 			qsc_socket_receive_async(&actx);
 			pkt.pmessage = mpkt;
-			mlen = 0;
+			mlen = 0U;
 
 			while (qsc_consoleutils_line_contains(sin, "qsmp quit") == false)
 			{
 				server_print_prompt();
 
-				if (mlen > 0)
+				if (mlen > 0U)
 				{
 					/* convert the packet to bytes */
 					skdp_server_encrypt_packet(&m_skdp_server_ctx, (uint8_t*)sin, mlen, &pkt);
@@ -410,12 +411,12 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 					qsc_socket_send(&ssck, msg, mlen, qsc_socket_send_flag_none);
 				}
 
-				mlen = qsc_consoleutils_get_line(sin, sizeof(sin)) - 1;
+				mlen = qsc_consoleutils_get_line(sin, sizeof(sin)) - 1U;
 
-				if (mlen > 0 && (sin[0] == '\n' || sin[0] == '\r'))
+				if (mlen > 0U && (sin[0U] == '\n' || sin[0U] == '\r'))
 				{
 					server_print_message("");
-					mlen = 0;
+					mlen = 0U;
 				}
 			}
 
@@ -435,7 +436,7 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 int main(void)
 {
 	skdp_server_key skey = { 0 };
-	uint8_t kid[SKDP_KID_SIZE] = { 0 };
+	uint8_t kid[SKDP_KID_SIZE] = { 0U };
 	skdp_errors err;
 
 	server_print_banner();

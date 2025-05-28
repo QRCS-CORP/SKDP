@@ -71,8 +71,8 @@ static void client_print_banner()
 static bool client_ipv4_dialogue(skdp_device_key* ckey, qsc_ipinfo_ipv4_address* address)
 {
 	uint8_t cskey[SKDP_DEVKEY_ENCODED_SIZE];
-	char fpath[QSC_FILEUTILS_MAX_PATH + 1] = { 0 };
-	char sadd[QSC_IPINFO_IPV4_STRNLEN + 1] = { 0 };
+	char fpath[QSC_FILEUTILS_MAX_PATH + 1U] = { 0 };
+	char sadd[QSC_IPINFO_IPV4_STRNLEN + 1U] = { 0 };
 	qsc_ipinfo_ipv4_address addv4t = { 0 };
 	size_t slen;
 	bool res;
@@ -130,10 +130,10 @@ static bool client_ipv4_dialogue(skdp_device_key* ckey, qsc_ipinfo_ipv4_address*
 
 static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t* message, size_t* msglen)
 {
-	assert(message != NULL);
-	assert(source != NULL);
+	QSC_ASSERT(message != NULL);
+	QSC_ASSERT(source != NULL);
 
-	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0 };
+	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0U };
 	char msgstr[SKDP_MESSAGE_MAX] = { 0 };
 	skdp_network_packet pkt = { 0 };
 	size_t mlen;
@@ -174,7 +174,7 @@ static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t*
 		{
 			if (pkt.msglen > 0)
 			{
-				qerr = (skdp_errors)pkt.pmessage[0];
+				qerr = (skdp_errors)pkt.pmessage[0U];
 				client_print_error(qerr);
 			}
 
@@ -191,7 +191,7 @@ static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t*
 
 static void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_exceptions error)
 {
-	assert(source != NULL);
+	QSC_ASSERT(source != NULL);
 
 	const char* emsg;
 
@@ -204,9 +204,9 @@ static void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_e
 
 static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, const skdp_device_key* ckey)
 {
-	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0 };
-	uint8_t msg[SKDP_MESSAGE_MAX] = { 0 };
-	char sin[SKDP_MESSAGE_MAX + 1] = { 0 };
+	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0U };
+	uint8_t msg[SKDP_MESSAGE_MAX] = { 0U };
+	char sin[SKDP_MESSAGE_MAX + 1U] = { 0 };
 	qsc_socket_receive_async_state actx = { 0 };
 	qsc_socket csck = { 0 };
 	skdp_network_packet pkt = { 0 };
@@ -248,7 +248,7 @@ static void client_connect_ipv4(const qsc_ipinfo_ipv4_address* address, const sk
 
 			mlen = qsc_consoleutils_get_line(sin, sizeof(sin)) - 1;
 
-			if (mlen > 0 && (sin[0] == '\r' || sin[0] == '\n'))
+			if (mlen > 0 && (sin[0U] == '\r' || sin[0U] == '\n'))
 			{
 				client_print_message("");
 				mlen = 0;

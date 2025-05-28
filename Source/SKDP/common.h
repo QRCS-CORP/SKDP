@@ -40,7 +40,6 @@
 #ifndef SKDP_COMMON_H
 #define SKDP_COMMON_H
 
-#include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <stdint.h>

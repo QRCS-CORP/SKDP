@@ -50,6 +50,24 @@
 */
 //#define SKDP_USE_RCS_ENCRYPTION
 
+/*!
+* \def SKDP_PROTOCOL_SEC512
+* \brief Use 512-bit end-to-end encryption with the RCS-512 cipher.
+*/
+//#define SKDP_PROTOCOL_SEC512
+
+ /*!
+  * \def SKDP_PROTOCOL_SEC256
+  * \brief The 256-bit security strength configuration flag.
+  *
+  * \note If SKDP_PROTOCOL_SEC512 is not defined, SKDP_PROTOCOL_SEC256 is assumed.
+  */
+#if !defined(SKDP_PROTOCOL_SEC512)
+#	if !defined(SKDP_PROTOCOL_SEC256)
+#		define SKDP_PROTOCOL_SEC256
+#	endif
+#endif
+
 #if defined(SKDP_USE_RCS_ENCRYPTION)
 #	include "../../QSC/QSC/rcs.h"
 #	define skdp_cipher_state qsc_rcs_state
@@ -106,18 +124,6 @@
  * process.
  */
 
- /*!
-  * \def SKDP_PROTOCOL_SEC256
-  * \brief The 256-bit security strength configuration flag.
-  *
-  * \note If SKDP_PROTOCOL_SEC512 is not defined, SKDP_PROTOCOL_SEC256 is assumed.
-  */
-#if !defined(SKDP_PROTOCOL_SEC512)
-#	if !defined(SKDP_PROTOCOL_SEC256)
-#		define SKDP_PROTOCOL_SEC256
-#	endif
-#endif
-
 /*!
  * \def SKDP_CONFIG_SIZE
  * \brief The size of the protocol configuration string.
@@ -173,6 +179,16 @@
 #define SKDP_MESSAGE_MAX (SKDP_MESSAGE_SIZE + SKDP_HEADER_SIZE)
 
 /*!
+ * \def SKDP_MESSAGE_SIZE
+ * \brief The message size (in bytes) used during a communications session.
+ */
+#if defined(SKDP_USE_RCS_ENCRYPTION)
+#	define SKDP_NONCE_SIZE 32
+#else
+#	define SKDP_NONCE_SIZE 16
+#endif
+
+/*!
  * \def SKDP_SERVER_PORT
  * \brief The default SKDP server port number.
  */
@@ -213,6 +229,19 @@
  * \brief The sequence number of a packet that closes a connection.
  */
 #define SKDP_SEQUENCE_TERMINATOR 0xFFFFFFFF
+
+/*!
+ * \brief The SKDP configuration string for 256-bit security.
+ */
+#if defined(SKDP_USE_RCS_ENCRYPTION)
+#	if defined(SKDP_PROTOCOL_SEC512)
+		static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r03-skdp-rcs512-keccak512";
+#	else
+		static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r02-skdp-rcs256-keccak256";
+#	endif
+#else
+		static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r01-skdp-aes256-keccak256";
+#endif
 
 #if defined(SKDP_PROTOCOL_SEC512) && defined(SKDP_USE_RCS_ENCRYPTION)
 
@@ -295,11 +324,6 @@
  * \brief The maximum message size used in the key exchange (exchange stage) for 512-bit security.
  */
 #define SKDP_EXCHANGE_MAX_MESSAGE_SIZE (SKDP_DTK_SIZE + SKDP_MACKEY_SIZE + SKDP_HEADER_SIZE)
-
-/*!
- * \brief The SKDP configuration string for 512-bit security.
- */
-static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r01-skdp-rcs512-keccak512";
 
 #else
 
@@ -386,11 +410,6 @@ static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r01-skdp-rcs512-keccak
  * \brief The maximum message size used in the key exchange (exchange stage) for 256-bit security.
  */
 #define SKDP_EXCHANGE_MAX_MESSAGE_SIZE (SKDP_KID_SIZE + SKDP_CONFIG_SIZE + SKDP_STOK_SIZE + SKDP_HEADER_SIZE)
-
-/*!
- * \brief The SKDP configuration string for 256-bit security.
- */
-static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r01-skdp-rcs256-keccak256";
 
 #endif
 
