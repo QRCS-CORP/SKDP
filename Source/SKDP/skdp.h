@@ -600,9 +600,9 @@ static const char SKDP_ERROR_STRINGS[SKDP_ERROR_STRING_DEPTH][SKDP_ERROR_STRING_
  */
 SKDP_EXPORT_API typedef struct skdp_master_key
 {
-	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
-	QSC_SIMD_ALIGN uint8_t mdk[SKDP_MDK_SIZE];				/*!< The master derivation key */
-	uint64_t expiration;					/*!< The expiration time in seconds from epoch */
+	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];	/*!< The key identity string */
+	QSC_SIMD_ALIGN uint8_t mdk[SKDP_MDK_SIZE];	/*!< The master derivation key */
+	uint64_t expiration;						/*!< The expiration time in seconds from epoch */
 } skdp_master_key;
 
 /*!
@@ -615,9 +615,9 @@ SKDP_EXPORT_API typedef struct skdp_master_key
  */
 SKDP_EXPORT_API typedef struct skdp_server_key
 {
-	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
-	QSC_SIMD_ALIGN uint8_t sdk[SKDP_SDK_SIZE];				/*!< The server derivation key */
-	uint64_t expiration;					/*!< The expiration time in seconds from epoch */
+	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];	/*!< The key identity string */
+	QSC_SIMD_ALIGN uint8_t sdk[SKDP_SDK_SIZE];	/*!< The server derivation key */
+	uint64_t expiration;						/*!< The expiration time in seconds from epoch */
 } skdp_server_key;
 
 /*!
@@ -630,9 +630,9 @@ SKDP_EXPORT_API typedef struct skdp_server_key
  */
 SKDP_EXPORT_API typedef struct skdp_device_key
 {
-	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
-	QSC_SIMD_ALIGN uint8_t ddk[SKDP_DDK_SIZE];				/*!< The device derivation key */
-	uint64_t expiration;					/*!< The expiration time in seconds from epoch */
+	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];	/*!< The key identity string */
+	QSC_SIMD_ALIGN uint8_t ddk[SKDP_DDK_SIZE];	/*!< The device derivation key */
+	uint64_t expiration;						/*!< The expiration time in seconds from epoch */
 } skdp_device_key;
 
 /*!
@@ -645,9 +645,9 @@ SKDP_EXPORT_API typedef struct skdp_device_key
  */
 SKDP_EXPORT_API typedef struct qsmp_keep_alive_state
 {
-	uint64_t etime;							/*!< The keep alive epoch time */
-	uint64_t seqctr;						/*!< The keep alive packet sequence number */
-	bool recd;								/*!< Indicates whether a keep alive response was received */
+	uint64_t etime;								/*!< The keep alive epoch time */
+	uint64_t seqctr;							/*!< The keep alive packet sequence number */
+	bool recd;									/*!< Indicates whether a keep alive response was received */
 } skdp_keep_alive_state;
 
 /*!
@@ -660,11 +660,11 @@ SKDP_EXPORT_API typedef struct qsmp_keep_alive_state
  */
 SKDP_EXPORT_API typedef struct skdp_network_packet
 {
-	uint8_t flag;							/*!< The packet flag */
-	uint32_t msglen;						/*!< The message length in bytes */
-	uint64_t sequence;						/*!< The packet sequence number */
-	uint64_t utctime;						/*!< The packet creation time in UTC seconds from epoch */
-	uint8_t* pmessage;						/*!< A pointer to the packet's message data */
+	uint8_t flag;								/*!< The packet flag */
+	uint32_t msglen;							/*!< The message length in bytes */
+	uint64_t sequence;							/*!< The packet sequence number */
+	uint64_t utctime;							/*!< The packet creation time in UTC seconds from epoch */
+	uint8_t* pmessage;							/*!< A pointer to the packet's message data */
 } skdp_network_packet;
 
 /*!
@@ -676,23 +676,23 @@ SKDP_EXPORT_API typedef struct skdp_network_packet
  */
 SKDP_EXPORT_API typedef enum skdp_errors
 {
-	skdp_error_none = 0x00,					/*!< No error was detected */
-	skdp_error_cipher_auth_failure = 0x01,	/*!< The cipher authentication has failed */
-	skdp_error_kex_auth_failure = 0x02,		/*!< The key exchange authentication has failed */
-	skdp_error_bad_keep_alive = 0x03,		/*!< The keep alive check failed */
-	skdp_error_channel_down = 0x04,			/*!< The communications channel has failed */
-	skdp_error_connection_failure = 0x05,	/*!< The device could not make a connection to the remote host */
-	skdp_error_establish_failure = 0x06,	/*!< The transmission failed at the key exchange establish phase */
-	skdp_error_invalid_input = 0x07,		/*!< The input provided is invalid */
-	skdp_error_keep_alive_expired = 0x08,	/*!< The keep alive has expired with no response */
-	skdp_error_key_not_recognized = 0x09,	/*!< The key identity is not recognized */
-	skdp_error_random_failure = 0x0A,		/*!< The random generator experienced a failure */
-	skdp_error_receive_failure = 0x0B,		/*!< The receiver failed at the network layer */
-	skdp_error_transmit_failure = 0x0C,		/*!< The transmitter failed at the network layer */
-	skdp_error_unknown_protocol = 0x0D,		/*!< The protocol version is unknown */
-	skdp_error_unsequenced = 0x0E,			/*!< The packet was received out of sequence */
-	skdp_error_packet_expired = 0x0F,		/*!< The packet valid-time was exceeded */
-	skdp_error_general_failure = 0xFF,		/*!< A general failure occurred */
+	skdp_error_none = 0x00,						/*!< No error was detected */
+	skdp_error_cipher_auth_failure = 0x01,		/*!< The cipher authentication has failed */
+	skdp_error_kex_auth_failure = 0x02,			/*!< The key exchange authentication has failed */
+	skdp_error_bad_keep_alive = 0x03,			/*!< The keep alive check failed */
+	skdp_error_channel_down = 0x04,				/*!< The communications channel has failed */
+	skdp_error_connection_failure = 0x05,		/*!< The device could not make a connection to the remote host */
+	skdp_error_establish_failure = 0x06,		/*!< The transmission failed at the key exchange establish phase */
+	skdp_error_invalid_input = 0x07,			/*!< The input provided is invalid */
+	skdp_error_keep_alive_expired = 0x08,		/*!< The keep alive has expired with no response */
+	skdp_error_key_not_recognized = 0x09,		/*!< The key identity is not recognized */
+	skdp_error_random_failure = 0x0A,			/*!< The random generator experienced a failure */
+	skdp_error_receive_failure = 0x0B,			/*!< The receiver failed at the network layer */
+	skdp_error_transmit_failure = 0x0C,			/*!< The transmitter failed at the network layer */
+	skdp_error_unknown_protocol = 0x0D,			/*!< The protocol version is unknown */
+	skdp_error_unsequenced = 0x0E,				/*!< The packet was received out of sequence */
+	skdp_error_packet_expired = 0x0F,			/*!< The packet valid-time was exceeded */
+	skdp_error_general_failure = 0xFF,			/*!< A general failure occurred */
 } skdp_errors;
 
 /*!
@@ -704,19 +704,19 @@ SKDP_EXPORT_API typedef enum skdp_errors
  */
 SKDP_EXPORT_API typedef enum skdp_flags
 {
-	skdp_flag_none = 0x00,					/*!< No flag was selected */
-	skdp_flag_connect_request = 0x01,		/*!< The packet contains a connection request */
-	skdp_flag_connect_response = 0x02,		/*!< The packet contains a connection response */
-	skdp_flag_connection_terminate = 0x03,	/*!< Indicates that the connection is to be terminated */
-	skdp_flag_encrypted_message = 0x04,		/*!< The packet contains an encrypted message */
-	skdp_flag_exchange_request = 0x05,		/*!< The packet contains an exchange request */
-	skdp_flag_exchange_response = 0x06,		/*!< The packet contains an exchange response */
-	skdp_flag_establish_request = 0x07,		/*!< The packet contains an establish request */
-	skdp_flag_establish_response = 0x08,	/*!< The packet contains an establish response */
-	skdp_flag_establish_verify = 0x09,		/*!< The packet contains an establish verify message */
-	skdp_flag_keepalive_request = 0x0A,		/*!< The packet is a keep alive request */
-	skdp_flag_session_established = 0x0B,	/*!< Indicates that the session has been established */
-	skdp_flag_error_condition = 0xFF,		/*!< Indicates that the connection experienced an error */
+	skdp_flag_none = 0x00,						/*!< No flag was selected */
+	skdp_flag_connect_request = 0x01,			/*!< The packet contains a connection request */
+	skdp_flag_connect_response = 0x02,			/*!< The packet contains a connection response */
+	skdp_flag_connection_terminate = 0x03,		/*!< Indicates that the connection is to be terminated */
+	skdp_flag_encrypted_message = 0x04,			/*!< The packet contains an encrypted message */
+	skdp_flag_exchange_request = 0x05,			/*!< The packet contains an exchange request */
+	skdp_flag_exchange_response = 0x06,			/*!< The packet contains an exchange response */
+	skdp_flag_establish_request = 0x07,			/*!< The packet contains an establish request */
+	skdp_flag_establish_response = 0x08,		/*!< The packet contains an establish response */
+	skdp_flag_establish_verify = 0x09,			/*!< The packet contains an establish verify message */
+	skdp_flag_keepalive_request = 0x0A,			/*!< The packet is a keep alive request */
+	skdp_flag_session_established = 0x0B,		/*!< Indicates that the session has been established */
+	skdp_flag_error_condition = 0xFF,			/*!< Indicates that the connection experienced an error */
 } skdp_flags;
 
 /**
