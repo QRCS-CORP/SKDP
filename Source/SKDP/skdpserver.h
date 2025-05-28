@@ -81,10 +81,10 @@ SKDP_EXPORT_API typedef struct skdp_server_state
 	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];			/*!< The key identity string */
 	QSC_SIMD_ALIGN uint8_t ssh[SKDP_STH_SIZE];			/*!< The server session hash */
 	QSC_SIMD_ALIGN uint8_t sdk[SKDP_SDK_SIZE];			/*!< The server derivation key */
-	uint64_t expiration;				/*!< The expiration time, in seconds from epoch */
+	uint64_t expiration;				/*!< The expiration time in seconds from epoch */
 	uint64_t rxseq;						/*!< The receive channel packet sequence number */
 	uint64_t txseq;						/*!< The transmit channel packet sequence number */
-	skdp_flags exflag;					/*!< The key exchange (kex) position flag */
+	skdp_flags exflag;					/*!< The key exchange position flag */
 } skdp_server_state;
 
 /*!
@@ -205,21 +205,5 @@ SKDP_EXPORT_API skdp_errors skdp_server_decrypt_packet(skdp_server_state* ctx, c
  * \return Returns a value of type \c skdp_errors indicating the success or failure of the encryption process.
  */
 SKDP_EXPORT_API skdp_errors skdp_server_encrypt_packet(skdp_server_state* ctx, const uint8_t* message, size_t msglen, skdp_network_packet* packetout);
-
-/*!
- * \brief Send a ratchet response to the client.
- *
- * \details
- * In SKDP, a ratchet response is used to send an encrypted token to the client and re-key the communication channel.
- * This mechanism is useful in static tunnel configurations where additional entropy is periodically injected based on
- * uptime or data transfer. The function constructs a ratchet response packet using the current server state and sends it
- * to the client.
- *
- * \param ctx A pointer to the SKDP server state structure.
- * \param packetout A pointer to the output SKDP network packet structure that will contain the ratchet response.
- *
- * \return Returns a value of type \c skdp_errors indicating the outcome of the ratchet response operation.
- */
-SKDP_EXPORT_API skdp_errors skdp_server_ratchet_response(skdp_server_state* ctx, skdp_network_packet* packetout);
 
 #endif

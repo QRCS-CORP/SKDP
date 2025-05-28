@@ -202,19 +202,4 @@ SKDP_EXPORT_API skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, c
  */
 SKDP_EXPORT_API skdp_errors skdp_client_encrypt_packet(skdp_client_state* ctx, const uint8_t* message, size_t msglen, skdp_network_packet* packetout);
 
-/*!
- * \brief Send a ratchet request to the server.
- *
- * \details
- * In SKDP, a ratchet request is used to ask the server for a new token key on demand. This mechanism is useful
- * in static tunnel configurations to periodically inject additional entropy into the system based on uptime or data
- * transferred. The function constructs a ratchet request packet using the current client state and sends it to the server.
- *
- * \param ctx A pointer to the SKDP client state structure.
- * \param packetout A pointer to the output SKDP network packet structure that will contain the ratchet request.
- *
- * \return Returns a value of type \c skdp_errors indicating the outcome of the ratchet request operation.
- */
-SKDP_EXPORT_API skdp_errors skdp_client_ratchet_request(skdp_client_state* ctx, skdp_network_packet* packetout);
-
 #endif
