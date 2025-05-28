@@ -40,8 +40,8 @@
 #ifndef SKPD_H
 #define SKPD_H
 
-#include "common.h"
-#include "../../QSC/QSC/sha3.h"
+#include "skdpcommon.h"
+#include "sha3.h"
 
 /*!
 * \def SKDP_USE_RCS_ENCRYPTION
@@ -69,7 +69,7 @@
 #endif
 
 #if defined(SKDP_USE_RCS_ENCRYPTION)
-#	include "../../QSC/QSC/rcs.h"
+#	include "rcs.h"
 #	define skdp_cipher_state qsc_rcs_state
 #	define skdp_cipher_dispose qsc_rcs_dispose
 #	define skdp_cipher_initialize qsc_rcs_initialize
@@ -77,7 +77,7 @@
 #	define skdp_cipher_set_associated qsc_rcs_set_associated
 #	define skdp_cipher_transform qsc_rcs_transform
 #else
-#	include "../../QSC/QSC/aes.h"
+#	include "aes.h"
 #	define skdp_cipher_state qsc_aes_gcm256_state
 #	define skdp_cipher_dispose qsc_aes_gcm256_dispose
 #	define skdp_cipher_initialize qsc_aes_gcm256_initialize

@@ -40,7 +40,10 @@
 #ifndef SKDP_SERVER_APP_H
 #define SKDP_SERVER_APP_H
 
-#include "common.h"
+#include "qsccommon.h"
+#include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
 
 #define SKDP_SERVER_MESSAGE_MAX 1024
 static const char SKDP_DEVKEY_NAME[] = "devkey.dkey";

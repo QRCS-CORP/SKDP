@@ -1,8 +1,8 @@
 #include "skdp.h"
-#include "../../QSC/QSC/acp.h"
-#include "../../QSC/QSC/intutils.h"
-#include "../../QSC/QSC/memutils.h"
-#include "../../QSC/QSC/timestamp.h"
+#include "acp.h"
+#include "intutils.h"
+#include "memutils.h"
+#include "timestamp.h"
 
 void skdp_deserialize_device_key(skdp_device_key* dkey, const uint8_t input[SKDP_DEVKEY_ENCODED_SIZE])
 {

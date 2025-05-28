@@ -37,15 +37,63 @@
  * Contact: john.underhill@protonmail.com
  */
 
-#ifndef SKDP_CLIENT_APP_H
-#define SKDP_CLIENT_APP_H
+#ifndef SKDP_COMMON_H
+#define SKDP_COMMON_H
 
-#include "qsccommon.h"
+#include <errno.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <limits.h>
 #include <string.h>
+#include "qsccommon.h"
+#include "intrinsics.h"
 
-static const char SKDP_DEVKEY_EXT[] = ".dkey";
-static const char SKDP_DEVKEY_DEFAULT[] = "devkey1.dkey";
+/**
+* \internal
+* \file skdpcommon.h
+* \brief This file contains common definitions
+* \endcode
+*/
+
+/*!
+\def SKDP_DLL_API
+* \brief Enables the dll api exports
+*/
+#if defined(_DLL)
+#	define SKDP_DLL_API
+#endif
+/*!
+\def SKDP_EXPORT_API
+* \brief The api export prefix
+*/
+#if defined(SKDP_DLL_API)
+#	if defined(QSC_SYSTEM_COMPILER_MSC)
+#		if defined(QSC_DLL_IMPORT)
+#			define SKDP_EXPORT_API __declspec(dllimport)
+#		else
+#			define SKDP_EXPORT_API __declspec(dllexport)
+#		endif
+#	elif defined(QSC_SYSTEM_COMPILER_GCC)
+#		if defined(QSC_DLL_IMPORT)
+#		define SKDP_EXPORT_API __attribute__((dllimport))
+#		else
+#		define SKDP_EXPORT_API __attribute__((dllexport))
+#		endif
+#	else
+#		if defined(__SUNPRO_C)
+#			if !defined(__GNU_C__)
+#				define SKDP_EXPORT_API __attribute__ (visibility(__global))
+#			else
+#				define SKDP_EXPORT_API __attribute__ __global
+#			endif
+#		elif defined(_MSG_VER)
+#			define SKDP_EXPORT_API extern __declspec(dllexport)
+#		else
+#			define SKDP_EXPORT_API __attribute__ ((visibility ("default")))
+#		endif
+#	endif
+#else
+#	define SKDP_EXPORT_API
+#endif
 
 #endif

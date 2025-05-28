@@ -40,9 +40,9 @@
 #ifndef SKDP_CLIENT_H
 #define SKDP_CLIENT_H
 
-#include "common.h"
+#include "skdpcommon.h"
 #include "skdp.h"
-#include "../../QSC/QSC/socketclient.h"
+#include "socketclient.h"
 
 /**
  * \file skdpclient.h

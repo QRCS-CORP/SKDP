@@ -1,12 +1,12 @@
 #include "skdpserver.h"
-#include "../../QSC/QSC/acp.h"
-#include "../../QSC/QSC/intutils.h"
-#include "../../QSC/QSC/memutils.h"
-#include "../../QSC/QSC/sha3.h"
-#include "../../QSC/QSC/socket.h"
-#include "../../QSC/QSC/socketserver.h"
-#include "../../QSC/QSC/stringutils.h"
-#include "../../QSC/QSC/timestamp.h"
+#include "acp.h"
+#include "intutils.h"
+#include "memutils.h"
+#include "sha3.h"
+#include "socket.h"
+#include "socketserver.h"
+#include "stringutils.h"
+#include "timestamp.h"
 
 static void server_dispose(skdp_server_state* ctx)
 {

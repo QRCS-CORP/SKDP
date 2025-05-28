@@ -1,13 +1,13 @@
 #include "appclt.h"
-#include "../SKDP/skdp.h"
-#include "../SKDP/skdpclient.h"
-#include "../../QSC/QSC/consoleutils.h"
-#include "../../QSC/QSC/fileutils.h"
-#include "../../QSC/QSC/folderutils.h"
-#include "../../QSC/QSC/memutils.h"
-#include "../../QSC/QSC/socketclient.h"
-#include "../../QSC/QSC/stringutils.h"
-#include "../../QSC/QSC/async.h"
+#include "skdp.h"
+#include "skdpclient.h"
+#include "consoleutils.h"
+#include "fileutils.h"
+#include "folderutils.h"
+#include "memutils.h"
+#include "socketclient.h"
+#include "stringutils.h"
+#include "async.h"
 
 static skdp_client_state m_skdp_client_ctx;
 

@@ -40,9 +40,9 @@
 #ifndef SKDP_SERVER_H
 #define SKDP_SERVER_H
 
-#include "common.h"
+#include "skdpcommon.h"
 #include "skdp.h"
-#include "../../QSC/QSC/socketserver.h"
+#include "socketserver.h"
 
 /**
  * \file skdpserver.h
