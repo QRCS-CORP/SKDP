@@ -84,7 +84,7 @@ SKDP_EXPORT_API typedef struct skdp_server_state
 	uint64_t expiration;				/*!< The expiration time in seconds from epoch */
 	uint64_t rxseq;						/*!< The receive channel packet sequence number */
 	uint64_t txseq;						/*!< The transmit channel packet sequence number */
-	skdp_flags exflag;					/*!< The key exchange position flag */
+	skdp_flags exflag;					/*!< The key exchange (kex) position flag */
 } skdp_server_state;
 
 /*!
