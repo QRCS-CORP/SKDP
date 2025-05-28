@@ -600,8 +600,8 @@ static const char SKDP_ERROR_STRINGS[SKDP_ERROR_STRING_DEPTH][SKDP_ERROR_STRING_
  */
 SKDP_EXPORT_API typedef struct skdp_master_key
 {
-	uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
-	uint8_t mdk[SKDP_MDK_SIZE];				/*!< The master derivation key */
+	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
+	QSC_SIMD_ALIGN uint8_t mdk[SKDP_MDK_SIZE];				/*!< The master derivation key */
 	uint64_t expiration;					/*!< The expiration time in seconds from epoch */
 } skdp_master_key;
 
@@ -615,8 +615,8 @@ SKDP_EXPORT_API typedef struct skdp_master_key
  */
 SKDP_EXPORT_API typedef struct skdp_server_key
 {
-	uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
-	uint8_t sdk[SKDP_SDK_SIZE];				/*!< The server derivation key */
+	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
+	QSC_SIMD_ALIGN uint8_t sdk[SKDP_SDK_SIZE];				/*!< The server derivation key */
 	uint64_t expiration;					/*!< The expiration time in seconds from epoch */
 } skdp_server_key;
 
@@ -630,8 +630,8 @@ SKDP_EXPORT_API typedef struct skdp_server_key
  */
 SKDP_EXPORT_API typedef struct skdp_device_key
 {
-	uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
-	uint8_t ddk[SKDP_DDK_SIZE];				/*!< The device derivation key */
+	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];				/*!< The key identity string */
+	QSC_SIMD_ALIGN uint8_t ddk[SKDP_DDK_SIZE];				/*!< The device derivation key */
 	uint64_t expiration;					/*!< The expiration time in seconds from epoch */
 } skdp_device_key;
 

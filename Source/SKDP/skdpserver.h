@@ -76,11 +76,11 @@ SKDP_EXPORT_API typedef struct skdp_server_state
 {
 	skdp_cipher_state rxcpr;			/*!< The receive channel cipher state */
 	skdp_cipher_state txcpr;			/*!< The transmit channel cipher state */
-	uint8_t did[SKDP_KID_SIZE];			/*!< The device identity string */
-	uint8_t dsh[SKDP_STH_SIZE];			/*!< The device session hash */
-	uint8_t kid[SKDP_KID_SIZE];			/*!< The key identity string */
-	uint8_t ssh[SKDP_STH_SIZE];			/*!< The server session hash */
-	uint8_t sdk[SKDP_SDK_SIZE];			/*!< The server derivation key */
+	QSC_SIMD_ALIGN uint8_t did[SKDP_KID_SIZE];			/*!< The device identity string */
+	QSC_SIMD_ALIGN uint8_t dsh[SKDP_STH_SIZE];			/*!< The device session hash */
+	QSC_SIMD_ALIGN uint8_t kid[SKDP_KID_SIZE];			/*!< The key identity string */
+	QSC_SIMD_ALIGN uint8_t ssh[SKDP_STH_SIZE];			/*!< The server session hash */
+	QSC_SIMD_ALIGN uint8_t sdk[SKDP_SDK_SIZE];			/*!< The server derivation key */
 	uint64_t expiration;				/*!< The expiration time, in seconds from epoch */
 	uint64_t rxseq;						/*!< The receive channel packet sequence number */
 	uint64_t txseq;						/*!< The transmit channel packet sequence number */
