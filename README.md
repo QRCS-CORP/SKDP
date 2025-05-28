@@ -2,7 +2,7 @@
 
 ## Introduction
 
-[![Build Status](https://github.com/QRCS-CORP/SKDP/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QRCS-CORP/SKDP/actions/workflows/codeql-analysis.yml)
+[![Build Status](https://github.com/QRCS-CORP/SKDP/actions/workflows/build.yml/badge.svg)](https://github.com/QRCS-CORP/SKDP/actions/workflows/build.yml)
 [![CodeQL](https://github.com/QRCS-CORP/SKDP/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QRCS-CORP/SKDP/actions/workflows/codeql-analysis.yml)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20|%20macOS%20|%20Windows-blue)](#)
 [![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/SKDP/)
