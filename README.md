@@ -67,6 +67,42 @@ SKDP is ideal for a wide range of applications, including:
 
 By leveraging robust symmetric cryptographic primitives and a scalable, hierarchical key derivation scheme, SKDP provides forward secrecy and addresses many of the vulnerabilities inherent in traditional pre-shared key systems. Its design mitigates the risk of mass compromise, ensuring that even if a device's key or a server's key is exposed, past communications remain secure. SKDP represents a significant advancement in secure key distribution, offering long-term security in an era of rapidly evolving cryptographic threats and quantum computing.
 
+## Compilation
+
+SKDP uses the QSC cryptographic library. QSC is a standalone, portable, and MISRA-aligned cryptographic library written in C. It supports platform-optimized builds across **Windows**, **macOS**, and **Linux** via [CMake](https://cmake.org/), and includes support for modern hardware acceleration such as AES-NI, AVX2/AVX-512, and RDRAND.
+
+
+### Prerequisites
+
+- CMake 3.15 or newer
+- A C11-compatible C compiler:
+  - **Windows**: Visual Studio 2022 or newer
+  - **macOS**: Clang via Xcode or Homebrew
+  - **Ubuntu**: GCC or Clang  
+
+### Building SKDP/QSC
+
+#### Windows (MSVC)
+
+Use the Visual Studio solution to create the library and the SKDP static library, Server and Client projects
+
+powershell:
+cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+
+#### macOS / Ubuntu
+
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DENABLE_AESNI=ON -DENABLE_AVX2=ON -DENABLE_RDRAND=ON
+cmake --build build
+
+#### Optional CMake Feature Flags
+
+-DENABLE_AESNI	Enables AES-NI acceleration  
+-DENABLE_AVX2	Enables AVX2 intrinsics  
+-DENABLE_AVX512	Enables AVX-512 performance optimizations  
+-DENABLE_RDRAND	Enables use of Intel RDRAND entropy  
+-DCMAKE_BUILD_TYPE=Release	Enables compiler optimizations  
+
 ## License
 
 ACQUISITION INQUIRIES:
