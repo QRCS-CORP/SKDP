@@ -385,7 +385,7 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 		qsc_consoleutils_print_line((char*)ssck.address);
 
 		/* start the keep-alive mechanism */
-		mthd = qsc_async_thread_create((void*)&server_keep_alive_loop, (void*)&ssck);
+		mthd = qsc_async_thread_create(&server_keep_alive_loop, (void*)&ssck);
 
 		if (mthd != 0)
 		{
