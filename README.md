@@ -2,10 +2,10 @@
 
 ## Introduction
 
-[![Build Status](https://github.com/QRCS-CORP/SKDP/actions/workflows/build.yml/badge.svg)](https://github.com/QRCS-CORP/SKDP/actions/workflows/build.yml)
+[![Build](https://img.shields.io/github/actions/workflow/status/QRCS-CORP/SKDP/build.yml?branch=master)](https://github.com/QRCS-CORP/SKDP/actions/workflows/build.yml)
 [![CodeQL](https://github.com/QRCS-CORP/SKDP/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QRCS-CORP/SKDP/actions/workflows/codeql-analysis.yml)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20|%20macOS%20|%20Windows-blue)](#)
-[![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/SKDP/)  
+[![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/SKDP/)
 [![Security Policy](https://img.shields.io/badge/security-policy-blue)](https://github.com/QRCS-CORP/SKDP/security/policy)  
 
 SKDP is a next-generation protocol designed to solve one of the most challenging problems in cryptography: secure key distribution. With the growth of the Internet as a global communications medium, traditional methods based on a single pre-shared symmetric key are increasingly vulnerable. In these systems, if a device or server key is compromised, an attacker may decrypt all encrypted communications—past, present, and future. Additionally, such systems often lack forward secrecy, meaning that the compromise of a session key can expose all historical communications.
