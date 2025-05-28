@@ -50,7 +50,3 @@ foreach(target skdp skdp_client skdp_server)
     target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
   endif()
 endforeach()
-
-# Tests (optional)
-enable_testing()
-add_subdirectory(tests EXCLUDE_FROM_ALL)
