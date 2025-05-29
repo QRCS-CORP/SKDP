@@ -255,16 +255,6 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 	return res;
 }
 
-static void server_keep_alive_loop_wrapper(void* state)
-{
-	server_loop_args* args = (server_loop_args*)state;
-
-	if (args != NULL && args->socket != NULL)
-	{
-		args->result = server_keep_alive_loop(args->socket);
-	}
-}
-
 static skdp_errors server_keep_alive_loop(const qsc_socket* sock)
 {
 	qsc_mutex mtx;
@@ -288,6 +278,16 @@ static skdp_errors server_keep_alive_loop(const qsc_socket* sock)
 	qsc_async_mutex_unlock_ex(mtx);
 
 	return err;
+}
+
+static void server_keep_alive_loop_wrapper(void* state)
+{
+	server_loop_args* args = (server_loop_args*)state;
+
+	if (args != NULL && args->socket != NULL)
+	{
+		args->result = server_keep_alive_loop(args->socket);
+	}
 }
 
 static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t* message, size_t* msglen)
