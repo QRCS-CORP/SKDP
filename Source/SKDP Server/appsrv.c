@@ -56,12 +56,12 @@ static void server_print_string(const char* message, size_t msglen)
 	}
 }
 
-static void server_print_prompt()
+static void server_print_prompt(void)
 {
 	qsc_consoleutils_print_safe("server> ");
 }
 
-static void server_print_banner()
+static void server_print_banner(void)
 {
 	qsc_consoleutils_print_line("******************************************************");
 	qsc_consoleutils_print_line("* SKDP: Symmetric Key Distribution Protocol Listener *");
@@ -90,7 +90,7 @@ static bool server_get_storage_path(char* fpath, size_t pathlen)
 	return res;
 }
 
-static bool server_prikey_exists()
+static bool server_prikey_exists(void)
 {
 	char fpath[QSC_SYSTEM_MAX_PATH] = { 0 };
 	bool res;

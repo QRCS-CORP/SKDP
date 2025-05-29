@@ -11,7 +11,7 @@
 
 static skdp_client_state m_skdp_client_ctx;
 
-static void client_print_prompt()
+static void client_print_prompt(void)
 {
 	qsc_consoleutils_print_safe("client> ");
 }
@@ -56,7 +56,7 @@ static void client_print_error(skdp_errors error)
 	}
 }
 
-static void client_print_banner()
+static void client_print_banner(void)
 {
 	qsc_consoleutils_print_line("****************************************************");
 	qsc_consoleutils_print_line("* SKDP: Symmetric Key Distribution Protocol Client *");
@@ -300,4 +300,3 @@ int main(void)
 
 	return 0;
 }
-
