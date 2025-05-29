@@ -6,6 +6,8 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
+message(STATUS "System processor: ${CMAKE_SYSTEM_PROCESSOR}")
+
 # Output dirs
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -32,7 +34,7 @@ target_link_libraries(skdp PUBLIC qsc)
 file(GLOB_RECURSE SKDP_CLIENT_SOURCES "Source/SKDP Client/*.c")
 
 add_executable(skdp_client ${SKDP_CLIENT_SOURCES})
-target_include_directories(skdp_client PRIVATE Source/SKDP Client)
+target_include_directories(skdp_client PRIVATE "Source/SKDP Client")
 target_link_libraries(skdp_client PRIVATE skdp)
 
 # SKDP Server
