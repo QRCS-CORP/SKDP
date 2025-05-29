@@ -15,6 +15,12 @@
 static skdp_keep_alive_state m_skdp_keep_alive;
 static skdp_server_state m_skdp_server_ctx;
 
+typedef struct server_loop_args_t
+{
+	const qsc_socket* socket;
+	volatile skdp_errors result;
+} server_loop_args;
+
 static void server_print_error(skdp_errors error)
 {
 	const char* msg;
@@ -249,6 +255,16 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 	return res;
 }
 
+static void server_keep_alive_loop_wrapper(void* state)
+{
+	server_loop_args* args = (server_loop_args*)state;
+
+	if (args != NULL && args->socket != NULL)
+	{
+		args->result = server_keep_alive_loop(args->socket);
+	}
+}
+
 static skdp_errors server_keep_alive_loop(const qsc_socket* sock)
 {
 	qsc_mutex mtx;
@@ -364,6 +380,7 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 	qsc_socket ssck = { 0 };
 	skdp_network_packet pkt = { 0 };
 	qsc_ipinfo_ipv4_address addt = { 0 };
+	server_loop_args args = { 0 };
 	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0U };
 	uint8_t msg[SKDP_MESSAGE_MAX] = { 0U };
 	char sin[SKDP_MESSAGE_MAX + 1] = { 0 };
@@ -384,8 +401,10 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 		qsc_consoleutils_print_safe("server> Connected to remote host: ");
 		qsc_consoleutils_print_line((char*)ssck.address);
 
+		args.socket = &ssck;
+		args.result = skdp_error_none;
 		/* start the keep-alive mechanism */
-		mthd = qsc_async_thread_create(&server_keep_alive_loop, (void*)&ssck);
+		mthd = qsc_async_thread_create(&server_keep_alive_loop_wrapper, (void*)&args);
 
 		if (mthd != 0)
 		{
@@ -398,7 +417,7 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 			pkt.pmessage = mpkt;
 			mlen = 0U;
 
-			while (qsc_consoleutils_line_contains(sin, "qsmp quit") == false)
+			while (qsc_consoleutils_line_contains(sin, "qsmp quit") == false && args.result == skdp_error_none)
 			{
 				server_print_prompt();
 
@@ -420,7 +439,7 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 				}
 			}
 
-			qsc_async_thread_terminate(mthd);
+			qsc_async_thread_wait(mthd);
 		}
 
 		skdp_server_connection_close(&m_skdp_server_ctx, &ssck, skdp_error_none);
