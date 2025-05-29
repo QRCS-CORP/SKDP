@@ -6,8 +6,6 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-message(STATUS "System processor: ${CMAKE_SYSTEM_PROCESSOR}")
-
 # Output dirs
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -27,7 +25,7 @@ file(GLOB_RECURSE SKDP_SOURCES "Source/SKDP/*.c")
 file(GLOB_RECURSE SKDP_HEADERS "Source/SKDP/include/*.h")
 
 add_library(skdp STATIC ${SKDP_SOURCES} ${SKDP_HEADERS})
-target_include_directories(skdp PUBLIC Source/SKDP/include)
+target_include_directories(skdp PUBLIC Source/SKDP)
 target_link_libraries(skdp PUBLIC qsc)
 
 # SKDP Client
