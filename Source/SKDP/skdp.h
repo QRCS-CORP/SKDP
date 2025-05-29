@@ -678,7 +678,7 @@ SKDP_EXPORT_API typedef enum skdp_errors
 {
 	skdp_error_none = 0x00,						/*!< No error was detected */
 	skdp_error_cipher_auth_failure = 0x01,		/*!< The cipher authentication has failed */
-	skdp_error_kex_auth_failure = 0x02,			/*!< The key exchange authentication has failed */
+	skdp_error_kex_auth_failure = 0x02,			/*!< The key exchange (kex) authentication has failed */
 	skdp_error_bad_keep_alive = 0x03,			/*!< The keep alive check failed */
 	skdp_error_channel_down = 0x04,				/*!< The communications channel has failed */
 	skdp_error_connection_failure = 0x05,		/*!< The device could not make a connection to the remote host */
