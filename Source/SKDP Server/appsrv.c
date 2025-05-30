@@ -292,9 +292,9 @@ static void server_keep_alive_loop_wrapper(void* state)
 
 static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t* message, size_t* msglen)
 {
-	QSC_ASSERT(source != NULL);
-	QSC_ASSERT(message != NULL);
-	QSC_ASSERT(msglen != NULL);
+	SKDP_ASSERT(source != NULL);
+	SKDP_ASSERT(message != NULL);
+	SKDP_ASSERT(msglen != NULL);
 
 	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0U };
 	char msgstr[SKDP_MESSAGE_MAX] = { 0 };
@@ -363,7 +363,7 @@ static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t*
 
 static void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_exceptions error)
 {
-	QSC_ASSERT(source != NULL);
+	SKDP_ASSERT(source != NULL);
 
 	const char* emsg;
 

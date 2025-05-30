@@ -55,6 +55,8 @@
 * \endcode
 */
 
+/** \cond DOXYGEN_IGNORE */
+
 /*!
 \def SKDP_DLL_API
 * \brief Enables the dll api exports
@@ -95,5 +97,25 @@
 #else
 #	define SKDP_EXPORT_API
 #endif
+
+#if defined(DEBUG) || defined(_DEBUG) || defined(__DEBUG__) || (defined(__GNUC__) && !defined(__OPTIMIZE__))
+  /*!
+   * \def SKDP_DEBUG_MODE
+   * \brief Defined when the build is in debug mode.
+   */
+#	define SKDP_DEBUG_MODE
+#endif
+
+#ifdef SKDP_DEBUG_MODE
+  /*!
+   * \def SKDP_ASSERT
+   * \brief Define the assert function and guarantee it as debug only.
+   */
+#  define SKDP_ASSERT(expr) assert(expr)
+#else
+#  define SKDP_ASSERT(expr) ((void)0)
+#endif
+
+/** \endcond DOXYGEN_IGNORE */
 
 #endif

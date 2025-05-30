@@ -6,8 +6,8 @@
 
 void skdp_deserialize_device_key(skdp_device_key* dkey, const uint8_t input[SKDP_DEVKEY_ENCODED_SIZE])
 {
-	QSC_ASSERT(dkey != NULL);
-	QSC_ASSERT(input != NULL);
+	SKDP_ASSERT(dkey != NULL);
+	SKDP_ASSERT(input != NULL);
 
 	size_t pos;
 
@@ -23,8 +23,8 @@ void skdp_deserialize_device_key(skdp_device_key* dkey, const uint8_t input[SKDP
 
 void skdp_serialize_device_key(uint8_t output[SKDP_DEVKEY_ENCODED_SIZE], const skdp_device_key* dkey)
 {
-	QSC_ASSERT(output != NULL);
-	QSC_ASSERT(dkey != NULL);
+	SKDP_ASSERT(output != NULL);
+	SKDP_ASSERT(dkey != NULL);
 
 	size_t pos;
 
@@ -40,8 +40,8 @@ void skdp_serialize_device_key(uint8_t output[SKDP_DEVKEY_ENCODED_SIZE], const s
 
 void skdp_deserialize_master_key(skdp_master_key* mkey, const uint8_t input[SKDP_MSTKEY_ENCODED_SIZE])
 {
-	QSC_ASSERT(mkey != NULL);
-	QSC_ASSERT(input != NULL);
+	SKDP_ASSERT(mkey != NULL);
+	SKDP_ASSERT(input != NULL);
 
 	size_t pos;
 
@@ -57,8 +57,8 @@ void skdp_deserialize_master_key(skdp_master_key* mkey, const uint8_t input[SKDP
 
 void skdp_serialize_master_key(uint8_t output[SKDP_MSTKEY_ENCODED_SIZE], const skdp_master_key* mkey)
 {
-	QSC_ASSERT(output != NULL);
-	QSC_ASSERT(mkey != NULL);
+	SKDP_ASSERT(output != NULL);
+	SKDP_ASSERT(mkey != NULL);
 
 	size_t pos;
 
@@ -74,8 +74,8 @@ void skdp_serialize_master_key(uint8_t output[SKDP_MSTKEY_ENCODED_SIZE], const s
 
 void skdp_deserialize_server_key(skdp_server_key* skey, const uint8_t input[SKDP_SRVKEY_ENCODED_SIZE])
 {
-	QSC_ASSERT(skey != NULL);
-	QSC_ASSERT(input != NULL);
+	SKDP_ASSERT(skey != NULL);
+	SKDP_ASSERT(input != NULL);
 
 	size_t pos;
 
@@ -91,8 +91,8 @@ void skdp_deserialize_server_key(skdp_server_key* skey, const uint8_t input[SKDP
 
 void skdp_serialize_server_key(uint8_t output[SKDP_SRVKEY_ENCODED_SIZE], const skdp_server_key* skey)
 {
-	QSC_ASSERT(output != NULL);
-	QSC_ASSERT(skey != NULL);
+	SKDP_ASSERT(output != NULL);
+	SKDP_ASSERT(skey != NULL);
 
 	size_t pos;
 
@@ -108,8 +108,8 @@ void skdp_serialize_server_key(uint8_t output[SKDP_SRVKEY_ENCODED_SIZE], const s
 
 bool skdp_generate_master_key(skdp_master_key* mkey, const uint8_t kid[SKDP_KID_SIZE])
 {
-	QSC_ASSERT(mkey != NULL);
-	QSC_ASSERT(kid != NULL);
+	SKDP_ASSERT(mkey != NULL);
+	SKDP_ASSERT(kid != NULL);
 
 	uint8_t rnd[SKDP_MDK_SIZE] = { 0U };
 	bool res;
@@ -134,9 +134,9 @@ bool skdp_generate_master_key(skdp_master_key* mkey, const uint8_t kid[SKDP_KID_
 
 void skdp_generate_server_key(skdp_server_key* skey, const skdp_master_key* mkey, const uint8_t kid[SKDP_KID_SIZE])
 {
-	QSC_ASSERT(skey != NULL);
-	QSC_ASSERT(kid != NULL);
-	QSC_ASSERT(mkey != NULL);
+	SKDP_ASSERT(skey != NULL);
+	SKDP_ASSERT(kid != NULL);
+	SKDP_ASSERT(mkey != NULL);
 
 	uint8_t kbuf[QSC_KECCAK_STATE_BYTE_SIZE] = { 0U };
 	qsc_keccak_state kctx = { 0 };
@@ -154,8 +154,8 @@ void skdp_generate_server_key(skdp_server_key* skey, const skdp_master_key* mkey
 
 void skdp_generate_device_key(skdp_device_key* dkey, const skdp_server_key* skey, const uint8_t kid[SKDP_KID_SIZE])
 {
-	QSC_ASSERT(skey != NULL);
-	QSC_ASSERT(kid != NULL);
+	SKDP_ASSERT(skey != NULL);
+	SKDP_ASSERT(kid != NULL);
 
 	uint8_t kbuf[QSC_KECCAK_STATE_BYTE_SIZE] = { 0U };
 	qsc_keccak_state kctx = { 0 };
@@ -187,7 +187,7 @@ const char* skdp_error_to_string(skdp_errors error)
 
 void skdp_packet_clear(skdp_network_packet* packet)
 {
-	QSC_ASSERT(packet != NULL);
+	SKDP_ASSERT(packet != NULL);
 
 	if (packet != NULL)
 	{
@@ -204,8 +204,8 @@ void skdp_packet_clear(skdp_network_packet* packet)
 
 void skdp_packet_header_deserialize(const uint8_t* header, skdp_network_packet* packet)
 {
-	QSC_ASSERT(header != NULL);
-	QSC_ASSERT(packet != NULL);
+	SKDP_ASSERT(header != NULL);
+	SKDP_ASSERT(packet != NULL);
 
 	if (header != NULL && packet != NULL)
 	{
@@ -218,8 +218,8 @@ void skdp_packet_header_deserialize(const uint8_t* header, skdp_network_packet* 
 
 void skdp_packet_header_serialize(const skdp_network_packet* packet, uint8_t* header)
 {
-	QSC_ASSERT(packet != NULL);
-	QSC_ASSERT(header != NULL);
+	SKDP_ASSERT(packet != NULL);
+	SKDP_ASSERT(header != NULL);
 
 	if (packet != NULL && header != NULL)
 	{
@@ -232,7 +232,7 @@ void skdp_packet_header_serialize(const skdp_network_packet* packet, uint8_t* he
 
 void skdp_packet_set_utc_time(skdp_network_packet* packet)
 {
-	QSC_ASSERT(packet != NULL);
+	SKDP_ASSERT(packet != NULL);
 
 	if (packet != NULL)
 	{
@@ -242,7 +242,7 @@ void skdp_packet_set_utc_time(skdp_network_packet* packet)
 
 bool skdp_packet_time_valid(const skdp_network_packet* packet)
 {
-	QSC_ASSERT(packet != NULL);
+	SKDP_ASSERT(packet != NULL);
 
 	uint64_t ltime;
 	bool res;
@@ -260,8 +260,8 @@ bool skdp_packet_time_valid(const skdp_network_packet* packet)
 
 size_t skdp_packet_to_stream(const skdp_network_packet* packet, uint8_t* pstream)
 {
-	QSC_ASSERT(packet != NULL);
-	QSC_ASSERT(pstream != NULL);
+	SKDP_ASSERT(packet != NULL);
+	SKDP_ASSERT(pstream != NULL);
 
 	size_t res;
 
@@ -286,8 +286,8 @@ size_t skdp_packet_to_stream(const skdp_network_packet* packet, uint8_t* pstream
 
 void skdp_stream_to_packet(const uint8_t* pstream, skdp_network_packet* packet)
 {
-	QSC_ASSERT(packet != NULL);
-	QSC_ASSERT(pstream != NULL);
+	SKDP_ASSERT(packet != NULL);
+	SKDP_ASSERT(pstream != NULL);
 
 	if (packet != NULL && pstream != NULL)
 	{

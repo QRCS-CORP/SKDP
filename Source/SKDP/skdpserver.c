@@ -10,7 +10,7 @@
 
 static void server_dispose(skdp_server_state* ctx)
 {
-	QSC_ASSERT(ctx != NULL);
+	SKDP_ASSERT(ctx != NULL);
 
 	if (ctx != NULL)
 	{
@@ -24,7 +24,7 @@ static void server_dispose(skdp_server_state* ctx)
 
 static void server_kex_reset(skdp_server_state* ctx)
 {
-	QSC_ASSERT(ctx != NULL);
+	SKDP_ASSERT(ctx != NULL);
 
 	if (ctx != NULL)
 	{
@@ -488,7 +488,7 @@ static skdp_errors server_key_exchange(skdp_server_state* ctx, qsc_socket* sock)
 
 void skdp_server_send_error(const qsc_socket* sock, skdp_errors error)
 {
-	QSC_ASSERT(sock != NULL);
+	SKDP_ASSERT(sock != NULL);
 
 	if (sock != NULL)
 	{
@@ -509,7 +509,7 @@ void skdp_server_send_error(const qsc_socket* sock, skdp_errors error)
 
 skdp_errors skdp_server_send_keep_alive(skdp_keep_alive_state* kctx, const qsc_socket* sock)
 {
-	QSC_ASSERT(kctx != NULL);
+	SKDP_ASSERT(kctx != NULL);
 
 	skdp_errors err;
 
@@ -550,7 +550,7 @@ skdp_errors skdp_server_send_keep_alive(skdp_keep_alive_state* kctx, const qsc_s
 
 void skdp_server_connection_close(skdp_server_state* ctx, qsc_socket* sock, skdp_errors error)
 {
-	QSC_ASSERT(ctx != NULL);
+	SKDP_ASSERT(ctx != NULL);
 
 	if (ctx != NULL)
 	{
@@ -580,8 +580,8 @@ void skdp_server_connection_close(skdp_server_state* ctx, qsc_socket* sock, skdp
 
 void skdp_server_initialize(skdp_server_state* ctx, const skdp_server_key* skey)
 {
-	QSC_ASSERT(ctx != NULL);
-	QSC_ASSERT(skey != NULL);
+	SKDP_ASSERT(ctx != NULL);
+	SKDP_ASSERT(skey != NULL);
 
 	if (ctx != NULL && skey != NULL)
 	{
@@ -596,9 +596,9 @@ void skdp_server_initialize(skdp_server_state* ctx, const skdp_server_key* skey)
 
 skdp_errors skdp_server_listen_ipv4(skdp_server_state* ctx, qsc_socket* sock, const qsc_ipinfo_ipv4_address* address, uint16_t port)
 {
-	QSC_ASSERT(ctx != NULL);
-	QSC_ASSERT(sock != NULL);
-	QSC_ASSERT(address != NULL);
+	SKDP_ASSERT(ctx != NULL);
+	SKDP_ASSERT(sock != NULL);
+	SKDP_ASSERT(address != NULL);
 
 	qsc_socket srvs;
 	qsc_socket_exceptions serr;
@@ -632,9 +632,9 @@ skdp_errors skdp_server_listen_ipv4(skdp_server_state* ctx, qsc_socket* sock, co
 
 skdp_errors skdp_server_listen_ipv6(skdp_server_state* ctx, qsc_socket* sock, const qsc_ipinfo_ipv6_address* address, uint16_t port)
 {
-	QSC_ASSERT(ctx != NULL);
-	QSC_ASSERT(sock != NULL);
-	QSC_ASSERT(address != NULL);
+	SKDP_ASSERT(ctx != NULL);
+	SKDP_ASSERT(sock != NULL);
+	SKDP_ASSERT(address != NULL);
 
 	qsc_socket srvs;
 	qsc_socket_exceptions serr;
@@ -667,10 +667,10 @@ skdp_errors skdp_server_listen_ipv6(skdp_server_state* ctx, qsc_socket* sock, co
 
 skdp_errors skdp_server_decrypt_packet(skdp_server_state* ctx, const skdp_network_packet* packetin, uint8_t* message, size_t* msglen)
 {
-	QSC_ASSERT(ctx != NULL);
-	QSC_ASSERT(message != NULL);
-	QSC_ASSERT(msglen != NULL);
-	QSC_ASSERT(packetin != NULL);
+	SKDP_ASSERT(ctx != NULL);
+	SKDP_ASSERT(message != NULL);
+	SKDP_ASSERT(msglen != NULL);
+	SKDP_ASSERT(packetin != NULL);
 
 	uint8_t hdr[SKDP_HEADER_SIZE] = { 0U };
 	skdp_errors err;
@@ -729,9 +729,9 @@ skdp_errors skdp_server_decrypt_packet(skdp_server_state* ctx, const skdp_networ
 
 skdp_errors skdp_server_encrypt_packet(skdp_server_state* ctx, const uint8_t* message, size_t msglen, skdp_network_packet* packetout)
 {
-	QSC_ASSERT(ctx != NULL);
-	QSC_ASSERT(message != NULL);
-	QSC_ASSERT(packetout != NULL);
+	SKDP_ASSERT(ctx != NULL);
+	SKDP_ASSERT(message != NULL);
+	SKDP_ASSERT(packetout != NULL);
 
 	skdp_errors err;
 

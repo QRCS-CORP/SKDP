@@ -14,7 +14,7 @@ We support the latest release of SKDP. Older versions are not maintained and may
 If you discover a security vulnerability in SKDP, **please report it privately** and responsibly.
 
 - **Do not** file public GitHub issues.
-- Contact us at: [security@qrcs.ca](mailto:security@qrcs.ca)
+- Contact us at: [contact@qrcscorp.ca](mailto:contact@qrcscorp.ca)
 - Include:
   - A clear description of the issue
   - Steps to reproduce

@@ -8,7 +8,7 @@
 
 static void client_dispose(skdp_client_state* ctx)
 {
-	QSC_ASSERT(ctx != NULL);
+	SKDP_ASSERT(ctx != NULL);
 
 	if (ctx != NULL)
 	{
@@ -22,7 +22,7 @@ static void client_dispose(skdp_client_state* ctx)
 
 static void client_kex_reset(skdp_client_state* ctx)
 {
-	QSC_ASSERT(ctx != NULL);
+	SKDP_ASSERT(ctx != NULL);
 
 	if (ctx != NULL)
 	{
@@ -36,7 +36,7 @@ static void client_kex_reset(skdp_client_state* ctx)
 
 skdp_errors client_connect_request(skdp_client_state* ctx, skdp_network_packet* packetout)
 {
-	QSC_ASSERT(ctx != NULL);
+	SKDP_ASSERT(ctx != NULL);
 
 	skdp_errors err;
 	uint8_t stok[SKDP_STOK_SIZE] = { 0U };
@@ -501,7 +501,7 @@ static skdp_errors client_key_exchange(skdp_client_state* ctx, qsc_socket* sock)
 
 void skdp_client_send_error(const qsc_socket* sock, skdp_errors error)
 {
-	QSC_ASSERT(sock != NULL);
+	SKDP_ASSERT(sock != NULL);
 
 	if (sock != NULL)
 	{
@@ -522,8 +522,8 @@ void skdp_client_send_error(const qsc_socket* sock, skdp_errors error)
 
 void skdp_client_initialize(skdp_client_state* ctx, const skdp_device_key* ckey)
 {
-	QSC_ASSERT(ctx != NULL);
-	QSC_ASSERT(ckey != NULL);
+	SKDP_ASSERT(ctx != NULL);
+	SKDP_ASSERT(ckey != NULL);
 
 	if (ctx != NULL && ckey != NULL)
 	{
@@ -540,9 +540,9 @@ void skdp_client_initialize(skdp_client_state* ctx, const skdp_device_key* ckey)
 
 skdp_errors skdp_client_connect_ipv4(skdp_client_state* ctx, qsc_socket* sock, const qsc_ipinfo_ipv4_address* address, uint16_t port)
 {
-	QSC_ASSERT(ctx != NULL);
-	QSC_ASSERT(sock != NULL);
-	QSC_ASSERT(address != NULL);
+	SKDP_ASSERT(ctx != NULL);
+	SKDP_ASSERT(sock != NULL);
+	SKDP_ASSERT(address != NULL);
 
 	qsc_socket_exceptions serr;
 	skdp_errors err;
@@ -572,9 +572,9 @@ skdp_errors skdp_client_connect_ipv4(skdp_client_state* ctx, qsc_socket* sock, c
 
 skdp_errors skdp_client_connect_ipv6(skdp_client_state* ctx, qsc_socket* sock, const qsc_ipinfo_ipv6_address* address, uint16_t port)
 {
-	QSC_ASSERT(ctx != NULL);
-	QSC_ASSERT(sock != NULL);
-	QSC_ASSERT(address != NULL);
+	SKDP_ASSERT(ctx != NULL);
+	SKDP_ASSERT(sock != NULL);
+	SKDP_ASSERT(address != NULL);
 
 	qsc_socket_exceptions serr;
 	skdp_errors err;
@@ -630,10 +630,10 @@ void skdp_client_connection_close(skdp_client_state* ctx, qsc_socket* sock, skdp
 
 skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_network_packet* packetin, uint8_t* message, size_t* msglen)
 {
-	QSC_ASSERT(ctx != NULL);
-	QSC_ASSERT(message != NULL);
-	QSC_ASSERT(msglen != NULL);
-	QSC_ASSERT(packetin != NULL);
+	SKDP_ASSERT(ctx != NULL);
+	SKDP_ASSERT(message != NULL);
+	SKDP_ASSERT(msglen != NULL);
+	SKDP_ASSERT(packetin != NULL);
 
 	uint8_t hdr[SKDP_HEADER_SIZE] = { 0 };
 	skdp_errors err;
@@ -692,9 +692,9 @@ skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_networ
 
 skdp_errors skdp_client_encrypt_packet(skdp_client_state* ctx, const uint8_t* message, size_t msglen, skdp_network_packet* packetout)
 {
-	QSC_ASSERT(ctx != NULL);
-	QSC_ASSERT(message != NULL);
-	QSC_ASSERT(packetout != NULL);
+	SKDP_ASSERT(ctx != NULL);
+	SKDP_ASSERT(message != NULL);
+	SKDP_ASSERT(packetout != NULL);
 
 	skdp_errors err;
 

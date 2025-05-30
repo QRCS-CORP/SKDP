@@ -130,8 +130,8 @@ static bool client_ipv4_dialogue(skdp_device_key* ckey, qsc_ipinfo_ipv4_address*
 
 static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t* message, size_t* msglen)
 {
-	QSC_ASSERT(message != NULL);
-	QSC_ASSERT(source != NULL);
+	SKDP_ASSERT(message != NULL);
+	SKDP_ASSERT(source != NULL);
 
 	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0U };
 	char msgstr[SKDP_MESSAGE_MAX] = { 0 };
@@ -191,7 +191,7 @@ static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t*
 
 static void qsc_socket_exception_callback(const qsc_socket* source, qsc_socket_exceptions error)
 {
-	QSC_ASSERT(source != NULL);
+	SKDP_ASSERT(source != NULL);
 
 	const char* emsg;
 
