@@ -128,49 +128,49 @@
  * \def SKDP_CONFIG_SIZE
  * \brief The size of the protocol configuration string.
  */
-#define SKDP_CONFIG_SIZE 26
+#define SKDP_CONFIG_SIZE 26U
 
 /*!
  * \def SKDP_ERROR_SIZE
  * \brief The size of a system error message.
  */
-#define SKDP_ERROR_SIZE 1
+#define SKDP_ERROR_SIZE 1U
 
 /*!
  * \def SKDP_EXP_SIZE
  * \brief The size (in bytes) of the expiration field.
  */
-#define SKDP_EXP_SIZE 8
+#define SKDP_EXP_SIZE 8U
 
 /*!
  * \def SKDP_HEADER_SIZE
  * \brief The SKDP packet header size in bytes.
  */
-#define SKDP_HEADER_SIZE 21
+#define SKDP_HEADER_SIZE 21U
 
 /*!
  * \def SKDP_KEEPALIVE_MESSAGE
  * \brief The size (in bytes) of the keep alive integer message.
  */
-#define SKDP_KEEPALIVE_MESSAGE 8
+#define SKDP_KEEPALIVE_MESSAGE 8U
 
 /*!
  * \def SKDP_KEEPALIVE_STRING
  * \brief The keep alive string size in bytes.
  */
-#define SKDP_KEEPALIVE_STRING 20
+#define SKDP_KEEPALIVE_STRING 20U
 
 /*!
  * \def SKDP_KEEPALIVE_TIMEOUT
  * \brief The keep alive timeout in milliseconds (5 minutes).
  */
-#define SKDP_KEEPALIVE_TIMEOUT (300 * 1000)
+#define SKDP_KEEPALIVE_TIMEOUT (300U * 1000U)
 
 /*!
  * \def SKDP_MESSAGE_SIZE
  * \brief The message size (in bytes) used during a communications session.
  */
-#define SKDP_MESSAGE_SIZE 1024
+#define SKDP_MESSAGE_SIZE 1024U
 
 /*!
  * \def SKDP_MESSAGE_MAX
@@ -183,40 +183,40 @@
  * \brief The message size (in bytes) used during a communications session.
  */
 #if defined(SKDP_USE_RCS_ENCRYPTION)
-#	define SKDP_NONCE_SIZE 32
+#	define SKDP_NONCE_SIZE 32U
 #else
-#	define SKDP_NONCE_SIZE 16
+#	define SKDP_NONCE_SIZE 16U
 #endif
 
 /*!
  * \def SKDP_SERVER_PORT
  * \brief The default SKDP server port number.
  */
-#define SKDP_SERVER_PORT 2201
+#define SKDP_SERVER_PORT 2201U
 
 /*!
  * \def SKDP_MID_SIZE
  * \brief The master key identity size in bytes.
  */
-#define SKDP_MID_SIZE 4
+#define SKDP_MID_SIZE 4U
 
 /*!
  * \def SKDP_SID_SIZE
  * \brief The server ID size in bytes.
  */
-#define SKDP_SID_SIZE 8
+#define SKDP_SID_SIZE 8U
 
 /*!
  * \def SKDP_DID_SIZE
  * \brief The device ID size in bytes.
  */
-#define SKDP_DID_SIZE 12
+#define SKDP_DID_SIZE 12U
 
 /*!
  * \def SKDP_TID_SIZE
  * \brief The session ID size in bytes.
  */
-#define SKDP_TID_SIZE 4
+#define SKDP_TID_SIZE 4U
 
 /*!
  * \def SKDP_KID_SIZE
@@ -228,7 +228,7 @@
  * \def SKDP_SEQUENCE_TERMINATOR
  * \brief The sequence number of a packet that closes a connection.
  */
-#define SKDP_SEQUENCE_TERMINATOR 0xFFFFFFFF
+#define SKDP_SEQUENCE_TERMINATOR 0xFFFFFFFFUL
 
 /*!
  * \brief The SKDP configuration string for 256-bit security.
@@ -251,25 +251,25 @@
  * \def SKDP_CPRKEY_SIZE
  * \brief The symmetric cipher key size (in bytes) for 512-bit security.
  */
-#	define SKDP_CPRKEY_SIZE 64
+#	define SKDP_CPRKEY_SIZE 64U
 
 /*!
  * \def SKDP_DDK_SIZE
  * \brief The device derivation key size (in bytes) for 512-bit security.
  */
-#	define SKDP_DDK_SIZE 64
+#	define SKDP_DDK_SIZE 64U
 
 /*!
  * \def SKDP_DTK_SIZE
  * \brief The device token key size (in bytes) for 512-bit security.
  */
-#	define SKDP_DTK_SIZE 64
+#	define SKDP_DTK_SIZE 64U
 
 /*!
  * \def SKDP_HASH_SIZE
  * \brief The output size (in bytes) of the hash function for 512-bit security.
  */
-#	define SKDP_HASH_SIZE 64
+#	define SKDP_HASH_SIZE 64U
 
 /*!
  * \def SKDP_PERMUTATION_RATE
@@ -281,43 +281,43 @@
  * \def SKDP_MACKEY_SIZE
  * \brief The MAC key size (in bytes) for 512-bit security.
  */
-#	define SKDP_MACKEY_SIZE 64
+#	define SKDP_MACKEY_SIZE 64U
 
 /*!
  * \def SKDP_MACTAG_SIZE
  * \brief The MAC tag size (in bytes) for 512-bit security.
  */
-#	define SKDP_MACTAG_SIZE 64
+#	define SKDP_MACTAG_SIZE 64U
 
 /*!
  * \def SKDP_MDK_SIZE
  * \brief The master derivation key size (in bytes) for 512-bit security.
  */
-#	define SKDP_MDK_SIZE 64
+#	define SKDP_MDK_SIZE 64U
 
 /*!
  * \def SKDP_SDK_SIZE
  * \brief The server derivation key size (in bytes) for 512-bit security.
  */
-#	define SKDP_SDK_SIZE 64
+#	define SKDP_SDK_SIZE 64U
 
 /*!
  * \def SKDP_STH_SIZE
  * \brief The session token hash size (in bytes) for 512-bit security.
  */
-#	define SKDP_STH_SIZE 64
+#	define SKDP_STH_SIZE 64U
 
 /*!
  * \def SKDP_STK_SIZE
  * \brief The session token key size (in bytes) for 512-bit security.
  */
-#	define SKDP_STK_SIZE 64
+#	define SKDP_STK_SIZE 64U
 
 /*!
  * \def SKDP_STOK_SIZE
  * \brief The session token size (in bytes) for 512-bit security.
  */
-#	define SKDP_STOK_SIZE 64
+#	define SKDP_STOK_SIZE 64U
 
 /*!
  * \def SKDP_EXCHANGE_MAX_MESSAGE_SIZE
@@ -333,47 +333,47 @@
  * \def SKDP_CPRKEY_SIZE
  * \brief The symmetric cipher key size (in bytes) for 256-bit security.
  */
-#	define SKDP_CPRKEY_SIZE 32
+#	define SKDP_CPRKEY_SIZE 32U
 
 /*!
  * \def SKDP_DDK_SIZE
  * \brief The device derivation key size (in bytes) for 256-bit security.
  */
-#	define SKDP_DDK_SIZE 32
+#	define SKDP_DDK_SIZE 32U
 
 /*!
  * \def SKDP_DTK_SIZE
  * \brief The device token key size (in bytes) for 256-bit security.
  */
-#	define SKDP_DTK_SIZE 32
+#	define SKDP_DTK_SIZE 32U
 
 /*!
  * \def SKDP_HASH_SIZE
  * \brief The output size (in bytes) of the hash function for 256-bit security.
  */
-#	define SKDP_HASH_SIZE 32
+#	define SKDP_HASH_SIZE 32U
 
 /*!
  * \def SKDP_MACKEY_SIZE
  * \brief The MAC key size (in bytes) for 256-bit security.
  */
-#	define SKDP_MACKEY_SIZE 32
+#	define SKDP_MACKEY_SIZE 32U
 
 /*!
 * \def SKDP_MACTAG_SIZE
 * \brief The MAC tag size (in bytes) for 256-bit security.
 */
 #	if defined(SKDP_USE_RCS_ENCRYPTION)
-#	define SKDP_MACTAG_SIZE 32
+#	define SKDP_MACTAG_SIZE 32U
 #else
-#	define SKDP_MACTAG_SIZE 16
+#	define SKDP_MACTAG_SIZE 16U
 #endif
 
 /*!
  * \def SKDP_MDK_SIZE
  * \brief The master derivation key size (in bytes) for 256-bit security.
  */
-#	define SKDP_MDK_SIZE 32
+#	define SKDP_MDK_SIZE 32U
 
 /*!
  * \def SKDP_PERMUTATION_RATE
@@ -385,25 +385,25 @@
  * \def SKDP_SDK_SIZE
  * \brief The server derivation key size (in bytes) for 256-bit security.
  */
-#	define SKDP_SDK_SIZE 32
+#	define SKDP_SDK_SIZE 32U
 
 /*!
  * \def SKDP_STK_SIZE
  * \brief The session token key size (in bytes) for 256-bit security.
  */
-#	define SKDP_STK_SIZE 32
+#	define SKDP_STK_SIZE 32U
 
 /*!
  * \def SKDP_STH_SIZE
  * \brief The session token hash size (in bytes) for 256-bit security.
  */
-#	define SKDP_STH_SIZE 32
+#	define SKDP_STH_SIZE 32U
 
 /*!
  * \def SKDP_STOK_SIZE
  * \brief The session token size (in bytes) for 256-bit security.
  */
-#	define SKDP_STOK_SIZE 32
+#	define SKDP_STOK_SIZE 32U
 
 /*!
  * \def SKDP_EXCHANGE_MAX_MESSAGE_SIZE
@@ -417,7 +417,7 @@
  * \def SKDP_KEY_DURATION_DAYS
  * \brief The number of days a key remains valid.
  */
-#define SKDP_KEY_DURATION_DAYS 365
+#define SKDP_KEY_DURATION_DAYS 365U
 
 /*!
  * \def SKDP_PACKET_TIME_THRESHOLD
@@ -427,13 +427,13 @@
  * On networks with a shared (NTP) time source, this may be set to as low as 1 second.
  * On exterior networks, it should be adjusted (typically between 30 and 100 seconds) to account for clock differences.
  */
-#define SKDP_PACKET_TIME_THRESHOLD 60
+#define SKDP_PACKET_TIME_THRESHOLD 60U
 
 /*!
  * \def SKDP_KEY_DURATION_SECONDS
  * \brief The number of seconds a key remains valid.
  */
-#define SKDP_KEY_DURATION_SECONDS (SKDP_KEY_DURATION_DAYS * 24 * 60 * 60)
+#define SKDP_KEY_DURATION_SECONDS (SKDP_KEY_DURATION_DAYS * 24U * 60U * 60U)
 
 /*!
  * \def SKDP_DEVKEY_ENCODED_SIZE
@@ -565,8 +565,8 @@
 /* error code strings */
 
 /** \cond */
-#define SKDP_ERROR_STRING_DEPTH 17
-#define SKDP_ERROR_STRING_WIDTH 128
+#define SKDP_ERROR_STRING_DEPTH 17U
+#define SKDP_ERROR_STRING_WIDTH 128U
 
 static const char SKDP_ERROR_STRINGS[SKDP_ERROR_STRING_DEPTH][SKDP_ERROR_STRING_WIDTH] =
 {
@@ -676,23 +676,23 @@ SKDP_EXPORT_API typedef struct skdp_network_packet
  */
 SKDP_EXPORT_API typedef enum skdp_errors
 {
-	skdp_error_none = 0x00,						/*!< No error was detected */
-	skdp_error_cipher_auth_failure = 0x01,		/*!< The cipher authentication has failed */
-	skdp_error_kex_auth_failure = 0x02,			/*!< The key exchange authentication has failed */
-	skdp_error_bad_keep_alive = 0x03,			/*!< The keep alive check failed */
-	skdp_error_channel_down = 0x04,				/*!< The communications channel has failed */
-	skdp_error_connection_failure = 0x05,		/*!< The device could not make a connection to the remote host */
-	skdp_error_establish_failure = 0x06,		/*!< The transmission failed at the key exchange establish phase */
-	skdp_error_invalid_input = 0x07,			/*!< The input provided is invalid */
-	skdp_error_keep_alive_expired = 0x08,		/*!< The keep alive has expired with no response */
-	skdp_error_key_not_recognized = 0x09,		/*!< The key identity is not recognized */
-	skdp_error_random_failure = 0x0A,			/*!< The random generator experienced a failure */
-	skdp_error_receive_failure = 0x0B,			/*!< The receiver failed at the network layer */
-	skdp_error_transmit_failure = 0x0C,			/*!< The transmitter failed at the network layer */
-	skdp_error_unknown_protocol = 0x0D,			/*!< The protocol version is unknown */
-	skdp_error_unsequenced = 0x0E,				/*!< The packet was received out of sequence */
-	skdp_error_packet_expired = 0x0F,			/*!< The packet valid-time was exceeded */
-	skdp_error_general_failure = 0xFF,			/*!< A general failure occurred */
+	skdp_error_none = 0x00U,					/*!< No error was detected */
+	skdp_error_cipher_auth_failure = 0x01U,		/*!< The cipher authentication has failed */
+	skdp_error_kex_auth_failure = 0x02U,		/*!< The key exchange authentication has failed */
+	skdp_error_bad_keep_alive = 0x03U,			/*!< The keep alive check failed */
+	skdp_error_channel_down = 0x04U,			/*!< The communications channel has failed */
+	skdp_error_connection_failure = 0x05U,		/*!< The device could not make a connection to the remote host */
+	skdp_error_establish_failure = 0x06U,		/*!< The transmission failed at the key exchange establish phase */
+	skdp_error_invalid_input = 0x07U,			/*!< The input provided is invalid */
+	skdp_error_keep_alive_expired = 0x08U,		/*!< The keep alive has expired with no response */
+	skdp_error_key_not_recognized = 0x09U,		/*!< The key identity is not recognized */
+	skdp_error_random_failure = 0x0AU,			/*!< The random generator experienced a failure */
+	skdp_error_receive_failure = 0x0BU,			/*!< The receiver failed at the network layer */
+	skdp_error_transmit_failure = 0x0CU,		/*!< The transmitter failed at the network layer */
+	skdp_error_unknown_protocol = 0x0DU,		/*!< The protocol version is unknown */
+	skdp_error_unsequenced = 0x0EU,				/*!< The packet was received out of sequence */
+	skdp_error_packet_expired = 0x0FU,			/*!< The packet valid-time was exceeded */
+	skdp_error_general_failure = 0xFFU,			/*!< A general failure occurred */
 } skdp_errors;
 
 /*!
@@ -704,19 +704,19 @@ SKDP_EXPORT_API typedef enum skdp_errors
  */
 SKDP_EXPORT_API typedef enum skdp_flags
 {
-	skdp_flag_none = 0x00,						/*!< No flag was selected */
-	skdp_flag_connect_request = 0x01,			/*!< The packet contains a connection request */
-	skdp_flag_connect_response = 0x02,			/*!< The packet contains a connection response */
-	skdp_flag_connection_terminate = 0x03,		/*!< Indicates that the connection is to be terminated */
-	skdp_flag_encrypted_message = 0x04,			/*!< The packet contains an encrypted message */
-	skdp_flag_exchange_request = 0x05,			/*!< The packet contains an exchange request */
-	skdp_flag_exchange_response = 0x06,			/*!< The packet contains an exchange response */
-	skdp_flag_establish_request = 0x07,			/*!< The packet contains an establish request */
-	skdp_flag_establish_response = 0x08,		/*!< The packet contains an establish response */
-	skdp_flag_establish_verify = 0x09,			/*!< The packet contains an establish verify message */
-	skdp_flag_keepalive_request = 0x0A,			/*!< The packet is a keep alive request */
-	skdp_flag_session_established = 0x0B,		/*!< Indicates that the session has been established */
-	skdp_flag_error_condition = 0xFF,			/*!< Indicates that the connection experienced an error */
+	skdp_flag_none = 0x00U,						/*!< No flag was selected */
+	skdp_flag_connect_request = 0x01U,			/*!< The packet contains a connection request */
+	skdp_flag_connect_response = 0x02U,			/*!< The packet contains a connection response */
+	skdp_flag_connection_terminate = 0x03U,		/*!< Indicates that the connection is to be terminated */
+	skdp_flag_encrypted_message = 0x04U,		/*!< The packet contains an encrypted message */
+	skdp_flag_exchange_request = 0x05U,			/*!< The packet contains an exchange request */
+	skdp_flag_exchange_response = 0x06U,		/*!< The packet contains an exchange response */
+	skdp_flag_establish_request = 0x07U,		/*!< The packet contains an establish request */
+	skdp_flag_establish_response = 0x08U,		/*!< The packet contains an establish response */
+	skdp_flag_establish_verify = 0x09U,			/*!< The packet contains an establish verify message */
+	skdp_flag_keepalive_request = 0x0AU,		/*!< The packet is a keep alive request */
+	skdp_flag_session_established = 0x0BU,		/*!< Indicates that the session has been established */
+	skdp_flag_error_condition = 0xFFU,			/*!< Indicates that the connection experienced an error */
 } skdp_flags;
 
 /**

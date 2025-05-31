@@ -15,11 +15,11 @@
 static skdp_keep_alive_state m_skdp_keep_alive;
 static skdp_server_state m_skdp_server_ctx;
 
-typedef struct server_loop_args_t
+typedef struct server_keepalive_loop_args
 {
 	const qsc_socket* socket;
 	volatile skdp_errors result;
-} server_loop_args;
+} server_keepalive_loop_args;
 
 static void server_print_error(skdp_errors error)
 {
@@ -258,7 +258,7 @@ static bool server_key_dialogue(skdp_server_key* skey, uint8_t keyid[SKDP_KID_SI
 static skdp_errors server_keep_alive_loop(const qsc_socket* sock)
 {
 	qsc_mutex mtx;
-	skdp_errors err;
+	skdp_errors serr;
 
 	mtx = qsc_async_mutex_lock_ex();
 
@@ -266,23 +266,23 @@ static skdp_errors server_keep_alive_loop(const qsc_socket* sock)
 	{
 		m_skdp_keep_alive.recd = false;
 
-		err = skdp_server_send_keep_alive(&m_skdp_keep_alive, sock);
+		serr = skdp_server_send_keep_alive(&m_skdp_keep_alive, sock);
 		qsc_async_thread_sleep(SKDP_KEEPALIVE_TIMEOUT);
 
 		if (m_skdp_keep_alive.recd == false)
 		{
-			err = skdp_error_keep_alive_expired;
+			serr = skdp_error_keep_alive_expired;
 		}
-	} 	while (err == skdp_error_none);
+	} 	while (serr == skdp_error_none);
 
 	qsc_async_mutex_unlock_ex(mtx);
 
-	return err;
+	return serr;
 }
 
 static void server_keep_alive_loop_wrapper(void* state)
 {
-	server_loop_args* args = (server_loop_args*)state;
+	server_keepalive_loop_args* args = (server_keepalive_loop_args*)state;
 
 	if (args != NULL && args->socket != NULL)
 	{
@@ -380,7 +380,7 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 	qsc_socket ssck = { 0 };
 	skdp_network_packet pkt = { 0 };
 	qsc_ipinfo_ipv4_address addt = { 0 };
-	server_loop_args args = { 0 };
+	server_keepalive_loop_args kargs = { 0 };
 	uint8_t mpkt[SKDP_MESSAGE_MAX] = { 0U };
 	uint8_t msg[SKDP_MESSAGE_MAX] = { 0U };
 	char sin[SKDP_MESSAGE_MAX + 1] = { 0 };
@@ -401,10 +401,10 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 		qsc_consoleutils_print_safe("server> Connected to remote host: ");
 		qsc_consoleutils_print_line((char*)ssck.address);
 
-		args.socket = &ssck;
-		args.result = skdp_error_none;
+		kargs.socket = &ssck;
+		kargs.result = skdp_error_none;
 		/* start the keep-alive mechanism */
-		mthd = qsc_async_thread_create(&server_keep_alive_loop_wrapper, (void*)&args);
+		mthd = qsc_async_thread_create(&server_keep_alive_loop_wrapper, &kargs);
 
 		if (mthd != 0)
 		{
@@ -417,7 +417,7 @@ static skdp_errors server_listen_ipv4(const skdp_server_key* skey)
 			pkt.pmessage = mpkt;
 			mlen = 0U;
 
-			while (qsc_consoleutils_line_contains(sin, "qsmp quit") == false && args.result == skdp_error_none)
+			while (qsc_consoleutils_line_contains(sin, "qsmp quit") == false && kargs.result == skdp_error_none)
 			{
 				server_print_prompt();
 
