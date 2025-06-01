@@ -32,14 +32,14 @@ target_link_libraries(skdp PUBLIC qsc)
 file(GLOB_RECURSE SKDP_CLIENT_SOURCES "Source/SKDP Client/*.c")
 
 add_executable(skdp_client ${SKDP_CLIENT_SOURCES})
-target_include_directories(skdp_client PRIVATE "Source/SKDP Client")
+target_include_directories(skdp_client PRIVATE "Source/Client")
 target_link_libraries(skdp_client PRIVATE skdp)
 
 # SKDP Server
-file(GLOB_RECURSE SKDP_SERVER_SOURCES "Source/SKDP Server/*.c")
+file(GLOB_RECURSE SKDP_SERVER_SOURCES "Source/Server/*.c")
 
 add_executable(skdp_server ${SKDP_SERVER_SOURCES})
-target_include_directories(skdp_server PRIVATE Source/SKDP Server)
+target_include_directories(skdp_server PRIVATE Source/Server)
 target_link_libraries(skdp_server PRIVATE skdp)
 
 # Warnings
