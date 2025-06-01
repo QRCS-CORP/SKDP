@@ -29,7 +29,7 @@ target_include_directories(skdp PUBLIC Source/SKDP)
 target_link_libraries(skdp PUBLIC qsc)
 
 # SKDP Client
-file(GLOB_RECURSE SKDP_CLIENT_SOURCES "Source/SKDP Client/*.c")
+file(GLOB_RECURSE SKDP_CLIENT_SOURCES "Source/Client/*.c")
 
 add_executable(skdp_client ${SKDP_CLIENT_SOURCES})
 target_include_directories(skdp_client PRIVATE "Source/Client")
