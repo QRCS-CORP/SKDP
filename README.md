@@ -94,7 +94,7 @@ Compile the QSC library (right-click and choose build), build the SKDP library, 
 #### MacOS / Ubuntu (Eclipse)
 
 The QSC and the SKDP library projects, along with the Server and Client projects have been tested using the Eclipse IDE on Ubuntu and MacOS.  
-In the Eclipse folder there are subfolders for Ubuntu and MacOS that contain the **.project**, **.cproject**, and **.settings** Eclipse files.  Copy those files directly into the folders containing the code files; move the files in the **Eclipse\Ubuntu\[project-name]** folder to the folder containing the project's header and implementation files, on the SKDP and the Server and Client projects.  
+In the Eclipse folder there are subfolders for Ubuntu and MacOS that contain the **.project**, **.cproject**, and **.settings** Eclipse files.  Copy those files directly into the folders containing the code files; move the files in the **Eclipse\Ubuntu\[project-name]** or **Eclipse\MacOS\[project-name]** folder to the folder containing the project's header and implementation files, on the SKDP and the Server and Client projects.  
 Create a new project for QSC, select C/C++ project, and then **Create an empty project** with the same name as the folder with the files, 'QSC'. Repeat for every additional project.  
 Eclipse should load the project with all of the settings into the project view window. The same proceedure is true for **MacOS and Ubuntu**, but some settings are different (GCC/Clang), so choose the project files that correspond to the operating system.  
 The default projects use minimal flags, but are set to use AVX2, AES-NI, and RDRand by default.
