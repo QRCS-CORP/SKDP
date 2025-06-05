@@ -15,7 +15,7 @@
 [![Custom: Standard](https://img.shields.io/static/v1?label=Security%20Standard&message=MISRA&color=blue)](https://misra.org.uk/)
 [![Custom: Target](https://img.shields.io/static/v1?label=Target%20Industry&message=Financial/Defense&color=brightgreen)](#)
 
-**SKDP: A Post-Quantum-Ready, Scalable Hierarchical Key Distribution Protocol with Ephemeral Session Keys and Forward Secrecy**
+**SKDP: A Post-Quantum Hierarchical Key Distribution Protocol with Ephemeral Session Keys and Forward Secrecy**
 
 ##Overview
 
