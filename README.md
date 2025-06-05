@@ -4,9 +4,18 @@
 
 [![Build](https://github.com/QRCS-CORP/SKDP/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/QRCS-CORP/SKDP/actions/workflows/build.yml)
 [![CodeQL](https://github.com/QRCS-CORP/SKDP/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QRCS-CORP/SKDP/actions/workflows/codeql-analysis.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/qrcs-corp/skdp/badge)](https://www.codefactor.io/repository/github/qrcs-corp/skdp)
 [![Platforms](https://img.shields.io/badge/platforms-Linux%20|%20macOS%20|%20Windows-blue)](#)
 [![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/SKDP/)
 [![Security Policy](https://img.shields.io/badge/security-policy-blue)](https://github.com/QRCS-CORP/SKDP/security/policy)  
+
+[![License: Private](https://img.shields.io/badge/License-Private-blue.svg)](https://github.com/QRCS-CORP/SKDP/blob/main/QRCS-PL%20License.txt)  
+[![Language](https://img.shields.io/static/v1?label=Language&message=C%2023&color=blue)](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3220.pdf)
+[![docs](https://img.shields.io/badge/docs-online-brightgreen)](https://qrcs-corp.github.io/SKDP/)
+[![GitHub release](https://img.shields.io/github/v/release/QRCS-CORP/QSTP)](https://github.com/QRCS-CORP/SKDP/releases/tag/2025-06-04)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/QRCS-CORP/SKDP.svg)](https://github.com/QRCS-CORP/SKDP/commits/main)
+[![Custom: Standard](https://img.shields.io/static/v1?label=Security%20Standard&message=MISRA&color=blue)](https://misra.org.uk/)
+[![Custom: Target](https://img.shields.io/static/v1?label=Target%20Industry&message=Financial/Defense&color=brightgreen)](#)
 
 SKDP is a next-generation protocol designed to solve one of the most challenging problems in cryptography: secure key distribution. With the growth of the Internet as a global communications medium, traditional methods based on a single pre-shared symmetric key are increasingly vulnerable. In these systems, if a device or server key is compromised, an attacker may decrypt all encrypted communications—past, present, and future. Additionally, such systems often lack forward secrecy, meaning that the compromise of a session key can expose all historical communications.
 
