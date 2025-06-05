@@ -15,6 +15,10 @@
 [![Custom: Standard](https://img.shields.io/static/v1?label=Security%20Standard&message=MISRA&color=blue)](https://misra.org.uk/)
 [![Custom: Target](https://img.shields.io/static/v1?label=Target%20Industry&message=Financial/Defense&color=brightgreen)](#)
 
+**SKDP: A Post-Quantum-Ready, Scalable Hierarchical Key Distribution Protocol with Ephemeral Session Keys and Forward Secrecy**
+
+##Overview
+
 SKDP is a next-generation protocol designed to solve one of the most challenging problems in cryptography: secure key distribution. With the growth of the Internet as a global communications medium, traditional methods based on a single pre-shared symmetric key are increasingly vulnerable. In these systems, if a device or server key is compromised, an attacker may decrypt all encrypted communications—past, present, and future. Additionally, such systems often lack forward secrecy, meaning that the compromise of a session key can expose all historical communications.
 
 [SKDP Help Documentation](https://qrcs-corp.github.io/SKDP/)  
