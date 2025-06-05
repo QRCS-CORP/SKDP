@@ -13,7 +13,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/QRCS-CORP/QSTP)](https://github.com/QRCS-CORP/SKDP/releases/tag/2025-06-04)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/QRCS-CORP/SKDP.svg)](https://github.com/QRCS-CORP/SKDP/commits/main)
 [![Custom: Standard](https://img.shields.io/static/v1?label=Security%20Standard&message=MISRA&color=blue)](https://misra.org.uk/)
-[![Custom: Target](https://img.shields.io/static/v1?label=Target%20Industry&message=Financial/Defense&color=brightgreen)](#)
+[![Custom: Target](https://img.shields.io/static/v1?label=Target%20Industry&message=Financial&color=brightgreen)](#)
 
 **SKDP: A Post-Quantum Hierarchical Key Distribution Protocol with Ephemeral Session Keys and Forward Secrecy**
 
