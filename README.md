@@ -72,7 +72,7 @@ SKDP is ideal for a wide range of applications, including:
 
 - Institutional transaction-based protocols (e.g., keys embedded on debit or credit cards).
 - Communication systems that distribute keys via pluggable memory-storage devices with a central hub managing secure connections.
-- Large-scale networks requiring the secure management of millions of devices from a single master key.
+- Large-scale networks requiring the secure management of millions of devices from a single master key. 
 
 ## Conclusion
 
