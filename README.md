@@ -19,7 +19,7 @@
 
 ## Overview
 
-SKDP is a next-generation protocol designed to solve one of the most challenging problems in cryptography: secure key distribution. With the growth of the Internet as a global communications medium, traditional methods based on a single pre-shared symmetric key are increasingly vulnerable. In these systems, if a device or server key is compromised, an attacker may decrypt all encrypted communications—past, present, and future. Additionally, such systems often lack forward secrecy, meaning that the compromise of a session key can expose all historical communications.
+SKDP is a next-generation protocol designed to solve one of the most challenging problems in cryptography: secure key distribution. With the growth of the Internet as a global communications medium, traditional methods based on a single pre-shared symmetric key are increasingly vulnerable. In these systems, if a device or server key is compromised, an attacker may decrypt all encrypted communications; past, present, and future. Additionally, such systems often lack forward secrecy, meaning that the compromise of a session key can expose all historical communications.
 
 [SKDP Help Documentation](https://qrcs-corp.github.io/SKDP/)  
 [SKDP Protocol Specification](https://qrcs-corp.github.io/SKDP/pdf/SKDP_Specification.pdf)  
@@ -40,7 +40,7 @@ Traditional key distribution schemes using pre-shared symmetric keys suffer from
 
 ## The SKDP Solution
 
-SKDP proposes a novel approach that leverages robust symmetric cryptographic primitives with longer key lengths, making the underlying problem far more computationally expensive—and potentially infeasible—to break. Key aspects of the SKDP solution include:
+SKDP proposes a novel approach that leverages robust symmetric cryptographic primitives with longer key lengths, making the underlying problem far more computationally expensive, and potentially infeasible to break. Key aspects of the SKDP solution include:
 
 - **Authentication & Token Exchange:**  
   Pre-shared keys are used primarily for authentication and for encrypting secret tokens exchanged between the server and the client.
