@@ -22,8 +22,11 @@
 SKDP is a next-generation protocol designed to solve one of the most challenging problems in cryptography: secure key distribution. With the growth of the Internet as a global communications medium, traditional methods based on a single pre-shared symmetric key are increasingly vulnerable. In these systems, if a device or server key is compromised, an attacker may decrypt all encrypted communications; past, present, and future. Additionally, such systems often lack forward secrecy, meaning that the compromise of a session key can expose all historical communications.
 
 [SKDP Help Documentation](https://qrcs-corp.github.io/SKDP/)  
-[SKDP Protocol Specification](https://qrcs-corp.github.io/SKDP/pdf/SKDP_Specification.pdf)  
-[SKDP Summary Document](https://qrcs-corp.github.io/SKDP/pdf/SKDP_Summary.pdf)  
+[SKDP Summary Document](https://qrcs-corp.github.io/SKDP/pdf/skdp_summary.pdf)  
+[SKDP Protocol Specification](https://qrcs-corp.github.io/SKDP/pdf/skdp_specification.pdf)  
+[SKDP Formal Analysis](https://qrcs-corp.github.io/SKDP/pdf/skdp_formal.pdf)  
+[SKDP Implementation Analysis](https://qrcs-corp.github.io/SKDP/pdf/skdp_analysis.pdf)  
+[SKDP Integration Guide](https://qrcs-corp.github.io/SKDP/pdf/skdp_integration.pdf)  
 
 ## Statement of the Problem
 
@@ -143,9 +146,10 @@ Sample flag sets and their meanings:
 
 ## License
 
-ACQUISITION INQUIRIES:
-QRCS is currently seeking a corporate acquirer for this technology.
-Parties interested in exclusive licensing or acquisition should contact: contact@qrcscorp.ca
+INVESTMENT INQUIRIES:
+QRCS is currently seeking a corporate investor for this technology.
+Parties interested in licensing or investment should connect to us at: contact@qrcscorp.ca  
+Visit https://www.qrcscorp.ca for a full inventory of our products and services.  
 
 PATENT NOTICE:
 One or more patent applications (provisional and/or non-provisional) covering aspects of this software have been filed with the United States Patent and 
