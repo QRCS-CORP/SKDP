@@ -22,7 +22,7 @@ FetchContent_MakeAvailable(QSC)
 
 # SKDP Static Library
 file(GLOB_RECURSE SKDP_SOURCES "Source/SKDP/*.c")
-file(GLOB_RECURSE SKDP_HEADERS "Source/SKDP/include/*.h")
+file(GLOB_RECURSE SKDP_HEADERS "Source/SKDP/*.h")
 
 add_library(skdp STATIC ${SKDP_SOURCES} ${SKDP_HEADERS})
 target_include_directories(skdp PUBLIC "Source/SKDP")
