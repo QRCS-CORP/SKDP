@@ -143,7 +143,7 @@ static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t*
 	{
 		/* convert the bytes to packet */
 		pkt.pmessage = mpkt;
-		skdp_stream_to_packet(message, &pkt);
+		skdp_stream_to_packet(message, *msglen, &pkt);
 
 		if (pkt.flag == skdp_flag_encrypted_message)
 		{

@@ -49,8 +49,8 @@
  * Contact: contact@qrcscorp.ca
  */
 
-#ifndef SKPD_H
-#define SKPD_H
+#ifndef SKDP_H
+#define SKDP_H
 
 #include "skdpcommon.h"
 #include "sha3.h"
@@ -245,15 +245,7 @@
 /*!
  * \brief The SKDP configuration string for 256-bit security.
  */
-#if defined(SKDP_USE_RCS_ENCRYPTION)
-#	if defined(SKDP_PROTOCOL_SEC512)
-		static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r03-skdp-rcs512-keccak512";
-#	else
-		static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r02-skdp-rcs256-keccak256";
-#	endif
-#else
-		static const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r01-skdp-aes256-keccak256";
-#endif
+extern const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE];
 
 #if defined(SKDP_PROTOCOL_SEC512) && defined(SKDP_USE_RCS_ENCRYPTION)
 
@@ -580,26 +572,7 @@
 #define SKDP_ERROR_STRING_DEPTH 17U
 #define SKDP_ERROR_STRING_WIDTH 128U
 
-static const char SKDP_ERROR_STRINGS[SKDP_ERROR_STRING_DEPTH][SKDP_ERROR_STRING_WIDTH] =
-{
-	"No error was detected.",
-	"The cipher authentication has failed.",
-	"The kex authentication has failed.",
-	"The keep alive check failed.",
-	"The communications channel has failed.",
-	"The device could not make a connnection to the remote host.",
-	"The transmission failed at the kex establish phase.",
-	"The input is invalid.",
-	"The keep alive has expired with no response.",
-	"The key-id is not recognized.",
-	"The random generator experienced a failure.",
-	"The receiver failed at the network layer.",
-	"The transmitter failed at the network layer.",
-	"The protocol version is unknown.",
-	"The packet was received out of sequence.",
-	"The packet valid-time was exceeded",
-	"The connection experienced an error",
-};
+extern const char SKDP_ERROR_STRINGS[SKDP_ERROR_STRING_DEPTH][SKDP_ERROR_STRING_WIDTH];
 /** \endcond */
 
 /*!
@@ -704,7 +677,7 @@ SKDP_EXPORT_API typedef enum skdp_errors
 	skdp_error_unknown_protocol = 0x0DU,		/*!< The protocol version is unknown */
 	skdp_error_unsequenced = 0x0EU,				/*!< The packet was received out of sequence */
 	skdp_error_packet_expired = 0x0FU,			/*!< The packet valid-time was exceeded */
-	skdp_error_general_failure = 0xFFU,			/*!< A general failure occurred */
+	skdp_error_general_failure = 0x10U,			/*!< A general failure occurred */
 } skdp_errors;
 
 /*!
@@ -728,7 +701,7 @@ SKDP_EXPORT_API typedef enum skdp_flags
 	skdp_flag_establish_verify = 0x09U,			/*!< The packet contains an establish verify message */
 	skdp_flag_keepalive_request = 0x0AU,		/*!< The packet is a keep alive request */
 	skdp_flag_session_established = 0x0BU,		/*!< Indicates that the session has been established */
-	skdp_flag_error_condition = 0xFFU,			/*!< Indicates that the connection experienced an error */
+	skdp_flag_error_condition = 0x0CU,			/*!< Indicates that the connection experienced an error */
 } skdp_flags;
 
 /**
@@ -849,6 +822,18 @@ SKDP_EXPORT_API void skdp_generate_device_key(skdp_device_key* dkey, const skdp_
 SKDP_EXPORT_API void skdp_packet_clear(skdp_network_packet* packet);
 
 /**
+ * \brief Convert a raw byte to an error enumerator.
+ *
+ * \details
+ * This function converts a raw byte to a valid error enumerator.
+ *
+ * \param message The message byte.
+ *
+ * \return Returns an error enumerator.
+ */
+SKDP_EXPORT_API skdp_errors skdp_message_to_error(uint8_t message);
+
+/**
  * \brief Return a string description of an SKDP error code.
  *
  * \details
@@ -925,8 +910,9 @@ SKDP_EXPORT_API size_t skdp_packet_to_stream(const skdp_network_packet* packet, 
  * This function converts a contiguous byte stream into a structured SKDP network packet.
  *
  * \param pstream A pointer to the input byte stream.
+ * \param streamlen The length of the input byte stream.
  * \param packet A pointer to the SKDP network packet structure to populate.
  */
-SKDP_EXPORT_API void skdp_stream_to_packet(const uint8_t* pstream, skdp_network_packet* packet);
+SKDP_EXPORT_API void skdp_stream_to_packet(const uint8_t* pstream, size_t streamlen, skdp_network_packet* packet);
 
 #endif

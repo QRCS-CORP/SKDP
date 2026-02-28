@@ -28,11 +28,11 @@ static void server_kex_reset(skdp_server_state* ctx)
 
 	if (ctx != NULL)
 	{
-		qsc_memutils_clear(ctx->did, SKDP_KID_SIZE);
-		qsc_memutils_clear(ctx->dsh, SKDP_STH_SIZE);
-		qsc_memutils_clear(ctx->kid, SKDP_KID_SIZE);
-		qsc_memutils_clear(ctx->sdk, SKDP_SDK_SIZE);
-		qsc_memutils_clear(ctx->ssh, SKDP_STH_SIZE);
+		qsc_memutils_secure_erase(ctx->did, SKDP_KID_SIZE);
+		qsc_memutils_secure_erase(ctx->dsh, SKDP_STH_SIZE);
+		qsc_memutils_secure_erase(ctx->kid, SKDP_KID_SIZE);
+		qsc_memutils_secure_erase(ctx->sdk, SKDP_SDK_SIZE);
+		qsc_memutils_secure_erase(ctx->ssh, SKDP_STH_SIZE);
 		ctx->expiration = 0U;
 	}
 }
@@ -54,38 +54,46 @@ static skdp_errors server_connect_response(skdp_server_state* ctx, const skdp_ne
 		/* compare for equivalent configuration strings */
 		if (qsc_stringutils_compare_strings((char*)dcfg, SKDP_CONFIG_STRING, SKDP_CONFIG_SIZE) == true)
 		{
-			qsc_keccak_state kctx = { 0 };
-			uint8_t stok[SKDP_DTK_SIZE] = { 0U };
-
-			/* store a hash of the client's id, configuration string, and the session token: dsh = H(kid || cfg || dtok) */
-			qsc_memutils_clear(ctx->dsh, SKDP_STH_SIZE);
-			qsc_sha3_initialize(&kctx);
-			qsc_sha3_update(&kctx, SKDP_PERMUTATION_RATE, packetin->pmessage, packetin->msglen);
-			qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, ctx->dsh);
-
-			/* generate the server session token */
-			if (qsc_acp_generate(stok, SKDP_DTK_SIZE) == true)
+			if (qsc_timestamp_epochtime_seconds() < ctx->expiration)
 			{
-				/* assign the packet parameters */
-				qsc_memutils_copy(packetout->pmessage, ctx->kid, SKDP_KID_SIZE);
-				qsc_memutils_copy(packetout->pmessage + SKDP_KID_SIZE, SKDP_CONFIG_STRING, SKDP_CONFIG_SIZE);
-				qsc_memutils_copy(packetout->pmessage + SKDP_KID_SIZE + SKDP_CONFIG_SIZE, stok, SKDP_STOK_SIZE);
+				qsc_keccak_state kctx = { 0 };
+				uint8_t stok[SKDP_DTK_SIZE] = { 0U };
 
-				packetout->flag = skdp_flag_connect_response;
-				packetout->msglen = SKDP_KID_SIZE + SKDP_CONFIG_SIZE + SKDP_STOK_SIZE;
-				packetout->sequence = ctx->txseq;
-
-				/* store a hash of the the servers id, configuration string, and session token: ssh = H(sid || cfg || stok) */
+				/* store a hash of the client's id, configuration string, and the session token: dsh = H(kid || cfg || dtok) */
+				qsc_memutils_clear(ctx->dsh, SKDP_STH_SIZE);
 				qsc_sha3_initialize(&kctx);
-				qsc_sha3_update(&kctx, SKDP_PERMUTATION_RATE, packetout->pmessage, packetout->msglen);
-				qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, ctx->ssh);
+				qsc_sha3_update(&kctx, SKDP_PERMUTATION_RATE, packetin->pmessage, packetin->msglen);
+				qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, ctx->dsh);
 
-				ctx->exflag = skdp_flag_connect_response;
+				/* generate the server session token */
+				if (qsc_acp_generate(stok, SKDP_DTK_SIZE) == true)
+				{
+					/* assign the packet parameters */
+					qsc_memutils_copy(packetout->pmessage, ctx->kid, SKDP_KID_SIZE);
+					qsc_memutils_copy(packetout->pmessage + SKDP_KID_SIZE, SKDP_CONFIG_STRING, SKDP_CONFIG_SIZE);
+					qsc_memutils_copy(packetout->pmessage + SKDP_KID_SIZE + SKDP_CONFIG_SIZE, stok, SKDP_STOK_SIZE);
+
+					packetout->flag = skdp_flag_connect_response;
+					packetout->msglen = SKDP_KID_SIZE + SKDP_CONFIG_SIZE + SKDP_STOK_SIZE;
+					packetout->sequence = ctx->txseq;
+
+					/* store a hash of the the servers id, configuration string, and session token: ssh = H(sid || cfg || stok) */
+					qsc_sha3_initialize(&kctx);
+					qsc_sha3_update(&kctx, SKDP_PERMUTATION_RATE, packetout->pmessage, packetout->msglen);
+					qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, ctx->ssh);
+
+					ctx->exflag = skdp_flag_connect_response;
+				}
+				else
+				{
+					ctx->exflag = skdp_flag_none;
+					err = skdp_error_random_failure;
+				}
 			}
 			else
 			{
 				ctx->exflag = skdp_flag_none;
-				err = skdp_error_random_failure;
+				err = skdp_error_invalid_input;
 			}
 		}
 		else
@@ -125,7 +133,7 @@ static skdp_errors server_exchange_response(skdp_server_state* ctx, const skdp_n
 		qsc_memutils_copy(ddk, prnd, SKDP_DDK_SIZE);
 
 		/* generate the encryption and mac keys */
-		qsc_memutils_clear(prnd, SKDP_PERMUTATION_RATE);
+		qsc_memutils_secure_erase(prnd, SKDP_PERMUTATION_RATE);
 		qsc_cshake_initialize(&kctx, SKDP_PERMUTATION_RATE, ddk, SKDP_DDK_SIZE, NULL, 0U, ctx->dsh, SKDP_STH_SIZE);
 		qsc_cshake_squeezeblocks(&kctx, SKDP_PERMUTATION_RATE, prnd, RNDBLK);
 
@@ -211,6 +219,9 @@ static skdp_errors server_exchange_response(skdp_server_state* ctx, const skdp_n
 				qsc_kmac_update(&kctx, SKDP_PERMUTATION_RATE, shdr, SKDP_HEADER_SIZE);
 				qsc_kmac_finalize(&kctx, SKDP_PERMUTATION_RATE, packetout->pmessage + SKDP_STK_SIZE, SKDP_MACTAG_SIZE);
 				ctx->exflag = skdp_flag_exchange_response;
+
+				qsc_memutils_secure_erase(&kctx, sizeof(qsc_keccak_state));
+				qsc_memutils_secure_erase(prnd, sizeof(prnd));
 			}
 			else
 			{
@@ -263,6 +274,8 @@ static skdp_errors server_establish_response(skdp_server_state* ctx, const skdp_
 		qsc_sha3_update(&kctx, SKDP_PERMUTATION_RATE, msg, SKDP_STH_SIZE);
 		qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, mhash);
 
+		qsc_memutils_secure_erase(&kctx, sizeof(qsc_keccak_state));
+
 		/* encrypt the message hash */
 		skdp_cipher_transform(&ctx->txcpr, packetout->pmessage, mhash, SKDP_HASH_SIZE);
 		ctx->exflag = skdp_flag_session_established;
@@ -311,7 +324,7 @@ static skdp_errors server_key_exchange(skdp_server_state* ctx, qsc_socket* sock)
 			{
 				if (reqt.flag == skdp_flag_error_condition)
 				{
-					err = (skdp_errors)reqt.pmessage[0U];
+					err = skdp_message_to_error(reqt.pmessage[0U]);
 				}
 				else
 				{
@@ -362,7 +375,7 @@ static skdp_errors server_key_exchange(skdp_server_state* ctx, qsc_socket* sock)
 						/* get the error message */
 						if (reqt.flag == skdp_flag_error_condition)
 						{
-							err = (skdp_errors)reqt.pmessage[0U];
+							err = skdp_message_to_error(reqt.pmessage[0U]);
 						}
 						else
 						{
@@ -423,7 +436,7 @@ static skdp_errors server_key_exchange(skdp_server_state* ctx, qsc_socket* sock)
 						/* get the error message */
 						if (reqt.flag == skdp_flag_error_condition)
 						{
-							err = (skdp_errors)reqt.pmessage[0U];
+							err = skdp_message_to_error(reqt.pmessage[0U]);
 						}
 						else
 						{
@@ -497,7 +510,7 @@ void skdp_server_send_error(const qsc_socket* sock, skdp_errors error)
 			skdp_network_packet resp = { 0 };
 			uint8_t spct[SKDP_HEADER_SIZE + SKDP_ERROR_SIZE] = { 0U };
 
-			resp.flag = skdp_error_general_failure;
+			resp.flag = skdp_flag_error_condition;
 			resp.msglen = sizeof(uint8_t);
 			resp.sequence = SKDP_SEQUENCE_TERMINATOR;
 			skdp_packet_header_serialize(&resp, spct);
@@ -679,9 +692,7 @@ skdp_errors skdp_server_decrypt_packet(skdp_server_state* ctx, const skdp_networ
 
 	if (ctx != NULL && message != NULL && msglen != NULL && packetin != NULL)
 	{
-		ctx->rxseq += 1;
-
-		if (packetin->sequence == ctx->rxseq)
+		if (packetin->sequence == ctx->rxseq + 1U)
 		{
 			if (ctx->exflag == skdp_flag_session_established)
 			{
@@ -691,16 +702,26 @@ skdp_errors skdp_server_decrypt_packet(skdp_server_state* ctx, const skdp_networ
 					/* serialize the header and add it to the ciphers associated data */
 					skdp_packet_header_serialize(packetin, hdr);
 					skdp_cipher_set_associated(&ctx->rxcpr, hdr, SKDP_HEADER_SIZE);
-					*msglen = packetin->msglen - SKDP_MACTAG_SIZE;
 
-					/* authenticate then decrypt the data */
-					if (skdp_cipher_transform(&ctx->rxcpr, message, packetin->pmessage, *msglen) == true)
+					if (packetin->msglen >= SKDP_MACTAG_SIZE)
 					{
-						err = skdp_error_none;
+						*msglen = packetin->msglen - SKDP_MACTAG_SIZE;
+						ctx->rxseq += 1;
+
+						/* authenticate then decrypt the data */
+						if (skdp_cipher_transform(&ctx->rxcpr, message, packetin->pmessage, *msglen) == true)
+						{
+							err = skdp_error_none;
+						}
+						else
+						{
+							err = skdp_error_cipher_auth_failure;
+						}
 					}
 					else
 					{
-						err = skdp_error_cipher_auth_failure;
+						*msglen = 0;
+						err = skdp_error_invalid_input;
 					}
 				}
 				else

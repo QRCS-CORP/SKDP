@@ -4,6 +4,37 @@
 #include "memutils.h"
 #include "timestamp.h"
 
+#if defined(SKDP_USE_RCS_ENCRYPTION)
+#	if defined(SKDP_PROTOCOL_SEC512)
+const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r03-skdp-rcs512-keccak512";
+#	else
+const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r02-skdp-rcs256-keccak256";
+#	endif
+#else
+const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE] = "r01-skdp-aes256-keccak256";
+#endif
+
+const char SKDP_ERROR_STRINGS[SKDP_ERROR_STRING_DEPTH][SKDP_ERROR_STRING_WIDTH] =
+{
+	"No error was detected.",
+	"The cipher authentication has failed.",
+	"The kex authentication has failed.",
+	"The keep alive check failed.",
+	"The communications channel has failed.",
+	"The device could not make a connnection to the remote host.",
+	"The transmission failed at the kex establish phase.",
+	"The input is invalid.",
+	"The keep alive has expired with no response.",
+	"The key-id is not recognized.",
+	"The random generator experienced a failure.",
+	"The receiver failed at the network layer.",
+	"The transmitter failed at the network layer.",
+	"The protocol version is unknown.",
+	"The packet was received out of sequence.",
+	"The packet valid-time was exceeded",
+	"A general failure occurred",
+};
+
 void skdp_deserialize_device_key(skdp_device_key* dkey, const uint8_t input[SKDP_DEVKEY_ENCODED_SIZE])
 {
 	SKDP_ASSERT(dkey != NULL);
@@ -126,6 +157,7 @@ bool skdp_generate_master_key(skdp_master_key* mkey, const uint8_t kid[SKDP_KID_
 			qsc_memutils_clear(mkey->kid, SKDP_KID_SIZE);
 			qsc_memutils_copy(mkey->kid, kid, SKDP_MID_SIZE);
 			mkey->expiration = qsc_timestamp_epochtime_seconds() + SKDP_KEY_DURATION_SECONDS;
+			qsc_memutils_secure_erase(rnd, sizeof(rnd));
 		}
 	}
 
@@ -149,6 +181,7 @@ void skdp_generate_server_key(skdp_server_key* skey, const skdp_master_key* mkey
 		qsc_memutils_clear(skey->kid, SKDP_KID_SIZE);
 		qsc_memutils_copy(skey->kid, kid, SKDP_MID_SIZE + SKDP_SID_SIZE);
 		skey->expiration = mkey->expiration;
+		qsc_memutils_secure_erase(&kctx, sizeof(qsc_keccak_state));
 	}
 }
 
@@ -168,6 +201,7 @@ void skdp_generate_device_key(skdp_device_key* dkey, const skdp_server_key* skey
 		qsc_memutils_clear(dkey->kid, SKDP_KID_SIZE);
 		qsc_memutils_copy(dkey->kid, kid, SKDP_KID_SIZE);
 		dkey->expiration = skey->expiration;
+		qsc_memutils_secure_erase(&kctx, sizeof(qsc_keccak_state));
 	}
 }
 
@@ -185,6 +219,20 @@ const char* skdp_error_to_string(skdp_errors error)
 	return dsc;
 }
 
+skdp_errors skdp_message_to_error(uint8_t message)
+{
+	skdp_errors err;
+
+	err = (skdp_errors)message;
+
+	if (err == skdp_error_none || err > skdp_error_general_failure)
+	{
+		err = skdp_error_general_failure;
+	}
+	
+	return err;
+}
+
 void skdp_packet_clear(skdp_network_packet* packet)
 {
 	SKDP_ASSERT(packet != NULL);
@@ -193,7 +241,7 @@ void skdp_packet_clear(skdp_network_packet* packet)
 	{
 		if (packet->msglen != 0U)
 		{
-			qsc_memutils_clear(packet->pmessage, packet->msglen);
+			qsc_memutils_secure_erase(packet->pmessage, packet->msglen);
 		}
 
 		packet->flag = (uint8_t)skdp_flag_none;
@@ -252,7 +300,14 @@ bool skdp_packet_time_valid(const skdp_network_packet* packet)
 	if (packet != NULL)
 	{
 		ltime = qsc_timestamp_datetime_utc();
-		res = (ltime >= packet->utctime - SKDP_PACKET_TIME_THRESHOLD && ltime <= packet->utctime + SKDP_PACKET_TIME_THRESHOLD);
+
+		/* two-way variance to account for differences in system clocks */
+		if (ltime > 0U && ltime < UINT64_MAX &&
+			UINT64_MAX - packet->utctime >= SKDP_PACKET_TIME_THRESHOLD &&
+			packet->utctime >= SKDP_PACKET_TIME_THRESHOLD)
+		{
+			res = (ltime >= packet->utctime - SKDP_PACKET_TIME_THRESHOLD && ltime <= packet->utctime + SKDP_PACKET_TIME_THRESHOLD);
+		}
 	}
 
 	return res;
@@ -284,7 +339,7 @@ size_t skdp_packet_to_stream(const skdp_network_packet* packet, uint8_t* pstream
 	return res;
 }
 
-void skdp_stream_to_packet(const uint8_t* pstream, skdp_network_packet* packet)
+void skdp_stream_to_packet(const uint8_t* pstream, size_t streamlen, skdp_network_packet* packet)
 {
 	SKDP_ASSERT(packet != NULL);
 	SKDP_ASSERT(pstream != NULL);
@@ -296,9 +351,12 @@ void skdp_stream_to_packet(const uint8_t* pstream, skdp_network_packet* packet)
 		packet->sequence = qsc_intutils_le8to64(pstream + sizeof(uint8_t) + sizeof(uint32_t));
 		packet->utctime = qsc_intutils_le8to64(pstream + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t));
 
-		if (packet->msglen <= SKDP_MESSAGE_MAX)
+		if (packet->msglen + SKDP_HEADER_SIZE <= streamlen && packet->msglen <= SKDP_MESSAGE_MAX)
 		{
-			qsc_memutils_copy(packet->pmessage, pstream + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t) + sizeof(uint64_t), packet->msglen);
+			if (packet->msglen <= SKDP_MESSAGE_MAX)
+			{
+				qsc_memutils_copy(packet->pmessage, pstream + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t) + sizeof(uint64_t), packet->msglen);
+			}
 		}
 	}
 }

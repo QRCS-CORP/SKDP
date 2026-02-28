@@ -5,6 +5,7 @@
 #include "sha3.h"
 #include "socket.h"
 #include "socketclient.h"
+#include "timestamp.h"
 
 static void client_dispose(skdp_client_state* ctx)
 {
@@ -26,10 +27,10 @@ static void client_kex_reset(skdp_client_state* ctx)
 
 	if (ctx != NULL)
 	{
-		qsc_memutils_clear(ctx->ddk, SKDP_DDK_SIZE);
-		qsc_memutils_clear(ctx->dsh, SKDP_STH_SIZE);
-		qsc_memutils_clear(ctx->kid, SKDP_KID_SIZE);
-		qsc_memutils_clear(ctx->ssh, SKDP_STH_SIZE);
+		qsc_memutils_secure_erase(ctx->ddk, SKDP_DDK_SIZE);
+		qsc_memutils_secure_erase(ctx->dsh, SKDP_STH_SIZE);
+		qsc_memutils_secure_erase(ctx->kid, SKDP_KID_SIZE);
+		qsc_memutils_secure_erase(ctx->ssh, SKDP_STH_SIZE);
 		ctx->expiration = 0U;
 	}
 }
@@ -45,30 +46,40 @@ skdp_errors client_connect_request(skdp_client_state* ctx, skdp_network_packet* 
 	{
 		err = skdp_error_none;
 
-		if (qsc_acp_generate(stok, SKDP_STOK_SIZE) == true)
+		if (qsc_timestamp_epochtime_seconds() < ctx->expiration)
 		{
-			qsc_keccak_state kctx = { 0 };
+			if (qsc_acp_generate(stok, SKDP_STOK_SIZE) == true)
+			{
+				qsc_keccak_state kctx = { 0 };
 
-			/* copy the KID, configuration string, and STOK to the message */
-			qsc_memutils_copy(packetout->pmessage, ctx->kid, SKDP_KID_SIZE);
-			qsc_memutils_copy(packetout->pmessage + SKDP_KID_SIZE, SKDP_CONFIG_STRING, SKDP_CONFIG_SIZE);
-			qsc_memutils_copy(packetout->pmessage + SKDP_KID_SIZE + SKDP_CONFIG_SIZE, stok, SKDP_STOK_SIZE);
+				/* copy the KID, configuration string, and STOK to the message */
+				qsc_memutils_copy(packetout->pmessage, ctx->kid, SKDP_KID_SIZE);
+				qsc_memutils_copy(packetout->pmessage + SKDP_KID_SIZE, SKDP_CONFIG_STRING, SKDP_CONFIG_SIZE);
+				qsc_memutils_copy(packetout->pmessage + SKDP_KID_SIZE + SKDP_CONFIG_SIZE, stok, SKDP_STOK_SIZE);
 
-			/* assemble the connection-request packet */
-			packetout->msglen = SKDP_KID_SIZE + SKDP_CONFIG_SIZE + SKDP_STOK_SIZE;
-			packetout->flag = skdp_flag_connect_request;
-			packetout->sequence = ctx->txseq;
+				/* assemble the connection-request packet */
+				packetout->msglen = SKDP_KID_SIZE + SKDP_CONFIG_SIZE + SKDP_STOK_SIZE;
+				packetout->flag = skdp_flag_connect_request;
+				packetout->sequence = ctx->txseq;
 
-			/* store a hash of the device id, the configuration string, and the client token: dsh = H(kid || cfg || stok) */
-			qsc_sha3_initialize(&kctx);
-			qsc_sha3_update(&kctx, SKDP_PERMUTATION_RATE, packetout->pmessage, packetout->msglen);
-			qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, ctx->dsh);
-			ctx->exflag = skdp_flag_connect_request;
+				/* store a hash of the device id, the configuration string, and the client token: dsh = H(kid || cfg || stok) */
+				qsc_sha3_initialize(&kctx);
+				qsc_sha3_update(&kctx, SKDP_PERMUTATION_RATE, packetout->pmessage, packetout->msglen);
+				qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, ctx->dsh);
+				ctx->exflag = skdp_flag_connect_request;
+
+				qsc_memutils_secure_erase(&kctx, sizeof(qsc_keccak_state));
+			}
+			else
+			{
+				ctx->exflag = skdp_flag_none;
+				err = skdp_error_random_failure;
+			}
 		}
 		else
 		{
 			ctx->exflag = skdp_flag_none;
-			err = skdp_error_random_failure;
+			err = skdp_error_invalid_input;
 		}
 	}
 	else
@@ -124,9 +135,11 @@ static skdp_errors client_exchange_request(skdp_client_state* ctx, const skdp_ne
 		qsc_kmac_finalize(&kctx, SKDP_PERMUTATION_RATE, packetout->pmessage + SKDP_DTK_SIZE, SKDP_MACTAG_SIZE);
 
 		/* generate the cipher key and nonce */
-		qsc_memutils_clear(prnd, QSC_KECCAK_STATE_BYTE_SIZE);
+		qsc_memutils_secure_erase(prnd, QSC_KECCAK_STATE_BYTE_SIZE);
 		qsc_cshake_initialize(&kctx, SKDP_PERMUTATION_RATE, dtk, SKDP_DTK_SIZE, NULL, 0U, ctx->dsh, SKDP_STH_SIZE);
 		qsc_cshake_squeezeblocks(&kctx, SKDP_PERMUTATION_RATE, prnd, RNDBLK);
+
+		qsc_memutils_secure_erase(&kctx, sizeof(qsc_keccak_state));
 
 		/* initialize the symmetric cipher, and raise client channel-1 tx */
 		skdp_cipher_keyparams kp;
@@ -139,6 +152,8 @@ static skdp_errors client_exchange_request(skdp_client_state* ctx, const skdp_ne
 		kp.info = NULL;
 		kp.infolen = 0U;
 		skdp_cipher_initialize(&ctx->txcpr, &kp, true);
+
+		qsc_memutils_secure_erase(prnd, sizeof(prnd));
 
 		ctx->exflag = skdp_flag_establish_request;
 	}
@@ -192,6 +207,8 @@ static skdp_errors client_establish_request(skdp_client_state* ctx, const skdp_n
 			qsc_cshake_initialize(&kctx, SKDP_PERMUTATION_RATE, stk, SKDP_STK_SIZE, NULL, 0U, ctx->ssh, SKDP_STH_SIZE);
 			qsc_cshake_squeezeblocks(&kctx, SKDP_PERMUTATION_RATE, prnd, RNDBLK);
 
+			qsc_memutils_secure_erase(&kctx, sizeof(qsc_keccak_state));
+
 			/* initialize the symmetric cipher, and raise client channel-2 rx */
 			skdp_cipher_keyparams kp;
 			kp.key = prnd;
@@ -204,6 +221,8 @@ static skdp_errors client_establish_request(skdp_client_state* ctx, const skdp_n
 			kp.infolen = 0U;
 			skdp_cipher_initialize(&ctx->rxcpr, &kp, false);
 
+			qsc_memutils_secure_erase(prnd, sizeof(prnd));
+
 			/* assemble the establish-request packet */
 			packetout->flag = skdp_flag_establish_request;
 			packetout->msglen = SKDP_STH_SIZE + SKDP_MACTAG_SIZE;
@@ -214,12 +233,17 @@ static skdp_errors client_establish_request(skdp_client_state* ctx, const skdp_n
 			skdp_cipher_set_associated(&ctx->txcpr, shdr, SKDP_HEADER_SIZE);
 
 			/* generate a random verification-token and store in the session hash state */
-			qsc_acp_generate(ctx->dsh, SKDP_STH_SIZE);
+			if (qsc_acp_generate(ctx->dsh, SKDP_STH_SIZE) == true)
+			{
+				/* encrypt the verification token */
+				skdp_cipher_transform(&ctx->txcpr, packetout->pmessage, ctx->dsh, SKDP_STH_SIZE);
 
-			/* encrypt the verification token */
-			skdp_cipher_transform(&ctx->txcpr, packetout->pmessage, ctx->dsh, SKDP_STH_SIZE);
-
-			ctx->exflag = skdp_flag_establish_request;
+				ctx->exflag = skdp_flag_establish_request;
+			}
+			else
+			{
+				err = skdp_error_random_failure;
+			}
 		}
 		else
 		{
@@ -256,6 +280,8 @@ static skdp_errors client_establish_verify(skdp_client_state* ctx, const skdp_ne
 		qsc_sha3_initialize(&kctx);
 		qsc_sha3_update(&kctx, SKDP_PERMUTATION_RATE, ctx->dsh, SKDP_STH_SIZE);
 		qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, vhash);
+
+		qsc_memutils_secure_erase(&kctx, sizeof(qsc_keccak_state));
 
 		if (qsc_intutils_verify(vhash, msg, SKDP_HASH_SIZE) == 0)
 		{
@@ -328,7 +354,7 @@ static skdp_errors client_key_exchange(skdp_client_state* ctx, qsc_socket* sock)
 						/* if we receive an error, set the error flag from the packet */
 						if (resp.flag == skdp_flag_error_condition)
 						{
-							err = (skdp_errors)resp.pmessage[0U];
+							err = skdp_message_to_error(resp.pmessage[0U]);
 						}
 						else
 						{
@@ -391,7 +417,7 @@ static skdp_errors client_key_exchange(skdp_client_state* ctx, qsc_socket* sock)
 						/* if we receive an error, set the error flag from the packet */
 						if (resp.flag == skdp_flag_error_condition)
 						{
-							err = (skdp_errors)resp.pmessage[0U];
+							err = skdp_message_to_error(resp.pmessage[0U]);
 						}
 						else
 						{
@@ -451,7 +477,7 @@ static skdp_errors client_key_exchange(skdp_client_state* ctx, qsc_socket* sock)
 					{
 						if (resp.flag == skdp_flag_error_condition)
 						{
-							err = (skdp_errors)resp.pmessage[0U];
+							err = skdp_message_to_error(resp.pmessage[0U]);
 						}
 						else
 						{
@@ -510,7 +536,7 @@ void skdp_client_send_error(const qsc_socket* sock, skdp_errors error)
 			skdp_network_packet resp = { 0 };
 			uint8_t spct[SKDP_HEADER_SIZE + SKDP_ERROR_SIZE] = { 0U };
 
-			resp.flag = skdp_error_general_failure;
+			resp.flag = skdp_flag_error_condition;
 			resp.msglen = sizeof(uint8_t);
 			resp.sequence = SKDP_SEQUENCE_TERMINATOR;
 			skdp_packet_header_serialize(&resp, spct);
@@ -642,9 +668,7 @@ skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_networ
 
 	if (ctx != NULL && message != NULL && msglen != NULL && packetin != NULL)
 	{
-		ctx->rxseq += 1;
-
-		if (packetin->sequence == ctx->rxseq)
+		if (packetin->sequence == ctx->rxseq + 1U)
 		{
 			if (ctx->exflag == skdp_flag_session_established)
 			{
@@ -654,16 +678,26 @@ skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_networ
 					/* serialize the header and add it to the ciphers associated data */
 					skdp_packet_header_serialize(packetin, hdr);
 					skdp_cipher_set_associated(&ctx->rxcpr, hdr, SKDP_HEADER_SIZE);
-					*msglen = packetin->msglen - SKDP_MACTAG_SIZE;
 
-					/* authenticate then decrypt the data */
-					if (skdp_cipher_transform(&ctx->rxcpr, message, packetin->pmessage, *msglen) == true)
+					if (packetin->msglen >= SKDP_MACTAG_SIZE)
 					{
-						err = skdp_error_none;
+						*msglen = packetin->msglen - SKDP_MACTAG_SIZE;
+						ctx->rxseq += 1;
+
+						/* authenticate then decrypt the data */
+						if (skdp_cipher_transform(&ctx->rxcpr, message, packetin->pmessage, *msglen) == true)
+						{
+							err = skdp_error_none;
+						}
+						else
+						{
+							err = skdp_error_cipher_auth_failure;
+						}
 					}
 					else
 					{
-						err = skdp_error_cipher_auth_failure;
+						*msglen = 0;
+						err = skdp_error_invalid_input;
 					}
 				}
 				else
