@@ -568,12 +568,12 @@ extern const char SKDP_CONFIG_STRING[SKDP_CONFIG_SIZE];
 
 /* error code strings */
 
-/** \cond */
+/** \cond DOXYGEN_NO_DOCUMENT */
 #define SKDP_ERROR_STRING_DEPTH 17U
 #define SKDP_ERROR_STRING_WIDTH 128U
 
 extern const char SKDP_ERROR_STRINGS[SKDP_ERROR_STRING_DEPTH][SKDP_ERROR_STRING_WIDTH];
-/** \endcond */
+/** \endcond DOXYGEN_NO_DOCUMENT */
 
 /*!
  * \struct skdp_master_key
