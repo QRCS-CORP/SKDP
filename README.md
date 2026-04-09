@@ -37,7 +37,7 @@ SKDP establishes authenticated, encrypted duplex channels using only symmetric c
 
 A three-stage handshake binds both parties to a shared transcript, derives independent transmit and receive session keys, and enforces freshness through timestamp and sequence-protected packet headers. Every step is authenticated before any protected traffic is accepted.
 
-Because SKDP avoids public-key operations entirely, its post-quantum security posture depends only on the strength of symmetric primitives — making it immediately ready for long-lifecycle deployments without waiting for algorithm standardization to mature.
+Because SKDP avoids public-key operations entirely, its post-quantum security posture depends only on the strength of symmetric primitives — making it immediately ready for long-lifecycle deployments without waiting for algorithm standardization to mature. 
 
 ---
 
