@@ -83,7 +83,11 @@ static bool server_get_storage_path(char* fpath, size_t pathlen)
 {
 	bool res;
 
+#if defined(QSC_SYSTEM_OS_WINDOWS)
+	qsc_folderutils_get_directory(qsc_folderutils_directories_user_app_data, fpath);
+#else
 	qsc_folderutils_get_directory(qsc_folderutils_directories_user_documents, fpath);
+#endif
 	qsc_folderutils_append_delimiter(fpath);
 	qsc_stringutils_concat_strings(fpath, pathlen, SKDP_APP_PATH);
 	res = qsc_folderutils_directory_exists(fpath);
