@@ -1,4 +1,4 @@
-# Symmetric Key Distribution Protocol (SKDP)
+# SKDP: Symmetric Key Distribution Protocol
 
 [![Build](https://github.com/QRCS-CORP/SKDP/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/QRCS-CORP/SKDP/actions/workflows/build.yml)
 [![CodeQL](https://github.com/QRCS-CORP/SKDP/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/QRCS-CORP/SKDP/actions/workflows/codeql-analysis.yml)
