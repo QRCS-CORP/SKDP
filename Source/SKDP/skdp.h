@@ -852,9 +852,12 @@ SKDP_EXPORT_API const char* skdp_error_to_string(skdp_errors error);
  * This function converts a serialized byte array representing a SKDP packet header into a structured SKDP network packet.
  *
  * \param header A pointer to the input header byte array.
+ * \param headerlen The length of the input header byte array.
  * \param packet A pointer to the SKDP network packet structure to populate.
+ *
+ * \return Returns true if the header was deserialized; otherwise, returns false.
  */
-SKDP_EXPORT_API void skdp_packet_header_deserialize(const uint8_t* header, skdp_network_packet* packet);
+SKDP_EXPORT_API bool skdp_packet_header_deserialize(const uint8_t* header, size_t headerlen, skdp_network_packet* packet);
 
 /**
  * \brief Serialize a SKDP packet header into a byte array.
@@ -912,7 +915,10 @@ SKDP_EXPORT_API size_t skdp_packet_to_stream(const skdp_network_packet* packet, 
  * \param pstream A pointer to the input byte stream.
  * \param streamlen The length of the input byte stream.
  * \param packet A pointer to the SKDP network packet structure to populate.
+ * \param message_capacity The size of the packet message buffer in bytes.
+ *
+ * \return Returns true if the stream was deserialized; otherwise, returns false.
  */
-SKDP_EXPORT_API void skdp_stream_to_packet(const uint8_t* pstream, size_t streamlen, skdp_network_packet* packet);
+SKDP_EXPORT_API bool skdp_stream_to_packet(const uint8_t* pstream, size_t streamlen, skdp_network_packet* packet, size_t message_capacity);
 
 #endif

@@ -182,7 +182,7 @@ static skdp_errors client_establish_request(skdp_client_state* ctx, const skdp_n
 	if (skdp_packet_time_valid(packetin) == true)
 	{
 		/* generate the encryption and mac keys */
-		qsc_cshake_initialize(&kctx, SKDP_PERMUTATION_RATE, ctx->ddk, SKDP_STK_SIZE, NULL, 0U, ctx->ssh, SKDP_STH_SIZE);
+		qsc_cshake_initialize(&kctx, SKDP_PERMUTATION_RATE, ctx->ddk, SKDP_DDK_SIZE, NULL, 0U, ctx->ssh, SKDP_STH_SIZE);
 		qsc_cshake_squeezeblocks(&kctx, SKDP_PERMUTATION_RATE, prnd, RNDBLK);
 
 		/* mac the encrypted token key */
@@ -266,37 +266,46 @@ static skdp_errors client_establish_verify(skdp_client_state* ctx, const skdp_ne
 
 	err = skdp_error_none;
 
-	/* serialize the packet header and add it to associated data */
-	skdp_packet_header_serialize(packetin, hdr);
-	skdp_cipher_set_associated(&ctx->rxcpr, hdr, SKDP_HEADER_SIZE);
-
-	/* authenticate and decrypt the cipher-text */
-	if (skdp_cipher_transform(&ctx->rxcpr, msg, packetin->pmessage, packetin->msglen - SKDP_MACTAG_SIZE) == true)
+	if (packetin->flag == skdp_flag_establish_response &&
+		packetin->msglen == SKDP_ESTABLISH_RESPONSE_MESSAGE_SIZE)
 	{
-		qsc_keccak_state kctx = { 0 };
-		uint8_t vhash[SKDP_HASH_SIZE] = { 0U };
+		/* serialize the packet header and add it to associated data */
+		skdp_packet_header_serialize(packetin, hdr);
+		skdp_cipher_set_associated(&ctx->rxcpr, hdr, SKDP_HEADER_SIZE);
 
-		/* hash the stored random verification-token */
-		qsc_sha3_initialize(&kctx);
-		qsc_sha3_update(&kctx, SKDP_PERMUTATION_RATE, ctx->dsh, SKDP_STH_SIZE);
-		qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, vhash);
-
-		qsc_memutils_secure_erase(&kctx, sizeof(qsc_keccak_state));
-
-		if (qsc_intutils_verify(vhash, msg, SKDP_HASH_SIZE) == 0)
+		/* authenticate and decrypt the cipher-text */
+		if (skdp_cipher_transform(&ctx->rxcpr, msg, packetin->pmessage, packetin->msglen - SKDP_MACTAG_SIZE) == true)
 		{
-			ctx->exflag = skdp_flag_session_established;
+			qsc_keccak_state kctx = { 0 };
+			uint8_t vhash[SKDP_HASH_SIZE] = { 0U };
+
+			/* hash the stored random verification-token */
+			qsc_sha3_initialize(&kctx);
+			qsc_sha3_update(&kctx, SKDP_PERMUTATION_RATE, ctx->dsh, SKDP_STH_SIZE);
+			qsc_sha3_finalize(&kctx, SKDP_PERMUTATION_RATE, vhash);
+
+			qsc_memutils_secure_erase(&kctx, sizeof(qsc_keccak_state));
+
+			if (qsc_intutils_verify(vhash, msg, SKDP_HASH_SIZE) == 0)
+			{
+				ctx->exflag = skdp_flag_session_established;
+			}
+			else
+			{
+				ctx->exflag = skdp_flag_none;
+				err = skdp_error_establish_failure;
+			}
 		}
 		else
 		{
 			ctx->exflag = skdp_flag_none;
-			err = skdp_error_establish_failure;
+			err = skdp_error_cipher_auth_failure;
 		}
 	}
 	else
 	{
 		ctx->exflag = skdp_flag_none;
-		err = skdp_error_cipher_auth_failure;
+		err = skdp_error_invalid_input;
 	}
 
 	return err;
@@ -333,7 +342,7 @@ static skdp_errors client_key_exchange(skdp_client_state* ctx, qsc_socket* sock)
 			if (rlen == SKDP_CONNECT_RESPONSE_PACKET_SIZE)
 			{
 				/* convert server response to packet */
-				skdp_packet_header_deserialize(mresp, &resp);
+				skdp_packet_header_deserialize(mresp, SKDP_HEADER_SIZE, &resp);
 				resp.pmessage = mresp + SKDP_HEADER_SIZE;
 
 				if (resp.sequence == ctx->rxseq)
@@ -397,7 +406,7 @@ static skdp_errors client_key_exchange(skdp_client_state* ctx, qsc_socket* sock)
 
 			if (rlen == SKDP_EXCHANGE_RESPONSE_PACKET_SIZE)
 			{
-				skdp_packet_header_deserialize(mresp, &resp);
+				skdp_packet_header_deserialize(mresp, SKDP_HEADER_SIZE, &resp);
 				resp.pmessage = mresp + SKDP_HEADER_SIZE;
 
 				if (resp.sequence == ctx->rxseq)
@@ -460,7 +469,7 @@ static skdp_errors client_key_exchange(skdp_client_state* ctx, qsc_socket* sock)
 
 			if (rlen == SKDP_ESTABLISH_RESPONSE_PACKET_SIZE)
 			{
-				skdp_packet_header_deserialize(mresp, &resp);
+				skdp_packet_header_deserialize(mresp, SKDP_HEADER_SIZE, &resp);
 				resp.pmessage = mresp + SKDP_HEADER_SIZE;
 
 				if (resp.sequence == ctx->rxseq)
@@ -654,7 +663,7 @@ void skdp_client_connection_close(skdp_client_state* ctx, qsc_socket* sock, skdp
 	client_dispose(ctx);
 }
 
-skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_network_packet* packetin, uint8_t* message, size_t* msglen)
+skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_network_packet* packetin, uint8_t* message, size_t message_capacity, size_t* msglen)
 {
 	SKDP_ASSERT(ctx != NULL);
 	SKDP_ASSERT(message != NULL);
@@ -675,22 +684,26 @@ skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_networ
 				/* change 1.1 anti-replay; verify the packet time */
 				if (skdp_packet_time_valid(packetin) == true)
 				{
-					/* serialize the header and add it to the ciphers associated data */
-					skdp_packet_header_serialize(packetin, hdr);
-					skdp_cipher_set_associated(&ctx->rxcpr, hdr, SKDP_HEADER_SIZE);
-
-					if (packetin->msglen >= SKDP_MACTAG_SIZE)
+					if (packetin->flag == skdp_flag_encrypted_message &&
+						packetin->msglen >= SKDP_MACTAG_SIZE &&
+						packetin->msglen <= SKDP_MESSAGE_SIZE + SKDP_MACTAG_SIZE &&
+						packetin->msglen - SKDP_MACTAG_SIZE <= message_capacity)
 					{
+						/* serialize the header and add it to the ciphers associated data */
+						skdp_packet_header_serialize(packetin, hdr);
+						skdp_cipher_set_associated(&ctx->rxcpr, hdr, SKDP_HEADER_SIZE);
+
 						*msglen = packetin->msglen - SKDP_MACTAG_SIZE;
-						ctx->rxseq += 1;
 
 						/* authenticate then decrypt the data */
 						if (skdp_cipher_transform(&ctx->rxcpr, message, packetin->pmessage, *msglen) == true)
 						{
+							ctx->rxseq += 1U;
 							err = skdp_error_none;
 						}
 						else
 						{
+							ctx->exflag = skdp_flag_none;
 							err = skdp_error_cipher_auth_failure;
 						}
 					}
@@ -716,7 +729,7 @@ skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_networ
 		}
 	}
 
-	if (err != skdp_error_none)
+	if (msglen != NULL && err != skdp_error_none)
 	{
 		*msglen = 0;
 	}
@@ -738,22 +751,29 @@ skdp_errors skdp_client_encrypt_packet(skdp_client_state* ctx, const uint8_t* me
 	{
 		if (ctx->exflag == skdp_flag_session_established)
 		{
-			uint8_t hdr[SKDP_HEADER_SIZE] = { 0U };
+			if (msglen <= SKDP_MESSAGE_SIZE)
+			{
+				uint8_t hdr[SKDP_HEADER_SIZE] = { 0U };
 
-			/* assemble the encryption packet */
-			ctx->txseq += 1;
-			packetout->flag = skdp_flag_encrypted_message;
-			packetout->msglen = (uint32_t)msglen + SKDP_MACTAG_SIZE;
-			packetout->sequence = ctx->txseq;
-			/* change 1.1 anti-replay; set the packet utc time field */
-			skdp_packet_set_utc_time(packetout);
-			/* serialize the header and add it to the ciphers associated data */
-			skdp_packet_header_serialize(packetout, hdr);
-			skdp_cipher_set_associated(&ctx->txcpr, hdr, SKDP_HEADER_SIZE);
-			/* encrypt the message */
-			skdp_cipher_transform(&ctx->txcpr, packetout->pmessage, message, msglen);
+				/* assemble the encryption packet */
+				ctx->txseq += 1U;
+				packetout->flag = skdp_flag_encrypted_message;
+				packetout->msglen = (uint32_t)msglen + SKDP_MACTAG_SIZE;
+				packetout->sequence = ctx->txseq;
+				/* change 1.1 anti-replay; set the packet utc time field */
+				skdp_packet_set_utc_time(packetout);
+				/* serialize the header and add it to the ciphers associated data */
+				skdp_packet_header_serialize(packetout, hdr);
+				skdp_cipher_set_associated(&ctx->txcpr, hdr, SKDP_HEADER_SIZE);
+				/* encrypt the message */
+				skdp_cipher_transform(&ctx->txcpr, packetout->pmessage, message, msglen);
 
-			err = skdp_error_none;
+				err = skdp_error_none;
+			}
+			else
+			{
+				err = skdp_error_invalid_input;
+			}
 		}
 		else
 		{

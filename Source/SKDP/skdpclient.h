@@ -190,11 +190,12 @@ SKDP_EXPORT_API void skdp_client_connection_close(skdp_client_state* ctx, qsc_so
  * \param ctx A pointer to the SKDP client state structure.
  * \param packetin [const] A pointer to the input SKDP network packet.
  * \param message The output buffer where the decrypted message will be stored.
+ * \param message_capacity The size of the output message buffer in bytes.
  * \param msglen A pointer to a variable that receives the length of the decrypted message.
  *
  * \return Returns a value of type \c skdp_errors indicating the result of the decryption operation.
  */
-SKDP_EXPORT_API skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_network_packet* packetin, uint8_t* message, size_t* msglen);
+SKDP_EXPORT_API skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, const skdp_network_packet* packetin, uint8_t* message, size_t message_capacity, size_t* msglen);
 
 /*!
  * \brief Encrypt a message into an SKDP packet.
@@ -207,7 +208,7 @@ SKDP_EXPORT_API skdp_errors skdp_client_decrypt_packet(skdp_client_state* ctx, c
  *
  * \param ctx A pointer to the SKDP client state structure.
  * \param message [const] The plaintext message to be encrypted.
- * \param msglen The length of the plaintext message in bytes.
+ * \param msglen The length of the plaintext message in bytes. The length must not exceed \c SKDP_MESSAGE_SIZE.
  * \param packetout A pointer to the output SKDP network packet structure.
  *
  * \return Returns a value of type \c skdp_errors indicating the success or failure of the encryption process.

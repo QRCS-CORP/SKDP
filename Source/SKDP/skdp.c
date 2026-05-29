@@ -250,18 +250,25 @@ void skdp_packet_clear(skdp_network_packet* packet)
 	}
 }
 
-void skdp_packet_header_deserialize(const uint8_t* header, skdp_network_packet* packet)
+bool skdp_packet_header_deserialize(const uint8_t* header, size_t headerlen, skdp_network_packet* packet)
 {
 	SKDP_ASSERT(header != NULL);
 	SKDP_ASSERT(packet != NULL);
 
-	if (header != NULL && packet != NULL)
+	bool res;
+
+	res = false;
+
+	if (header != NULL && packet != NULL && headerlen >= SKDP_HEADER_SIZE)
 	{
 		packet->flag = header[0U];
 		packet->msglen = qsc_intutils_le8to32(header + sizeof(uint8_t));
 		packet->sequence = qsc_intutils_le8to64(header + sizeof(uint8_t) + sizeof(uint32_t));
 		packet->utctime = qsc_intutils_le8to64(header + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t));
+		res = true;
 	}
+
+	return res;
 }
 
 void skdp_packet_header_serialize(const skdp_network_packet* packet, uint8_t* header)
@@ -339,24 +346,39 @@ size_t skdp_packet_to_stream(const skdp_network_packet* packet, uint8_t* pstream
 	return res;
 }
 
-void skdp_stream_to_packet(const uint8_t* pstream, size_t streamlen, skdp_network_packet* packet)
+bool skdp_stream_to_packet(const uint8_t* pstream, size_t streamlen, skdp_network_packet* packet, size_t message_capacity)
 {
 	SKDP_ASSERT(packet != NULL);
 	SKDP_ASSERT(pstream != NULL);
 
-	if (packet != NULL && pstream != NULL)
+	bool res;
+
+	res = false;
+
+	if (packet != NULL && pstream != NULL && streamlen >= SKDP_HEADER_SIZE)
 	{
 		packet->flag = pstream[0U];
 		packet->msglen = qsc_intutils_le8to32(pstream + sizeof(uint8_t));
 		packet->sequence = qsc_intutils_le8to64(pstream + sizeof(uint8_t) + sizeof(uint32_t));
 		packet->utctime = qsc_intutils_le8to64(pstream + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t));
 
-		if (packet->msglen + SKDP_HEADER_SIZE <= streamlen && packet->msglen <= SKDP_MESSAGE_MAX)
+		if (packet->msglen <= streamlen - SKDP_HEADER_SIZE && packet->msglen <= message_capacity && packet->msglen <= SKDP_MESSAGE_MAX)
 		{
-			if (packet->msglen <= SKDP_MESSAGE_MAX)
+			if (packet->msglen == 0U || packet->pmessage != NULL)
 			{
-				qsc_memutils_copy(packet->pmessage, pstream + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(uint64_t) + sizeof(uint64_t), packet->msglen);
+				if (packet->msglen != 0U)
+				{
+					qsc_memutils_copy(packet->pmessage, pstream + SKDP_HEADER_SIZE, packet->msglen);
+				}
+
+				res = true;
 			}
 		}
+		else
+		{
+			packet->msglen = 0U;
+		}
 	}
+
+	return res;
 }

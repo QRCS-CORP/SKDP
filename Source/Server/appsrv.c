@@ -72,8 +72,8 @@ static void server_print_banner(void)
 	qsc_consoleutils_print_line("******************************************************");
 	qsc_consoleutils_print_line("* SKDP: Symmetric Key Distribution Protocol Listener *");
 	qsc_consoleutils_print_line("*                                                    *");
-	qsc_consoleutils_print_line("* Release:   v1.2.0.0b (A2)                          *");
-	qsc_consoleutils_print_line("* Date:      May 28, 2025                            *");
+	qsc_consoleutils_print_line("* Release:   v1.2.0.0c (A2)                          *");
+	qsc_consoleutils_print_line("* Date:      May 28, 2026                            *");
 	qsc_consoleutils_print_line("* Contact:   contact@qrcscorp.ca                     *");
 	qsc_consoleutils_print_line("******************************************************");
 	qsc_consoleutils_print_line("");
@@ -309,11 +309,9 @@ static void qsc_socket_receive_async_callback(qsc_socket* source, const uint8_t*
 	{
 		/* convert the bytes to packet */
 		pkt.pmessage = mpkt;
-		skdp_stream_to_packet(message, *msglen, &pkt);
-
-		if (pkt.flag == skdp_flag_encrypted_message)
+		if (skdp_stream_to_packet(message, *msglen, &pkt, sizeof(mpkt)) == true && pkt.flag == skdp_flag_encrypted_message)
 		{
-			qerr = skdp_server_decrypt_packet(&m_skdp_server_ctx, &pkt, (uint8_t*)msgstr, msglen);
+			qerr = skdp_server_decrypt_packet(&m_skdp_server_ctx, &pkt, (uint8_t*)msgstr, sizeof(msgstr), msglen);
 
 			if (qerr == skdp_error_none)
 			{
