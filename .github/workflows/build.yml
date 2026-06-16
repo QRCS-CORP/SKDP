@@ -18,13 +18,7 @@ jobs:
 
     steps:
     - name: Checkout source
-      uses: actions/checkout@v4
-
-    - name: Set up CMake
-      uses: lukka/get-cmake@v3.27.0
-
-    - name: Set up Ninja
-      uses: seanmiddleditch/gha-setup-ninja@v5
+      uses: actions/checkout@v5
 
     - name: Set up MSVC
       if: runner.os == 'Windows'
