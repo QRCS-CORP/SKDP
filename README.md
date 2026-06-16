@@ -118,9 +118,7 @@ Master Key  (MID: 4 bytes)
 | [Help Documentation](https://qrcs-corp.github.io/SKDP/) | API reference and integration guide |
 | [Protocol Specification](https://qrcs-corp.github.io/SKDP/pdf/skdp_specification.pdf) | Message formats, header semantics, key derivation, cipher suites |
 | [Formal Analysis](https://qrcs-corp.github.io/SKDP/pdf/skdp_formal.pdf) | Game-based security proofs for authentication, confidentiality, and key separation |
-| [Implementation Analysis](https://qrcs-corp.github.io/SKDP/pdf/skdp_analysis.pdf) | Security analysis of the reference implementation |
 | [Executive Summary](https://qrcs-corp.github.io/SKDP/pdf/skdp_summary.pdf) | High-level overview for non-technical stakeholders |
-| [Integration Guide](https://qrcs-corp.github.io/SKDP/pdf/skdp_integration.pdf) | Step-by-step embedding into applications |
 
 ---
 
